@@ -8,20 +8,29 @@ import {
   FiSettings,
   FiMenu
 } from 'react-icons/fi';
+import { Link } from 'react-router-dom';
 
-const NavItem = ({ icon, text, active, onClick, sidebarOpen }) => {
+const NavItem = ({ icon, text, active, path, sidebarOpen }) => {
   return (
-    <div 
-      className={`flex items-center p-3 cursor-pointer ${active ? 'bg-[#E4141C]' : 'hover:bg-[#2d365a]'}`}
-      onClick={onClick}
-    >
-      <span className="mr-3">{icon}</span>
-      {sidebarOpen && <span>{text}</span>}
-    </div>
+    <Link to={path}>
+      <div 
+        className={`flex items-center p-3 cursor-pointer group relative ${active ? 'bg-[#E4141C]' : 'hover:bg-[#2d365a]'}`}
+      >
+        <span className="mr-3">{icon}</span>
+        {sidebarOpen && <span>{text}</span>}
+        
+        {/* Tooltip for when sidebar is closed */}
+        {!sidebarOpen && (
+          <div className="absolute left-full ml-2 px-2 py-1 bg-[#242C54] text-white text-sm rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">
+            {text}
+          </div>
+        )}
+      </div>
+    </Link>
   );
 };
 
-const Sidebaar = ({ sidebarOpen, toggleSidebar, activeTab, setActiveTab }) => {
+const Sidebaar = ({ sidebarOpen, toggleSidebar, activeTab }) => {
   return (
     <div 
       className={`bg-[#242C54] text-white transition-all duration-300 ${sidebarOpen ? 'w-64' : 'w-20'}`}
@@ -37,45 +46,45 @@ const Sidebaar = ({ sidebarOpen, toggleSidebar, activeTab, setActiveTab }) => {
       
       <nav className="mt-6">
         <NavItem 
-          icon={<FiHome />} 
+          icon={<FiHome size={20} />} 
           text="Dashboard" 
           active={activeTab === 'dashboard'}
-          onClick={() => setActiveTab('dashboard')}
+          path="/"
           sidebarOpen={sidebarOpen}
         />
         <NavItem 
-          icon={<FiUsers />} 
+          icon={<FiUsers size={20} />} 
           text="Passengers" 
           active={activeTab === 'passengers'}
-          onClick={() => setActiveTab('passengers')}
+          path="/passengers"
           sidebarOpen={sidebarOpen}
         />
         <NavItem 
-          icon={<FiMessageSquare />} 
+          icon={<FiMessageSquare size={20} />} 
           text="Campaigns" 
           active={activeTab === 'campaigns'}
-          onClick={() => setActiveTab('campaigns')}
+          path="/campaigns"
           sidebarOpen={sidebarOpen}
         />
         <NavItem 
-          icon={<FiStar />} 
-          text="Reviews" 
-          active={activeTab === 'reviews'}
-          onClick={() => setActiveTab('reviews')}
+          icon={<FiStar size={20} />} 
+          text="Feedback" 
+          active={activeTab === 'feedback'}
+          path="/feedback"
           sidebarOpen={sidebarOpen}
         />
         <NavItem 
-          icon={<FiPieChart />} 
+          icon={<FiPieChart size={20} />} 
           text="Reports" 
           active={activeTab === 'reports'}
-          onClick={() => setActiveTab('reports')}
+          path="/reports"
           sidebarOpen={sidebarOpen}
         />
         <NavItem 
-          icon={<FiSettings />} 
+          icon={<FiSettings size={20} />} 
           text="Settings" 
           active={activeTab === 'settings'}
-          onClick={() => setActiveTab('settings')}
+          path="/setting"
           sidebarOpen={sidebarOpen}
         />
       </nav>
