@@ -14,8 +14,23 @@ import {
   FiMenu
 } from 'react-icons/fi';
 import { FaWhatsapp, FaEnvelope, FaQrcode } from 'react-icons/fa';
+import { Bar, Line, Pie } from 'react-chartjs-2';
+import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend, PointElement, LineElement, ArcElement } from 'chart.js';
 
-const TarcoDashboard = () => {
+// Register ChartJS components
+ChartJS.register(
+  CategoryScale,
+  LinearScale,
+  BarElement,
+  Title,
+  Tooltip,
+  Legend,
+  PointElement,
+  LineElement,
+  ArcElement
+);
+
+const Home = () => {
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const [activeTab, setActiveTab] = useState('dashboard');
 
@@ -33,11 +48,89 @@ const TarcoDashboard = () => {
     { name: 'Fatima Hassan', flight: 'TA102', destination: 'IST', date: '2023-11-14' },
   ];
 
+  // AI Analytics Data
+  const passengerTrendsData = {
+    labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov'],
+    datasets: [
+      {
+        label: 'Passengers',
+        data: [1200, 1900, 1500, 2000, 2200, 2500, 2800, 2600, 3000, 3200, 3500],
+        backgroundColor: 'rgba(228, 20, 28, 0.2)',
+        borderColor: 'rgba(228, 20, 28, 1)',
+        borderWidth: 2,
+        tension: 0.4,
+        fill: true
+      }
+    ]
+  };
 
+  const stationComparisonData = {
+    labels: stations.map(station => station.name),
+    datasets: [
+      {
+        label: 'Passengers',
+        data: stations.map(station => station.passengers),
+        backgroundColor: [
+          'rgba(228, 20, 28, 0.7)',
+          'rgba(36, 44, 84, 0.7)',
+          'rgba(228, 20, 28, 0.5)',
+          'rgba(36, 44, 84, 0.5)'
+        ],
+        borderColor: [
+          'rgba(228, 20, 28, 1)',
+          'rgba(36, 44, 84, 1)',
+          'rgba(228, 20, 28, 1)',
+          'rgba(36, 44, 84, 1)'
+        ],
+        borderWidth: 1
+      }
+    ]
+  };
+
+  const channelDistributionData = {
+    labels: ['Website', 'Mobile App', 'Travel Agency', 'Airport Counter'],
+    datasets: [
+      {
+        data: [35, 40, 15, 10],
+        backgroundColor: [
+          'rgba(228, 20, 28, 0.7)',
+          'rgba(228, 20, 28, 0.5)',
+          'rgba(36, 44, 84, 0.7)',
+          'rgba(36, 44, 84, 0.5)'
+        ],
+        borderColor: [
+          'rgba(228, 20, 28, 1)',
+          'rgba(228, 20, 28, 1)',
+          'rgba(36, 44, 84, 1)',
+          'rgba(36, 44, 84, 1)'
+        ],
+        borderWidth: 1
+      }
+    ]
+  };
+
+  const chartOptions = {
+    responsive: true,
+    plugins: {
+      legend: {
+        position: 'top',
+      },
+      tooltip: {
+        mode: 'index',
+        intersect: false,
+      }
+    },
+    scales: {
+      y: {
+        beginAtZero: true
+      }
+    },
+    maintainAspectRatio: false
+  };
 
   return (
     <div className="flex h-screen bg-gray-100">
-            {/* Main Content */}
+      {/* Main Content */}
       <div className="flex-1 overflow-auto">
         {/* Header */}
         <header className="bg-white shadow p-4 flex items-center justify-between">
@@ -91,6 +184,78 @@ const TarcoDashboard = () => {
             />
           </div>
 
+          {/* AI Analytics Graphs Section */}
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
+            {/* Passenger Trends (Line Chart) */}
+            <div className="bg-white rounded-lg shadow p-6 lg:col-span-2">
+              <h3 className="text-lg font-semibold text-[#242C54] mb-4">
+                Passenger Trends (AI Forecast)
+              </h3>
+              <div className="h-64">
+                <Line 
+                  data={passengerTrendsData} 
+                  options={{
+                    ...chartOptions,
+                    plugins: {
+                      ...chartOptions.plugins,
+                      title: {
+                        display: true,
+                        text: 'Monthly Passenger Growth with AI Projection',
+                        color: '#242C54'
+                      }
+                    }
+                  }} 
+                />
+              </div>
+            </div>
+
+            {/* Channel Distribution (Pie Chart) */}
+            <div className="bg-white rounded-lg shadow p-6">
+              <h3 className="text-lg font-semibold text-[#242C54] mb-4">
+                Booking Channel Distribution
+              </h3>
+              <div className="h-64">
+                <Pie 
+                  data={channelDistributionData} 
+                  options={{
+                    ...chartOptions,
+                    plugins: {
+                      ...chartOptions.plugins,
+                      title: {
+                        display: true,
+                        text: 'Distribution by Booking Channel',
+                        color: '#242C54'
+                      }
+                    }
+                  }} 
+                />
+              </div>
+            </div>
+          </div>
+
+          {/* Station Comparison (Bar Chart) */}
+          <div className="bg-white rounded-lg shadow p-6 mb-8">
+            <h3 className="text-lg font-semibold text-[#242C54] mb-4">
+              Station Performance Comparison
+            </h3>
+            <div className="h-64">
+              <Bar 
+                data={stationComparisonData} 
+                options={{
+                  ...chartOptions,
+                  plugins: {
+                    ...chartOptions.plugins,
+                    title: {
+                      display: true,
+                      text: 'Passenger Volume by Station',
+                      color: '#242C54'
+                    }
+                  }
+                }} 
+              />
+            </div>
+          </div>
+
           {/* Stations Table */}
           <div className="bg-white rounded-lg shadow p-6 mb-8">
             <div className="flex justify-between items-center mb-4">
@@ -124,7 +289,7 @@ const TarcoDashboard = () => {
                     </th>
                   </tr>
                 </thead>
-                <tbody className="bg-white divide-y divide-gray-200">
+                <tbody className="bg-white divide-y divide-gray-200 ">
                   {stations.map((station) => (
                     <tr key={station.id}>
                       <td className="px-6 py-4 whitespace-nowrap">
@@ -260,4 +425,4 @@ const StatCard = ({ title, value, change, icon }) => {
   );
 };
 
-export default TarcoDashboard;
+export default Home;
