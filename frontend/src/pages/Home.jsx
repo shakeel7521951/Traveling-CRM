@@ -104,44 +104,44 @@ const TarcoDashboard = () => {
             </div>
             
             <div className="overflow-x-auto">
-              <table className="min-w-full divide-y divide-gray-200">
+              <table  className="min-w-full border divide-y divide-gray-200">
                 <thead className="bg-gray-50">
-                  <tr>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-[#242C54] uppercase tracking-wider">
+                  <tr className=' border'>
+                    <th className="px-6 border py-3 text-left text-xs font-medium text-[#242C54] uppercase tracking-wider">
                       Station
                     </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-[#242C54] uppercase tracking-wider">
+                    <th className="px-6 py-3 border text-left text-xs font-medium text-[#242C54] uppercase tracking-wider">
                       Code
                     </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-[#242C54] uppercase tracking-wider">
+                    <th className="px-6 py-3 border text-left text-xs font-medium text-[#242C54] uppercase tracking-wider">
                       Passengers
                     </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-[#242C54] uppercase tracking-wider">
+                    <th className="px-6 py-3 border text-left text-xs font-medium text-[#242C54] uppercase tracking-wider">
                       Rating
                     </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-[#242C54] uppercase tracking-wider">
+                    <th className="px-6 py-3 border text-end text-xs font-medium text-[#242C54] uppercase tracking-wider">
                       Actions
                     </th>
                   </tr>
                 </thead>
                 <tbody className="bg-white divide-y divide-gray-200">
                   {stations.map((station) => (
-                    <tr key={station.id}>
-                      <td className="px-6 py-4 whitespace-nowrap">
+                    <tr key={station.id} className=''>
+                      <td className="px-6 py-4 border whitespace-nowrap">
                         <div className="flex items-center">
                           <FiGlobe className="text-[#E4141C] mr-2" />
                           <span>{station.name}</span>
                         </div>
                       </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-gray-500">
+                      <td className="px-6 py-4 border whitespace-nowrap text-gray-500">
                         {station.code}
                       </td>
-                      <td className="px-6 py-4 whitespace-nowrap">
+                      <td className="px-6 py-4 border whitespace-nowrap">
                         <span className="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
                           {station.passengers}
                         </span>
                       </td>
-                      <td className="px-6 py-4 whitespace-nowrap">
+                      <td className="px-6 py-4 border whitespace-nowrap">
                         <div className="flex items-center">
                           <div className="h-2 w-16 bg-gray-200 rounded-full mr-2">
                             <div 
@@ -152,7 +152,7 @@ const TarcoDashboard = () => {
                           <span>{station.rating}</span>
                         </div>
                       </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                      <td className="px-6 py-4 border whitespace-nowrap text-right text-sm font-medium">
                         <button className="text-[#E4141C] hover:text-[#242C54] mr-3">
                           View
                         </button>

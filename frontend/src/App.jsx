@@ -8,6 +8,7 @@ import Campaigns from './pages/Campaigns'
 import Feedback from './pages/Feedback'
 import Reports from './pages/Reports'
 import Setting from './pages/Setting'
+import AdminHome from './pages/AdminHome'
 
 const MainLayout = () => { 
   return (
@@ -32,7 +33,8 @@ const router = createBrowserRouter([
       { path: "/campaigns", element: <Campaigns /> },
       { path: "/feedback", element: <Feedback /> },
       { path: "/reports", element: <Reports /> },
-      { path: "/setting", element: <Setting /> }
+      { path: "/setting", element: <Setting /> },
+      { path: "/admin", element: <AdminHome /> }
     ]
   }
 ])
