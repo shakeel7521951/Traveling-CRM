@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   FiUser,
   FiPhone,
@@ -10,6 +10,7 @@ import {
   FiTrash2,
   FiPlus
 } from 'react-icons/fi';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 const Passengers = () => {
   const initialPassengers = [
@@ -24,6 +25,35 @@ const Passengers = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [currentPassenger, setCurrentPassenger] = useState(null);
+  
+  const location = useLocation();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (location.state) {
+      setPassengers(prevPassengers => {
+        // Check if passenger already exists by name and phone
+        const exists = prevPassengers.some(p => 
+          p.name === location.state.name && 
+          p.phone === location.state.phone
+        );
+        
+        if (!exists) {
+          const newPassenger = {
+            ...location.state,
+            id: prevPassengers.length + 1,
+            station: location.state.destination || 'JED'
+          };
+          return [...prevPassengers, newPassenger];
+        }
+        return prevPassengers;
+      });
+      
+      // Clear the navigation state to prevent duplicates
+      navigate(location.pathname, { replace: true, state: null });
+    }
+  }, [location.state, navigate, location.pathname]);
+
   const [formData, setFormData] = useState({
     name: '',
     phone: '',
@@ -49,13 +79,14 @@ const Passengers = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+
     if (currentPassenger) {
-      // Edit existing
+      // Edit existing passenger
       setPassengers(passengers.map(p =>
         p.id === currentPassenger.id ? { ...formData, id: currentPassenger.id } : p
       ));
     } else {
-      // Add new
+      // Add new passenger
       const newPassenger = {
         ...formData,
         id: passengers.length + 1
@@ -63,7 +94,7 @@ const Passengers = () => {
       setPassengers([...passengers, newPassenger]);
     }
 
-    // Reset state
+    // Reset form state
     setFormData({
       name: '',
       phone: '',
@@ -93,9 +124,9 @@ const Passengers = () => {
 
   return (
     <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
-      <div className="px-6 py-4 border-b border-gray-100 flex justify-between items-center">
-        <h3 className="text-lg font-semibold text-[#242C54]">Recent Passengers</h3>
-        <div className="flex space-x-3">
+      <div className="px-6 py-4 border-b border-gray-100 flex justify-between items-center flex-col gap-3">
+        <h3 className="text-lg whitespace-nowrap sm:text-lg font-semibold text-[#242C54]">Recent Passengers</h3>
+        <div className="flex flex-col sm:flex-row gap-3 ">
           <div className="relative">
             <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
               <FiSearch className="text-gray-400" />
@@ -135,7 +166,7 @@ const Passengers = () => {
               <th className="px-6 py-3 text-left text-xs font-medium text-[#242C54] uppercase tracking-wider">Name</th>
               <th className="px-6 py-3 text-left text-xs font-medium text-[#242C54] uppercase tracking-wider">Contact</th>
               <th className="px-6 py-3 text-left text-xs font-medium text-[#242C54] uppercase tracking-wider">Flight Date</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-[#242C54] uppercase tracking-wider">Station</th>
+              
               <th className="px-6 py-3 text-left text-xs font-medium text-[#242C54] uppercase tracking-wider">Actions</th>
             </tr>
           </thead>
@@ -173,11 +204,7 @@ const Passengers = () => {
                     </div>
                   </div>
                 </td>
-                <td className="px-6 py-4 whitespace-nowrap">
-                  <span className="px-3 py-1 inline-flex text-xs leading-5 font-semibold rounded-full bg-gradient-to-r from-[#E4141C] to-[#FF6B6B] text-white">
-                    {passenger.station}
-                  </span>
-                </td>
+               
                 <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                   <div className="flex space-x-3 justify-start">
                     <button onClick={() => handleEdit(passenger)} className="text-gray-400 hover:text-blue-500 transition-colors">
@@ -186,9 +213,6 @@ const Passengers = () => {
                     <button onClick={() => handleDelete(passenger.id)} className="text-gray-400 hover:text-red-500 transition-colors">
                       <FiTrash2 className="h-5 w-5" />
                     </button>
-                    {/* <button className="text-gray-400 hover:text-[#242C54] transition-colors">
-                      <FiChevronRight className="h-5 w-5" />
-                    </button> */}
                   </div>
                 </td>
               </tr>
@@ -197,26 +221,23 @@ const Passengers = () => {
         </table>
       </div>
 
-      {/* View all */}
       <div className="px-6 py-3 border-t border-gray-100 bg-gray-50 text-right">
         <button className="text-sm font-medium text-[#242C54] hover:text-[#3A4375]">
           View All Passengers →
         </button>
       </div>
 
-      {/* Modal */}
       {isModalOpen && (
-        <div className="fixed z-10 inset-0 overflow-y-auto">
+        
+        <div className="fixed bg-black/70 z-10 inset-0 overflow-y-auto">
           <div className="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
-            {/* <div className="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity"></div> */}
-            <span className="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
             <div className="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
               <div className="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
                 <h3 className="text-lg font-medium text-gray-900 mb-4">
                   {currentPassenger ? 'Edit Passenger' : 'Add New Passenger'}
                 </h3>
                 <form onSubmit={handleSubmit}>
-                  {['name', 'phone', 'email', 'flightDate', 'station'].map((field, idx) => (
+                  {['name', 'phone', 'email', 'flightDate',].map((field, idx) => (
                     <div className="mb-4" key={idx}>
                       <label htmlFor={field} className="block text-sm font-medium text-gray-700 capitalize">{field.replace(/([A-Z])/g, ' $1')}</label>
                       <input
@@ -247,7 +268,7 @@ const Passengers = () => {
                           phone: '',
                           email: '',
                           flightDate: '',
-                          station: ''
+                          
                         });
                       }}
                       className="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#242C54] sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm"
@@ -257,7 +278,7 @@ const Passengers = () => {
                   </div>
                 </form>
               </div>
-            </div>
+            </div> 
           </div>
         </div>
       )}
