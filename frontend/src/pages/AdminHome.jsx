@@ -4,10 +4,11 @@ import StationLeaderboard from '../components/adminHome/StationLeaderboard'
 import CampaignEngagementChart from '../components/adminHome/CampaignEngagementChart'
 import RecentActivityTimeline from '../components/adminHome/RecentActivityTimeline'
 import PassengerDataOverview from '../components/adminHome/PassengerDataOverview'
+import { FaHeart } from 'react-icons/fa'
 export default function AdminHome() {
   return (
     <div>
-      <KPISection title="Total Flights" value='120'/>
+      <KPISection title="Total Flights" value='120' icon={<FaHeart/>} color='orange'/>
     
 
       <PassengerDataOverview />

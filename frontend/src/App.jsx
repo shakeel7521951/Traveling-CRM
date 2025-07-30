@@ -11,6 +11,7 @@ import Setting from './pages/Setting'
 import AdminHome from './pages/AdminHome'
 import AllStations from './pages/AllStations'
 import StationDetails from './pages/StationDetails'
+import StationPassengers from './components/AllStations/StationPassengers'
 
 const MainLayout = () => { 
   return (
@@ -38,7 +39,8 @@ const router = createBrowserRouter([
       { path: "/setting", element: <Setting /> },
       { path: "/admin", element: <AdminHome /> },
       { path: "/all-stations", element: <AllStations /> },
-      { path: "/stationsdetail/:id", element: <StationDetails/>}
+      { path: "/stationsdetail/:id", element: <StationDetails/>},
+      { path: "/station-passengers", element: <StationPassengers/>}
     ]
   }
 ])
