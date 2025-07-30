@@ -287,7 +287,7 @@ const Setting = () => {
           {/* Right Column - Preferences */}
           <div className="space-y-6">
             {/* Theme Card */}
-            <div className="bg-white rounded-xl shadow-md overflow-hidden border border-gray-100">
+            {/* <div className="bg-white rounded-xl shadow-md overflow-hidden border border-gray-100">
               <div className="bg-gradient-to-r from-[#242C54] to-[#3a456b] p-5 text-white">
                 <div className="flex items-center space-x-3">
                   <div className="p-3 bg-white bg-opacity-20 rounded-full">
@@ -329,7 +329,7 @@ const Setting = () => {
                   </div>
                 </div>
               </div>
-            </div>
+            </div> */}
 
             {/* Data Export Card */}
             <div className="bg-white rounded-xl shadow-md overflow-hidden border border-gray-100">

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { 
   FiPlus, 
   FiFilter, 
@@ -13,8 +13,10 @@ import {
   FiChevronDown
 } from 'react-icons/fi';
 import { FaWhatsapp } from 'react-icons/fa';
+import { useLocation } from 'react-router-dom';
 
 const Campaigns = () => {
+  const location = useLocation();
   // State for campaigns data
   const [campaigns, setCampaigns] = useState([
     {
@@ -68,6 +70,21 @@ const Campaigns = () => {
     endDate: '',
     message: ''
   });
+
+  // Check for incoming campaign data from navigation state
+  useEffect(() => {
+    if (location.state) {
+      const incomingCampaign = location.state;
+      const campaign = {
+        ...incomingCampaign,
+        id: Math.max(...campaigns.map(c => c.id)) + 1,
+        sent: 0,
+        responses: 0,
+        color: ['from-emerald-500 to-green-600', 'from-blue-500 to-indigo-600', 'from-amber-500 to-orange-500'][Math.floor(Math.random() * 3)]
+      };
+      setCampaigns([...campaigns, campaign]);
+    }
+  }, [location.state]);
 
   // Calculate response rate safely
   const calculateResponseRate = () => {
@@ -224,14 +241,9 @@ const Campaigns = () => {
           
           {/* Actions */}
           <div className="flex justify-between border-t pt-4">
-            <button className="text-blue-600 hover:text-blue-800 flex items-center text-sm font-medium">
-              <FiEdit className="mr-2" />
-              Edit
-            </button>
-            
             <button 
               onClick={() => handleDelete(campaign.id)}
-              className="text-gray-500 hover:text-red-600 flex items-center text-sm font-medium"
+              className="text-gray-500 cursor-pointer hover:text-red-600 flex items-center text-sm font-medium"
             >
               <FiTrash2 className="mr-2" />
               Delete
@@ -251,7 +263,7 @@ const Campaigns = () => {
           <p className="text-gray-500">Create and manage your marketing campaigns</p>
         </div>
         
-        <div className="flex flex-col sm:flex-row gap-3 w-full lg:w-auto">
+        <div className="flex flex-col lg:flex-row gap-3 w-full lg:w-auto">
           <div className="relative flex-1 min-w-[200px]">
             <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
               <FiSearch className="text-gray-400" />
