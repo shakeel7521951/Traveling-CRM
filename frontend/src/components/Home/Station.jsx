@@ -16,23 +16,7 @@ const StatCard = ({ title, value, change, icon }) => (
 const Station = () => {
   return (
     <div className="p-4 bg-gray-50 ">
-         {/* Header */}
-        <header className="bg-white shadow p-4 flex items-center justify-between">
-          <div className="flex items-center space-x-4">
-            <FiSearch className="text-gray-500" />
-            <input
-              type="text"
-              placeholder="Search..."
-              className="border-none outline-none bg-transparent"
-            />
-          </div>
-          <div className="flex hidden sm:block sm:flex items-center space-x-4">
-            <FiBell className="text-gray-600" size={20} />
-            <div className="w-8 h-8 rounded-full bg-[#E4141C] flex items-center justify-center text-white">
-              A
-            </div>
-          </div>
-        </header>
+      
       <h2 className="text-2xl mt-4 font-bold text-[#242C54] mb-6">
         Station Performance Dashboard
       </h2>

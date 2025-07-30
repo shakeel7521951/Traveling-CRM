@@ -32,7 +32,9 @@ const Navbar = () => {
             <a href="#" className="w-7 h-7 rounded-full bg-gray-800 flex items-center justify-center hover:bg-red-500 transition-colors group" aria-label="LinkedIn">
               <FaLinkedinIn className="text-gray-400 group-hover:text-white text-xs" />
             </a>
-            
+             <div className="w-8 h-8 rounded-full bg-[#E4141C] flex items-center justify-center text-white">
+              A
+            </div>
           </div>
         </div>
       </div>
