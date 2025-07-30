@@ -47,13 +47,13 @@ const FeedbackRatingSummary = () => {
   const chartData = dataByFilter[timeFilter];
 
   return (
-    <div className="bg-white md:w-6/12 shadow-xl rounded-2xl p-6   mb-10">
-      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-4 gap-4">
-        <h2 className="text-xl font-bold  dark:text-black">
-            Feedback Rating Summary ({timeFilter})
+    <div className="bg-white sm:w-6/12 w-full shadow-md rounded-lg p-4 mb-6 border border-gray-100">
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-4 gap-3">
+        <h2 className="text-lg sm:text-xl font-bold text-[#242C54]">
+          Feedback Rating Summary ({timeFilter})
         </h2>
         <select
-          className="p-2 rounded-md border dark:border-gray-700 text-sm text-gray-800 dark:text-white dark:bg-gray-800"
+          className="p-2 rounded-md border border-gray-300 text-sm text-[#242C54] focus:border-[#E4141C] focus:ring-1 focus:ring-[#E4141C] outline-none transition-colors"
           value={timeFilter}
           onChange={(e) => setTimeFilter(e.target.value)}
         >
@@ -64,38 +64,49 @@ const FeedbackRatingSummary = () => {
         </select>
       </div>
 
-      <ResponsiveContainer width="100%" height={350} className={' border'}>
-        <PieChart>
-          <Pie
-            data={chartData}
-            dataKey="value"
-            nameKey="name"
-            cx="50%"
-            cy="50%"
-            innerRadius={70}
-            outerRadius={110}
-            fill="#8884d8"
-            label
-          >
-            {chartData.map((entry, index) => (
-              <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
-            ))}
-          </Pie>
-          <Tooltip
-            contentStyle={{
-              backgroundColor: 'white',
-              borderRadius: '8px',
-              color: '#fff',
-            }}
-          />
-          <Legend
-            layout="horizontal"
-            verticalAlign="bottom"
-            align="center"
-            iconType="circle"
-          />
-        </PieChart>
-      </ResponsiveContainer>
+      <div className="w-full h-[300px] sm:h-[350px]">
+        <ResponsiveContainer width="100%" height="100%">
+          <PieChart>
+            <Pie
+              data={chartData}
+              dataKey="value"
+              nameKey="name"
+              cx="50%"
+              cy="50%"
+              innerRadius={60}
+              outerRadius={90}
+              paddingAngle={2}
+              fill="#8884d8"
+              label={({ name, percent }) => `${name} ${(percent * 100).toFixed(0)}%`}
+            >
+              {chartData.map((entry, index) => (
+                <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+              ))}
+            </Pie>
+            <Tooltip
+              formatter={(value, name) => [`${value} ratings`, name]}
+              contentStyle={{
+                backgroundColor: '#242C54',
+                color: '#fff',
+                border: 'none',
+                borderRadius: '6px',
+                fontSize: '14px',
+              }}
+            />
+            <Legend
+              layout="horizontal"
+              verticalAlign="bottom"
+              align="center"
+              iconType="circle"
+              wrapperStyle={{ 
+                color: '#242C54',
+                fontSize: '14px',
+                paddingTop: '20px'
+              }}
+            />
+          </PieChart>
+        </ResponsiveContainer>
+      </div>
     </div>
   );
 };

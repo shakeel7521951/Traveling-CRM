@@ -10,7 +10,6 @@ import {
   Legend,
 } from 'recharts';
 
-// Sample data for multiple time filters
 const dataByFilter = {
   Today: [
     { station: 'JED', male: 5, female: 3, total: 8 },
@@ -32,7 +31,6 @@ const dataByFilter = {
     { station: 'NBO', male: 6, female: 5, total: 11 },
     { station: 'DXB', male: 7, female: 6, total: 13 },
   ],
-
   'This Week': [
     { station: 'JED', male: 40, female: 25, total: 65 },
     { station: 'RUH', male: 38, female: 20, total: 58 },
@@ -53,7 +51,6 @@ const dataByFilter = {
     { station: 'NBO', male: 41, female: 38, total: 79 },
     { station: 'DXB', male: 44, female: 37, total: 81 },
   ],
-
   'This Month': [
     { station: 'JED', male: 160, female: 140, total: 300 },
     { station: 'RUH', male: 150, female: 120, total: 270 },
@@ -74,7 +71,6 @@ const dataByFilter = {
     { station: 'NBO', male: 165, female: 160, total: 325 },
     { station: 'DXB', male: 170, female: 150, total: 320 },
   ],
-
   'All Time': [
     { station: 'JED', male: 1800, female: 1700, total: 3500 },
     { station: 'RUH', male: 1750, female: 1600, total: 3350 },
@@ -98,53 +94,81 @@ const dataByFilter = {
 };
 
 const PassengerDataOverview = () => {
-  const [timeFilter, setTimeFilter] =useState('Today');
+  const [timeFilter, setTimeFilter] = useState('Today');
   const chartData = dataByFilter[timeFilter];
 
   return (
-    <div className="bg-white shadow-xl mb-10 mt-3 p-4 rounded-xl">
-      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-4 gap-4">
-        <h2 className="text-xl font-bold text-gray-800 dark:text-black">
+    <div className="bg-white shadow-md rounded-lg p-4 w-full">
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-4 gap-2">
+        <h2 className="text-lg sm:text-xl font-bold text-[#242C54]">
           Passenger Overview ({timeFilter})
         </h2>
         <select
-          className="p-2 rounded-md border border-gray-300 text-sm text-gray-800 dark:text-white dark:bg-gray-800"
+          className="p-2 text-sm rounded border border-gray-300 text-[#242C54] focus:border-[#E4141C] focus:ring-1 focus:ring-[#E4141C] outline-none transition-colors"
           value={timeFilter}
           onChange={(e) => setTimeFilter(e.target.value)}
         >
           {Object.keys(dataByFilter).map((filter) => (
-            <option key={filter}>{filter}</option>
+            <option key={filter} value={filter}>
+              {filter}
+            </option>
           ))}
         </select>
       </div>
 
-      <ResponsiveContainer width="100%" height={400}>
-        <BarChart
-          data={chartData}
-          margin={{ top: 10, right: 30, left: 10, bottom: 60 }}
-        >
-          <CartesianGrid strokeDasharray="3 3" stroke="#ccc" />
-          <XAxis
-            dataKey="station"
-            tick={{ fill: '#4B5563' }}
-            angle={-45}
-            textAnchor="end"
-            interval={0}
-          />
-          <YAxis tick={{ fill: '#4B5563' }} />
-          <Tooltip
-            contentStyle={{
-              backgroundColor: '#1f2937',
-              borderRadius: '8px',
-              color: '#fff',
-            }}
-          />
-          <Legend verticalAlign="top" height={36} />
-          <Bar dataKey="male" fill="#60a5fa" name="Male Passengers" />
-          <Bar dataKey="female" fill="#f472b6" name="Female Passengers" />
-          <Bar dataKey="total" fill="#34d399" name="Total Passengers" />
-        </BarChart>
-      </ResponsiveContainer>
+      <div className="w-full h-[300px] sm:h-[400px]">
+        <ResponsiveContainer width="100%" height="100%">
+          <BarChart
+            data={chartData}
+            margin={{ top: 20, right: 20, left: 0, bottom: 60 }}
+          >
+            <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
+            <XAxis
+              dataKey="station"
+              tick={{ fill: '#242C54', fontSize: 12 }}
+              angle={-45}
+              textAnchor="end"
+              interval={0}
+              height={60}
+            />
+            <YAxis tick={{ fill: '#242C54', fontSize: 12 }} />
+            <Tooltip
+              contentStyle={{
+                backgroundColor: '#242C54',
+                color: '#fff',
+                border: 'none',
+                borderRadius: '6px',
+                fontSize: '14px',
+              }}
+            />
+            <Legend
+              wrapperStyle={{
+                paddingTop: '10px',
+                color: '#242C54',
+                fontSize: '14px',
+              }}
+            />
+            <Bar
+              dataKey="male"
+              name="Male"
+              fill="#242C54"
+              radius={[4, 4, 0, 0]}
+            />
+            <Bar
+              dataKey="female"
+              name="Female"
+              fill="#E4141C"
+              radius={[4, 4, 0, 0]}
+            />
+            <Bar
+              dataKey="total"
+              name="Total"
+              fill="#64748b"
+              radius={[4, 4, 0, 0]}
+            />
+          </BarChart>
+        </ResponsiveContainer>
+      </div>
     </div>
   );
 };
