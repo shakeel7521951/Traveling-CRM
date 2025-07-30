@@ -124,12 +124,13 @@ const Reports = () => {
   return (
     <div className="p-6">
       {/* Page Header */}
-      <div className="flex flex-col xl:flex-row justify-between items-start xl:items-center mb-6">
-        <h1 className="text-2xl font-bold text-[#242C54] mb-4 xl:mb-0">Analytics Reports</h1>
+      <div className="flex flex-col sm:gap-10 sm:flex-row sm:justify-between mb-6">
+        <h1 className="text-xl sm:text-3xl  xl:text-4xl whitespace-nowrap font-bold text-[#242C54] mb-4 xl:mb-0">Analytics Reports</h1>
         
         <div className="flex flex-col xl:flex-row gap-3 w-full md:w-auto">
           {/* Date Range Filter */}
-          <div className="relative">
+       <div className="flex flex-wrap gap-5">
+           <div className="relative">
             <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
               <FiCalendar className="text-gray-500" />
             </div>
@@ -162,6 +163,7 @@ const Reports = () => {
               ))}
             </select>
           </div>
+       </div>
           
           {/* Export Button */}
           <button
