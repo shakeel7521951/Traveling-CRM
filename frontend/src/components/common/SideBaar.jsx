@@ -15,15 +15,19 @@ const NavItem = ({ icon, text, active, path, sidebarOpen, isMobile }) => {
   return (
     <Link to={path} className="block">
       <div 
-        className={`flex gap-3 m-2  p-3 cursor-pointer group relative ${
+        className={`flex gap-3 m-2 p-3 cursor-pointer group relative ${
           active ? '' : 'hover:bg-[#2d365a]'
         }`}
       >
-        <span className={`${sidebarOpen || isMobile ? 'mr-3' : 'mx-auto'}`}>
-          {icon}
-        </span>
-        {(sidebarOpen && !isMobile) && <span>{text}</span>}
+        {/* Show icon only when sidebar is open on mobile */}
+        {sidebarOpen && (
+          <span className="mr-0">
+            {icon}
+          </span>
+        )}
+        {sidebarOpen && !isMobile && <span>{text}</span>}
         
+        {/* Tooltip for desktop when sidebar is closed */}
         {!sidebarOpen && !isMobile && (
           <div className="absolute left-full ml-2 px-2 py-1 bg-[#242C54] text-white text-sm rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">
             {text}
@@ -94,61 +98,64 @@ const Sidebar = () => {
         </button>
       </div>
       
-      <nav className="mt-6 w-full">
-        <NavItem 
-          icon={<FiHome size={20} />} 
-          text="Dashboard" 
-          active={getActiveTab() === 'dashboard'}
-          path="/"
-          sidebarOpen={sidebarOpen}
-          isMobile={isMobile}
-        />
-        
-        <NavItem 
-          icon={<FiUsers size={20} />} 
-          text="Passengers" 
-          active={getActiveTab() === 'passengers'}
-          path="/passengers"
-          sidebarOpen={sidebarOpen}
-          isMobile={isMobile}
-        />
-        
-        <NavItem 
-          icon={<FiMessageSquare size={20} />} 
-          text="Campaigns" 
-          active={getActiveTab() === 'campaigns'}
-          path="/campaigns"
-          sidebarOpen={sidebarOpen}
-          isMobile={isMobile}
-        />
-        
-        <NavItem 
-          icon={<FiStar size={20} />} 
-          text="Feedback" 
-          active={getActiveTab() === 'feedback'}
-          path="/feedback"
-          sidebarOpen={sidebarOpen}
-          isMobile={isMobile}
-        />
-        
-        <NavItem 
-          icon={<FiPieChart size={20} />} 
-          text="Reports" 
-          active={getActiveTab() === 'reports'}
-          path="/reports"
-          sidebarOpen={sidebarOpen}
-          isMobile={isMobile}
-        />
-        
-        <NavItem 
-          icon={<FiSettings size={20} />} 
-          text="Settings" 
-          active={getActiveTab() === 'settings'}
-          path="/setting"
-          sidebarOpen={sidebarOpen}
-          isMobile={isMobile}
-        />
-      </nav>
+      {/* Only show nav items when sidebar is open on mobile */}
+      {(sidebarOpen || !isMobile) && (
+        <nav className="mt-6 w-full">
+          <NavItem 
+            icon={<FiHome size={20} />} 
+            text="Dashboard" 
+            active={getActiveTab() === 'dashboard'}
+            path="/"
+            sidebarOpen={sidebarOpen}
+            isMobile={isMobile}
+          />
+          
+          <NavItem 
+            icon={<FiUsers size={20} />} 
+            text="Passengers" 
+            active={getActiveTab() === 'passengers'}
+            path="/passengers"
+            sidebarOpen={sidebarOpen}
+            isMobile={isMobile}
+          />
+          
+          <NavItem 
+            icon={<FiMessageSquare size={20} />} 
+            text="Campaigns" 
+            active={getActiveTab() === 'campaigns'}
+            path="/campaigns"
+            sidebarOpen={sidebarOpen}
+            isMobile={isMobile}
+          />
+          
+          <NavItem 
+            icon={<FiStar size={20} />} 
+            text="Feedback" 
+            active={getActiveTab() === 'feedback'}
+            path="/feedback"
+            sidebarOpen={sidebarOpen}
+            isMobile={isMobile}
+          />
+          
+          <NavItem 
+            icon={<FiPieChart size={20} />} 
+            text="Reports" 
+            active={getActiveTab() === 'reports'}
+            path="/reports"
+            sidebarOpen={sidebarOpen}
+            isMobile={isMobile}
+          />
+          
+          <NavItem 
+            icon={<FiSettings size={20} />} 
+            text="Settings" 
+            active={getActiveTab() === 'settings'}
+            path="/setting"
+            sidebarOpen={sidebarOpen}
+            isMobile={isMobile}
+          />
+        </nav>
+      )}
     </div>
   );
 };
