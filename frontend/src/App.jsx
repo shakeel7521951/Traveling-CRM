@@ -8,6 +8,9 @@ import Campaigns from './pages/Campaigns'
 import Feedback from './pages/Feedback'
 import Reports from './pages/Reports'
 import Setting from './pages/Setting'
+import AdminHome from './pages/AdminHome'
+import AllStations from './pages/AllStations'
+import StationDetails from './pages/StationDetails'
 
 const MainLayout = () => { 
   return (
@@ -32,7 +35,10 @@ const router = createBrowserRouter([
       { path: "/campaigns", element: <Campaigns /> },
       { path: "/feedback", element: <Feedback /> },
       { path: "/reports", element: <Reports /> },
-      { path: "/setting", element: <Setting /> }
+      { path: "/setting", element: <Setting /> },
+      { path: "/admin", element: <AdminHome /> },
+      { path: "/all-stations", element: <AllStations /> },
+      { path: "/stationsdetail/:id", element: <StationDetails/>}
     ]
   }
 ])
