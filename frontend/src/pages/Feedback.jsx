@@ -119,8 +119,8 @@ const Feedback = () => {
   return (
     <div className="p-6">
       {/* Header and search/filter */}
-      <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-6">
-        <h1 className="text-2xl font-bold text-[#242C54] mb-4 md:mb-0">Passenger Feedback</h1>
+      <div className="flex flex-col sm:flex-row justify-between items-start md:items-center mb-6">
+        <h1 className="text-lg sm:text-2xl font-bold text-[#242C54] mb-4 md:mb-0">Passenger Feedback</h1>
         
         <div className="flex flex-col sm:flex-row gap-3 w-full md:w-auto">
           <div className="relative flex-1">
@@ -139,7 +139,7 @@ const Feedback = () => {
             />
           </div>
           
-          <div className="relative">
+          <div className="relative flex-1">
             <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
               <FiFilter className="text-gray-500" />
             </div>

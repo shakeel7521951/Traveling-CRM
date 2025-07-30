@@ -124,10 +124,10 @@ const Passengers = () => {
 
   return (
     <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
-      <div className="px-6 py-4 border-b border-gray-100 flex justify-between items-center flex-col gap-3">
-        <h3 className="text-lg whitespace-nowrap sm:text-lg font-semibold text-[#242C54]">Recent Passengers</h3>
-        <div className="flex flex-col sm:flex-row gap-3 ">
-          <div className="relative">
+      <div className="px-6 py-4 border-b border-gray-100  items-center flex-col gap-3">
+        <h3 className="text-2xl whitespace-nowrap mb-3 font-semibold text-[#242C54]">Total Passengers</h3>
+        <div className="flex flex-col sm:flex-row sm:justify-end gap-3 ">
+          <div className="relative ">
             <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
               <FiSearch className="text-gray-400" />
             </div>
