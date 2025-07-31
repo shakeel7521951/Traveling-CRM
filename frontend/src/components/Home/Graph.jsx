@@ -26,22 +26,43 @@ ChartJS.register(
 
 const chartOptions = {
   responsive: true,
+  maintainAspectRatio: false,
   plugins: {
     legend: {
       position: 'bottom',
       labels: {
         color: '#242C54',
+        font: {
+          size: 12
+        },
+        padding: 20
       },
     },
   },
   scales: {
     x: {
-      ticks: { color: '#242C54' },
-      grid: { color: '#f0f0f0' },
+      ticks: { 
+        color: '#242C54',
+        font: {
+          size: 12
+        }
+      },
+      grid: { 
+        color: 'rgba(0, 0, 0, 0.05)',
+        drawBorder: false
+      },
     },
     y: {
-      ticks: { color: '#242C54' },
-      grid: { color: '#f0f0f0' },
+      ticks: { 
+        color: '#242C54',
+        font: {
+          size: 12
+        }
+      },
+      grid: { 
+        color: 'rgba(0, 0, 0, 0.05)',
+        drawBorder: false
+      },
     },
   },
 };
@@ -54,16 +75,25 @@ const passengerTrendsData = {
       label: 'Actual Passengers',
       data: [420, 480, 530, 610, 700, 760, 820],
       borderColor: '#242C54',
-      backgroundColor: '#242C54',
+      backgroundColor: 'rgba(36, 44, 84, 0.1)',
+      borderWidth: 2,
       tension: 0.4,
+      fill: true,
+      pointBackgroundColor: '#242C54',
+      pointRadius: 4,
+      pointHoverRadius: 6
     },
     {
       label: 'AI Forecast',
       data: [450, 500, 580, 650, 730, 810, 890],
       borderColor: '#E4141C',
-      backgroundColor: '#E4141C',
+      backgroundColor: 'rgba(228, 20, 28, 0.1)',
+      borderWidth: 2,
       borderDash: [5, 5],
       tension: 0.4,
+      pointBackgroundColor: '#E4141C',
+      pointRadius: 4,
+      pointHoverRadius: 6
     },
   ],
 };
@@ -75,61 +105,72 @@ const channelDistributionData = {
     {
       label: 'Bookings',
       data: [40, 30, 20, 10],
-      backgroundColor: ['#242C54', '#E4141C', '#FDBA74', '#60A5FA'],
-      borderWidth: 1,
+      backgroundColor: [
+        '#242C54', 
+        '#E4141C', 
+        'rgba(36, 44, 84, 0.7)', 
+        'rgba(228, 20, 28, 0.7)'
+      ],
+      borderColor: '#fff',
+      borderWidth: 2,
+      hoverOffset: 10
     },
   ],
 };
 
 const Graph = () => {
   return (
-    <div className="p-4 bg-gray-50 ">
+    <div className="p-4 md:p-6 bg-gray-50">
       <h2 className="text-2xl font-bold text-[#242C54] mb-6">
         AI Analytics Graphs Section
       </h2>
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 md:gap-6">
         {/* Passenger Trends (Line Chart) */}
-        <div className="bg-white rounded-lg shadow p-6 lg:col-span-2">
+        <div className="bg-white rounded-xl shadow-sm p-4 md:p-6 lg:col-span-2 border border-gray-100">
           <h3 className="text-lg font-semibold text-[#242C54] mb-4">
             Passenger Trends (AI Forecast)
           </h3>
-          <div className="h-64">
+          <div className="h-64 md:h-80">
             <Line
               data={passengerTrendsData}
               options={{
                 ...chartOptions,
                 plugins: {
                   ...chartOptions.plugins,
-                  title: {
-                    display: true,
-                    text: 'Monthly Passenger Growth with AI Projection',
-                    color: '#242C54',
-                  },
-                },
+                  tooltip: {
+                    backgroundColor: '#242C54',
+                    titleColor: '#fff',
+                    bodyColor: '#fff',
+                    padding: 12,
+                    cornerRadius: 8
+                  }
+                }
               }}
             />
           </div>
         </div>
 
         {/* Channel Distribution (Pie Chart) */}
-        <div className="bg-white rounded-lg shadow p-6">
+        <div className="bg-white rounded-xl shadow-sm p-4 md:p-6 border border-gray-100">
           <h3 className="text-lg font-semibold text-[#242C54] mb-4">
             Booking Channel Distribution
           </h3>
-          <div className="h-64">
+          <div className="h-64 md:h-80">
             <Pie
               data={channelDistributionData}
               options={{
                 ...chartOptions,
                 plugins: {
                   ...chartOptions.plugins,
-                  title: {
-                    display: true,
-                    text: 'Distribution by Booking Channel',
-                    color: '#242C54',
-                  },
-                },
+                  tooltip: {
+                    backgroundColor: '#242C54',
+                    titleColor: '#fff',
+                    bodyColor: '#fff',
+                    padding: 12,
+                    cornerRadius: 8
+                  }
+                }
               }}
             />
           </div>

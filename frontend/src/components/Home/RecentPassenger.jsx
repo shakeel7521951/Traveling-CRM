@@ -379,7 +379,7 @@ const RecentPassenger = () => {
                         <div className="bg-green-100 p-2 rounded-lg mr-2">
                           <FaWhatsapp className="text-green-600" />
                         </div>
-                        <span>WhatsApp</span>
+                        <span className=" text-wrap">WhatsApp</span>
                       </div>
                     </label>
                     <label className={`flex items-center p-3 border rounded-lg cursor-pointer transition-all ${newCampaign.type === 'email' ? 'border-blue-500 bg-blue-50' : 'border-gray-300 hover:border-gray-400'}`}>
