@@ -142,7 +142,7 @@ const Feedback = () => {
             />
           </div>
           
-          <div className="relative">
+          <div className="relative flex-1">
             <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
               <FiFilter className="text-gray-400" />
             </div>

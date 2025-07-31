@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
-import { 
-  FiDownload, 
-  FiFilter, 
-  FiCalendar, 
+import {
+  FiDownload,
+  FiFilter,
+  FiCalendar,
   FiChevronDown,
   FiChevronUp,
   FiBarChart2,
@@ -69,8 +69,8 @@ const Reports = () => {
     return (
       <div key={index} className="flex flex-col items-center mx-1 md:mx-2">
         <div className="relative h-32 md:h-40 w-6 md:w-8 bg-gray-200 rounded-t-sm">
-          <div 
-            className="absolute bottom-0 w-full bg-[#1E3A8A] rounded-t-sm" 
+          <div
+            className="absolute bottom-0 w-full bg-[#1E3A8A] rounded-t-sm"
             style={{ height: `${height}%` }}
           ></div>
         </div>
@@ -84,9 +84,9 @@ const Reports = () => {
   const renderPieSegment = (rating, index, total) => {
     const circumference = 2 * Math.PI * 40;
     const strokeDasharray = `${(rating.count / total) * circumference} ${circumference}`;
-    const rotation = index === 0 ? 0 : 
+    const rotation = index === 0 ? 0 :
       feedbackRatings.slice(0, index).reduce((sum, r) => sum + (r.count / total) * 360, 0);
-    
+
     return (
       <circle
         key={rating.stars}
@@ -111,8 +111,8 @@ const Reports = () => {
           <span className="text-sm font-semibold">{campaign.rate}%</span>
         </div>
         <div className="w-full bg-gray-200 rounded-full h-2">
-          <div 
-            className="bg-[#E4141C] h-2 rounded-full" 
+          <div
+            className="bg-[#E4141C] h-2 rounded-full"
             style={{ width: `${campaign.rate}%` }}
           ></div>
         </div>
@@ -128,43 +128,45 @@ const Reports = () => {
           <h1 className="text-xl md:text-2xl font-bold text-[#1E3A8A]">Analytics Reports</h1>
           <p className="text-gray-500 text-sm">Generate and export detailed reports</p>
         </div>
-        
+
         <div className="flex flex-col sm:flex-row gap-3 w-full lg:w-auto">
           {/* Date Range Filter */}
-          <div className="relative">
-            <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-              <FiCalendar className="text-gray-400" />
+          <div className="flex flex-wrap gap-5">
+            <div className="relative">
+              <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                <FiCalendar className="text-gray-400" />
+              </div>
+              <select
+                className="pl-10 p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#E4141C] focus:border-transparent appearance-none pr-8"
+                value={dateRange}
+                onChange={(e) => setDateRange(e.target.value)}
+              >
+                <option value="last7">Last 7 Days</option>
+                <option value="last30">Last 30 Days</option>
+                <option value="last90">Last 90 Days</option>
+                <option value="custom">Custom Range</option>
+              </select>
             </div>
-            <select
-              className="pl-10 p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#E4141C] focus:border-transparent appearance-none pr-8"
-              value={dateRange}
-              onChange={(e) => setDateRange(e.target.value)}
-            >
-              <option value="last7">Last 7 Days</option>
-              <option value="last30">Last 30 Days</option>
-              <option value="last90">Last 90 Days</option>
-              <option value="custom">Custom Range</option>
-            </select>
-          </div>
-          
-          {/* Station Filter */}
-          <div className="relative">
-            <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-              <FiFilter className="text-gray-400" />
+
+            {/* Station Filter */}
+            <div className="relative">
+              <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                <FiFilter className="text-gray-400" />
+              </div>
+              <select
+                className="pl-10 p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#E4141C] focus:border-transparent appearance-none pr-8"
+                value={stationFilter}
+                onChange={(e) => setStationFilter(e.target.value)}
+              >
+                {stations.map(station => (
+                  <option key={station} value={station.toLowerCase()}>
+                    {station}
+                  </option>
+                ))}
+              </select>
             </div>
-            <select
-              className="pl-10 p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#E4141C] focus:border-transparent appearance-none pr-8"
-              value={stationFilter}
-              onChange={(e) => setStationFilter(e.target.value)}
-            >
-              {stations.map(station => (
-                <option key={station} value={station.toLowerCase()}>
-                  {station}
-                </option>
-              ))}
-            </select>
           </div>
-          
+
           {/* Export Button */}
           <button
             className="bg-[#E4141C] text-white p-2 rounded-lg hover:bg-[#C1121F] transition-colors flex items-center justify-center gap-2"
@@ -178,7 +180,7 @@ const Reports = () => {
 
       {/* Passenger Statistics Section */}
       <div className="bg-white rounded-lg shadow-sm mb-6 overflow-hidden border border-gray-100">
-        <div 
+        <div
           className="flex justify-between items-center p-4 border-b cursor-pointer hover:bg-gray-50 transition-colors"
           onClick={() => toggleSection('passengerStats')}
         >
@@ -188,7 +190,7 @@ const Reports = () => {
           </div>
           {expandedSection.passengerStats ? <FiChevronUp /> : <FiChevronDown />}
         </div>
-        
+
         {expandedSection.passengerStats && (
           <div className="p-4 md:p-6">
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6">
@@ -205,22 +207,22 @@ const Reports = () => {
                 <p className="text-xl md:text-2xl font-bold text-[#1E3A8A]">JED (3,240)</p>
               </div>
             </div>
-            
+
             <div className="h-64 md:h-80 flex items-end justify-center">
               <div className="flex">
                 {passengerCounts.map(renderPassengerBar)}
               </div>
             </div>
-            
+
             <div className="flex justify-end mt-4 gap-2">
-              <button 
+              <button
                 className="flex items-center gap-2 px-3 py-1 md:px-4 md:py-2 border border-[#1E3A8A] text-[#1E3A8A] rounded-lg hover:bg-gray-100 text-sm transition-colors"
                 onClick={() => handleDownload('passengers')}
               >
                 <FiDownload size={14} />
                 Export
               </button>
-              <button 
+              <button
                 className="flex items-center gap-2 px-3 py-1 md:px-4 md:py-2 border border-[#1E3A8A] text-[#1E3A8A] rounded-lg hover:bg-gray-100 text-sm transition-colors"
                 onClick={() => window.print()}
               >
@@ -234,7 +236,7 @@ const Reports = () => {
 
       {/* Feedback Statistics Section */}
       <div className="bg-white rounded-lg shadow-sm mb-6 overflow-hidden border border-gray-100">
-        <div 
+        <div
           className="flex justify-between items-center p-4 border-b cursor-pointer hover:bg-gray-50 transition-colors"
           onClick={() => toggleSection('feedbackStats')}
         >
@@ -244,7 +246,7 @@ const Reports = () => {
           </div>
           {expandedSection.feedbackStats ? <FiChevronUp /> : <FiChevronDown />}
         </div>
-        
+
         {expandedSection.feedbackStats && (
           <div className="p-4 md:p-6">
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6">
@@ -261,20 +263,20 @@ const Reports = () => {
                 <p className="text-xl md:text-2xl font-bold text-[#1E3A8A]">78%</p>
               </div>
             </div>
-            
+
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
               <div className="h-64 md:h-80 flex flex-col items-center justify-center">
                 <h3 className="text-gray-700 mb-4 text-sm md:text-base">Feedback Ratings</h3>
                 <svg width="100" height="100" viewBox="0 0 100 100" className="mb-4">
-                  {feedbackRatings.map((rating, i) => 
+                  {feedbackRatings.map((rating, i) =>
                     renderPieSegment(rating, i, totalFeedback)
                   )}
                 </svg>
                 <div className="flex flex-wrap justify-center gap-2">
                   {feedbackRatings.map(rating => (
                     <div key={rating.stars} className="flex items-center">
-                      <div 
-                        className="w-3 h-3 rounded-full mr-1" 
+                      <div
+                        className="w-3 h-3 rounded-full mr-1"
                         style={{ backgroundColor: rating.color }}
                       ></div>
                       <span className="text-xs">
@@ -342,16 +344,16 @@ const Reports = () => {
                 </div>
               </div>
             </div>
-            
+
             <div className="flex justify-end mt-4 gap-2">
-              <button 
+              <button
                 className="flex items-center gap-2 px-3 py-1 md:px-4 md:py-2 border border-[#1E3A8A] text-[#1E3A8A] rounded-lg hover:bg-gray-100 text-sm transition-colors"
                 onClick={() => handleDownload('feedback')}
               >
                 <FiDownload size={14} />
                 Export
               </button>
-              <button 
+              <button
                 className="flex items-center gap-2 px-3 py-1 md:px-4 md:py-2 border border-[#1E3A8A] text-[#1E3A8A] rounded-lg hover:bg-gray-100 text-sm transition-colors"
                 onClick={() => window.print()}
               >
@@ -365,7 +367,7 @@ const Reports = () => {
 
       {/* Campaign Statistics Section */}
       <div className="bg-white rounded-lg shadow-sm overflow-hidden border border-gray-100">
-        <div 
+        <div
           className="flex justify-between items-center p-4 border-b cursor-pointer hover:bg-gray-50 transition-colors"
           onClick={() => toggleSection('campaignStats')}
         >
@@ -375,7 +377,7 @@ const Reports = () => {
           </div>
           {expandedSection.campaignStats ? <FiChevronUp /> : <FiChevronDown />}
         </div>
-        
+
         {expandedSection.campaignStats && (
           <div className="p-4 md:p-6">
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6">
@@ -392,19 +394,19 @@ const Reports = () => {
                 <p className="text-xl md:text-2xl font-bold text-[#1E3A8A]">32%</p>
               </div>
             </div>
-            
+
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
               <div className="h-64 md:h-80 flex flex-col items-center justify-center">
                 <h3 className="text-gray-700 mb-4 text-sm md:text-base">Campaign Types</h3>
                 <div className="relative w-40 h-40 md:w-48 md:h-48 mb-4">
                   <div className="absolute inset-0 flex items-center justify-center">
-                    <div 
-                      className="w-20 h-20 md:w-24 md:h-24 rounded-full" 
+                    <div
+                      className="w-20 h-20 md:w-24 md:h-24 rounded-full"
                       style={{ backgroundColor: campaignTypes[0].color }}
                     ></div>
                   </div>
-                  <div 
-                    className="absolute inset-0 rounded-full" 
+                  <div
+                    className="absolute inset-0 rounded-full"
                     style={{
                       background: `conic-gradient(
                         ${campaignTypes[0].color} 0% ${campaignTypes[0].percent}%,
@@ -416,8 +418,8 @@ const Reports = () => {
                 <div className="flex gap-2 md:gap-4">
                   {campaignTypes.map(type => (
                     <div key={type.type} className="flex items-center">
-                      <div 
-                        className="w-3 h-3 rounded-full mr-1" 
+                      <div
+                        className="w-3 h-3 rounded-full mr-1"
                         style={{ backgroundColor: type.color }}
                       ></div>
                       <span className="text-xs">
@@ -434,16 +436,16 @@ const Reports = () => {
                 </div>
               </div>
             </div>
-            
+
             <div className="flex justify-end mt-4 gap-2">
-              <button 
+              <button
                 className="flex items-center gap-2 px-3 py-1 md:px-4 md:py-2 border border-[#1E3A8A] text-[#1E3A8A] rounded-lg hover:bg-gray-100 text-sm transition-colors"
                 onClick={() => handleDownload('campaigns')}
               >
                 <FiDownload size={14} />
                 Export
               </button>
-              <button 
+              <button
                 className="flex items-center gap-2 px-3 py-1 md:px-4 md:py-2 border border-[#1E3A8A] text-[#1E3A8A] rounded-lg hover:bg-gray-100 text-sm transition-colors"
                 onClick={() => window.print()}
               >

@@ -226,7 +226,7 @@ const RecentPassenger = () => {
 
       {showForm && (
         <>
-          <div className="fixed inset-0 bg-black bg-opacity-50 z-40"></div>
+          <div className="fixed inset-0 bg-black bg-opacity-50 z-50 "></div>
           <form onSubmit={handleSubmit}>
             <div
               ref={formRef}
