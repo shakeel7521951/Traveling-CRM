@@ -1,16 +1,36 @@
-import React, { useState } from 'react';
+import React, { useState } from "react";
 
 const activities = [
-  { time: '09:30 AM', type: 'Flight Update', station: 'Lahore', user: 'Ali Khan' },
-  { time: '10:15 AM', type: 'Feedback Received', station: 'Karachi', user: 'Sara Malik' },
-  { time: '11:45 AM', type: 'System Sync', station: 'Islamabad', user: 'Zeeshan Ahmed' },
-  { time: '12:30 PM', type: 'Flight Update', station: 'Lahore', user: 'Sara Malik' },
+  {
+    time: "09:30 AM",
+    type: "Flight Update",
+    station: "Doha",
+    user: "Hassan Al-Thani",
+  },
+  {
+    time: "10:15 AM",
+    type: "Feedback Received",
+    station: "Al Wakrah",
+    user: "Fatima Noor",
+  },
+  {
+    time: "11:45 AM",
+    type: "System Sync",
+    station: "Al Rayyan",
+    user: "Mohammed Saleh",
+  },
+  {
+    time: "12:30 PM",
+    type: "Flight Update",
+    station: "Lusail",
+    user: "Aisha Karim",
+  },
 ];
 
 const RecentActivityTimeline = () => {
-  const [typeFilter, setTypeFilter] = useState('');
-  const [stationFilter, setStationFilter] = useState('');
-  const [userFilter, setUserFilter] = useState('');
+  const [typeFilter, setTypeFilter] = useState("");
+  const [stationFilter, setStationFilter] = useState("");
+  const [userFilter, setUserFilter] = useState("");
 
   const filteredActivities = activities.filter((activity) => {
     return (
@@ -24,13 +44,17 @@ const RecentActivityTimeline = () => {
     <div className="flex flex-col lg:flex-row bg-white shadow-md rounded-lg p-4 border border-gray-100 w-full">
       {/* Left: Timeline */}
       <div className="lg:w-2/3 lg:pr-4">
-        <h2 className="text-lg sm:text-xl font-semibold mb-4 text-[#242C54]">Recent Activity Timeline</h2>
+        <h2 className="text-lg sm:text-xl font-semibold mb-4 text-[#242C54]">
+          Recent Activity Timeline
+        </h2>
         {filteredActivities.length > 0 ? (
           <ul className="space-y-4">
             {filteredActivities.map((activity, index) => (
               <li key={index} className="border-l-4 border-[#E4141C] pl-4 py-2">
                 <p className="text-sm text-gray-500">{activity.time}</p>
-                <p className="text-md font-medium text-[#242C54]">{activity.type}</p>
+                <p className="text-md font-medium text-[#242C54]">
+                  {activity.type}
+                </p>
                 <p className="text-sm text-gray-600">
                   {activity.station} — by {activity.user}
                 </p>
@@ -38,15 +62,20 @@ const RecentActivityTimeline = () => {
             ))}
           </ul>
         ) : (
-          <p className="text-gray-500">No activity found with selected filters.</p>
+          <p className="text-gray-500">
+            No activity found with selected filters.
+          </p>
         )}
       </div>
 
       {/* Right: Filter + Stats */}
       <div className="lg:w-1/3 flex flex-col gap-4 lg:pl-4 lg:border-l lg:border-gray-200 mt-4 lg:mt-0">
-        <h2 className="text-lg sm:text-xl font-semibold text-[#242C54]">Filters</h2>
+        <h2 className="text-lg sm:text-xl font-semibold text-[#242C54]">
+          Filters
+        </h2>
 
         <div className="space-y-3">
+          {/* Type Filter */}
           <select
             className="w-full border border-gray-300 rounded px-3 py-2 text-sm text-[#242C54] focus:border-[#E4141C] focus:ring-1 focus:ring-[#E4141C] outline-none transition-colors"
             value={typeFilter}
@@ -58,36 +87,44 @@ const RecentActivityTimeline = () => {
             <option value="System Sync">System Sync</option>
           </select>
 
+          {/* Station Filter */}
           <select
             className="w-full border border-gray-300 rounded px-3 py-2 text-sm text-[#242C54] focus:border-[#E4141C] focus:ring-1 focus:ring-[#E4141C] outline-none transition-colors"
             value={stationFilter}
             onChange={(e) => setStationFilter(e.target.value)}
           >
             <option value="">All Stations</option>
-            <option value="Lahore">Lahore</option>
-            <option value="Karachi">Karachi</option>
-            <option value="Islamabad">Islamabad</option>
+            <option value="Doha">Doha</option>
+            <option value="Al Rayyan">Al Rayyan</option>
+            <option value="Al Wakrah">Al Wakrah</option>
+            <option value="Lusail">Lusail</option>
           </select>
 
+          {/* User Filter */}
           <select
             className="w-full border border-gray-300 rounded px-3 py-2 text-sm text-[#242C54] focus:border-[#E4141C] focus:ring-1 focus:ring-[#E4141C] outline-none transition-colors"
             value={userFilter}
             onChange={(e) => setUserFilter(e.target.value)}
           >
             <option value="">All Users</option>
-            <option value="Ali Khan">Ali Khan</option>
-            <option value="Sara Malik">Sara Malik</option>
-            <option value="Zeeshan Ahmed">Zeeshan Ahmed</option>
+            <option value="Hassan Al-Thani">Hassan Al-Thani</option>
+            <option value="Fatima Noor">Fatima Noor</option>
+            <option value="Mohammed Saleh">Mohammed Saleh</option>
+            <option value="Aisha Karim">Aisha Karim</option>
           </select>
         </div>
 
         {/* Mini Stats */}
         <div className="mt-4">
-          <h3 className="text-md sm:text-lg font-semibold mb-2 text-[#242C54]">Summary</h3>
+          <h3 className="text-md sm:text-lg font-semibold mb-2 text-[#242C54]">
+            Summary
+          </h3>
           <div className="grid grid-cols-2 gap-3">
             <div className="bg-[#242C54]/10 p-3 rounded text-center">
               <p className="text-xs sm:text-sm text-gray-600">Activities</p>
-              <p className="font-bold text-[#242C54] text-lg sm:text-xl">{filteredActivities.length}</p>
+              <p className="font-bold text-[#242C54] text-lg sm:text-xl">
+                {filteredActivities.length}
+              </p>
             </div>
             <div className="bg-[#E4141C]/10 p-3 rounded text-center">
               <p className="text-xs sm:text-sm text-gray-600">Users</p>
