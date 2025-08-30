@@ -4,25 +4,25 @@ const activities = [
   {
     time: "09:30 AM",
     type: "Flight Update",
-    station: "Doha",
-    user: "Hassan Al-Thani",
+    station: "Saudi Arabia",
+    user: "Hassan Al-Faisal",
   },
   {
     time: "10:15 AM",
     type: "Feedback Received",
-    station: "Al Wakrah",
+    station: "United Arab Emirates",
     user: "Fatima Noor",
   },
   {
     time: "11:45 AM",
     type: "System Sync",
-    station: "Al Rayyan",
+    station: "Qatar",
     user: "Mohammed Saleh",
   },
   {
     time: "12:30 PM",
     type: "Flight Update",
-    station: "Lusail",
+    station: "Egypt",
     user: "Aisha Karim",
   },
 ];
@@ -87,17 +87,23 @@ const RecentActivityTimeline = () => {
             <option value="System Sync">System Sync</option>
           </select>
 
-          {/* Station Filter */}
+          {/* Station Filter (Arabic Countries) */}
           <select
             className="w-full border border-gray-300 rounded px-3 py-2 text-sm text-[#242C54] focus:border-[#E4141C] focus:ring-1 focus:ring-[#E4141C] outline-none transition-colors"
             value={stationFilter}
             onChange={(e) => setStationFilter(e.target.value)}
           >
-            <option value="">All Stations</option>
-            <option value="Doha">Doha</option>
-            <option value="Al Rayyan">Al Rayyan</option>
-            <option value="Al Wakrah">Al Wakrah</option>
-            <option value="Lusail">Lusail</option>
+            <option value="">All Countries</option>
+            <option value="Saudi Arabia">Saudi Arabia</option>
+            <option value="United Arab Emirates">United Arab Emirates</option>
+            <option value="Qatar">Qatar</option>
+            <option value="Egypt">Egypt</option>
+            <option value="Kuwait">Kuwait</option>
+            <option value="Oman">Oman</option>
+            <option value="Bahrain">Bahrain</option>
+            <option value="Jordan">Jordan</option>
+            <option value="Lebanon">Lebanon</option>
+            <option value="Morocco">Morocco</option>
           </select>
 
           {/* User Filter */}
@@ -107,7 +113,7 @@ const RecentActivityTimeline = () => {
             onChange={(e) => setUserFilter(e.target.value)}
           >
             <option value="">All Users</option>
-            <option value="Hassan Al-Thani">Hassan Al-Thani</option>
+            <option value="Hassan Al-Faisal">Hassan Al-Faisal</option>
             <option value="Fatima Noor">Fatima Noor</option>
             <option value="Mohammed Saleh">Mohammed Saleh</option>
             <option value="Aisha Karim">Aisha Karim</option>
