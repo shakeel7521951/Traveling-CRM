@@ -1,8 +1,10 @@
-import React from "react";
 import { FiBell, FiMail, FiSettings, FiUser, FiSearch } from "react-icons/fi";
 import { FaFacebookF, FaTwitter, FaLinkedinIn } from "react-icons/fa";
+import { selectUserProfile } from "../../redux/slices/UserProfile";
+import { useSelector } from "react-redux";
 
 const Navbar = () => {
+  const userProfile = useSelector(selectUserProfile);
   return (
     <header className="bg-gradient-to-r from-[#242C54] to-[#1a1f42] text-white border-b border-gray-700 shadow-lg">
       <div className="container mx-auto px-4">
@@ -88,14 +90,16 @@ const Navbar = () => {
             </div>
 
             {/* Profile */}
-            <div className="flex items-center space-x-3">
+            <div className="flex items-center space-x-3 ms-4">
               <div className="hidden sm:block text-right">
-                <p className="text-sm font-semibold text-white">Admin User</p>
-                <p className="text-xs text-gray-300">System Administrator</p>
+                <p className="text-sm font-semibold text-white">
+                  {userProfile?.name  || 'Guest'}
+                </p>
+                <p className="text-xs text-gray-300">{userProfile?.role}</p>
               </div>
               <div className="relative">
                 <div className="w-10 h-10 rounded-full bg-gradient-to-br from-[#E4141C] to-[#c1121f] flex items-center justify-center text-white font-bold shadow-lg border-2 border-white/20">
-                  A
+                  {userProfile?.name[0] || 'S'}
                 </div>
                 <div className="absolute -bottom-1 -right-1 w-4 h-4 bg-green-500 rounded-full border-2 border-white"></div>
               </div>

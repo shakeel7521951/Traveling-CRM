@@ -97,3 +97,12 @@ export const login = async (req, res) => {
     return res.status(500).json({ message: "Internal server error" });
   }
 };
+
+export const myProfile = async(req,res)=>{
+  try {
+    const user = req.user;
+    return res.status(200).json({user})
+  } catch (error) {
+    return res.status(500).json({message:"Internal server error"});
+  }
+}

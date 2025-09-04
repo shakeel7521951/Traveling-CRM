@@ -13,6 +13,13 @@ import AdminHome from "./pages/AdminHome";
 import AllStations from "./pages/AllStations";
 import StationDetails from "./pages/StationDetails";
 import StationPassengers from "./components/AllStations/StationPassengers";
+import Login from "./pages/Login";
+import { useDispatch } from "react-redux";
+import { useMyProfileQuery } from "./redux/slices/UserSlice";
+import { useEffect } from "react";
+import { setProfile } from "./redux/slices/UserProfile";
+import Signup from "./pages/Signup";
+import VerifyOtp from "./pages/VerifyOtp";
 
 const MainLayout = () => {
   return (
@@ -45,9 +52,20 @@ const router = createBrowserRouter([
       { path: "/station-passengers", element: <StationPassengers /> },
     ],
   },
+  {path:"/login",element:<Login />},
+  {path:"/signup",element:<Signup />},
+  {path:"/verify-otp",element:<VerifyOtp />},
 ]);
 
 function App() {
+  const disptach = useDispatch();
+  const {data:profile} = useMyProfileQuery();
+  console.log("app.js",profile)
+  useEffect(()=>{
+    if(profile?.user){
+      disptach(setProfile(profile?.user))
+    }
+  },[profile,disptach])
   return <RouterProvider router={router} />;
 }
 
