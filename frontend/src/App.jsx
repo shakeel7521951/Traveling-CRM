@@ -60,7 +60,6 @@ const router = createBrowserRouter([
 function App() {
   const disptach = useDispatch();
   const {data:profile} = useMyProfileQuery();
-  console.log("app.js",profile)
   useEffect(()=>{
     if(profile?.user){
       disptach(setProfile(profile?.user))
