@@ -1,11 +1,23 @@
 import Feedback from "../models/Feedback.js";
 
-// Create feedback
+// Create feedback/complaint
 export const createFeedback = async (req, res) => {
   try {
     const feedbackData = req.body;
-    if (!feedbackData.source) {
-      feedbackData.source = "Email";
+        if (!feedbackData.source) {
+      feedbackData.source = "Web";
+    }
+    const complaintTypes = [
+      'Baggage', 'Flight Delay', 'Booking Issue', 'Accessibility',
+      'Customer Service', 'Refund', 'Other'
+    ];
+    
+    if (complaintTypes.includes(feedbackData.feedbackType)) {
+      feedbackData.status = feedbackData.status || 'Pending';
+      feedbackData.priority = feedbackData.priority || 'Medium';
+      if (!feedbackData.rating) {
+        feedbackData.rating = 1;
+      }
     }
 
     const feedback = new Feedback(feedbackData);
@@ -26,15 +38,36 @@ export const createFeedback = async (req, res) => {
   }
 };
 
-// Get all feedback
+// Get all feedback with filtering options
 export const getAllFeedback = async (req, res) => {
   try {
-    const { page = 1, limit = 10, rating, station, feedbackType } = req.query;
+    const { 
+      page = 1, 
+      limit = 10, 
+      rating, 
+      station, 
+      feedbackType, 
+      status,
+      priority,
+      isComplaint 
+    } = req.query;
 
     const filter = {};
     if (rating) filter.rating = parseInt(rating);
     if (station) filter.station = new RegExp(station, "i");
     if (feedbackType) filter.feedbackType = feedbackType;
+    if (status) filter.status = status;
+    if (priority) filter.priority = priority;
+    
+    // Filter for complaints only
+    if (isComplaint === 'true') {
+      filter.feedbackType = {
+        $in: [
+          'Baggage', 'Flight Delay', 'Booking Issue', 'Accessibility',
+          'Customer Service', 'Refund', 'Other'
+        ]
+      };
+    }
 
     const feedbacks = await Feedback.find(filter)
       .limit(limit * 1)
@@ -62,38 +95,63 @@ export const getAllFeedback = async (req, res) => {
   }
 };
 
-// Get single feedback by ID
-export const getFeedback = async (req, res) => {
+// Get complaint statistics
+export const getComplaintStats = async (req, res) => {
   try {
-    const feedback = await Feedback.findById(req.params.id);
+    const complaintTypes = [
+      'Baggage', 'Flight Delay', 'Booking Issue', 'Accessibility',
+      'Customer Service', 'Refund', 'Other'
+    ];
 
-    if (!feedback) {
-      return res.status(404).json({
-        success: false,
-        message: "Feedback not found",
-      });
-    }
+    const totalComplaints = await Feedback.countDocuments({
+      feedbackType: { $in: complaintTypes }
+    });
+
+    const complaintsByStatus = await Feedback.aggregate([
+      { $match: { feedbackType: { $in: complaintTypes } } },
+      { $group: { _id: '$status', count: { $sum: 1 } } }
+    ]);
+
+    const complaintsByType = await Feedback.aggregate([
+      { $match: { feedbackType: { $in: complaintTypes } } },
+      { $group: { _id: '$feedbackType', count: { $sum: 1 } } },
+      { $sort: { count: -1 } }
+    ]);
+
+    const complaintsByPriority = await Feedback.aggregate([
+      { $match: { feedbackType: { $in: complaintTypes } } },
+      { $group: { _id: '$priority', count: { $sum: 1 } } }
+    ]);
 
     res.status(200).json({
       success: true,
-      data: feedback,
+      data: {
+        total: totalComplaints,
+        byStatus: complaintsByStatus,
+        byType: complaintsByType,
+        byPriority: complaintsByPriority
+      },
     });
   } catch (error) {
     res.status(500).json({
       success: false,
-      message: "Error fetching feedback",
+      message: "Error fetching complaint statistics",
       error: error.message,
     });
   }
 };
 
-// Update feedback
+// Update feedback/complaint
 export const updateFeedback = async (req, res) => {
   try {
-    const feedback = await Feedback.findByIdAndUpdate(req.params.id, req.body, {
-      new: true,
-      runValidators: true,
-    });
+    const feedback = await Feedback.findByIdAndUpdate(
+      req.params.id, 
+      req.body, 
+      {
+        new: true,
+        runValidators: true,
+      }
+    );
 
     if (!feedback) {
       return res.status(404).json({
@@ -141,37 +199,26 @@ export const deleteFeedback = async (req, res) => {
   }
 };
 
-// Get feedback statistics
-export const getFeedbackStats = async (req, res) => {
+// Get single feedback by ID
+export const getFeedback = async (req, res) => {
   try {
-    const total = await Feedback.countDocuments();
-    const averageRating = await Feedback.aggregate([
-      { $group: { _id: null, avgRating: { $avg: "$rating" } } },
-    ]);
+    const feedback = await Feedback.findById(req.params.id);
 
-    const ratingDistribution = await Feedback.aggregate([
-      { $group: { _id: "$rating", count: { $sum: 1 } } },
-      { $sort: { _id: 1 } },
-    ]);
-
-    const feedbackByType = await Feedback.aggregate([
-      { $group: { _id: "$feedbackType", count: { $sum: 1 } } },
-      { $sort: { count: -1 } },
-    ]);
+    if (!feedback) {
+      return res.status(404).json({
+        success: false,
+        message: "Feedback not found",
+      });
+    }
 
     res.status(200).json({
       success: true,
-      data: {
-        total,
-        averageRating: averageRating[0]?.avgRating || 0,
-        ratingDistribution,
-        feedbackByType,
-      },
+      data: feedback,
     });
   } catch (error) {
     res.status(500).json({
       success: false,
-      message: "Error fetching feedback statistics",
+      message: "Error fetching feedback",
       error: error.message,
     });
   }

@@ -53,20 +53,20 @@ const router = createBrowserRouter([
       { path: "/station-passengers", element: <StationPassengers /> },
     ],
   },
-    {path:'/travel-feedback-portal',element:<TravelFeedbackPortal />},
-  {path:"/login",element:<Login />},
-  {path:"/signup",element:<Signup />},
-  {path:"/verify-otp",element:<VerifyOtp />},
+  { path: "/travel-feedback-portal", element: <TravelFeedbackPortal /> },
+  { path: "/login", element: <Login /> },
+  { path: "/signup", element: <Signup /> },
+  { path: "/verify-otp", element: <VerifyOtp /> },
 ]);
 
 function App() {
   const disptach = useDispatch();
-  const {data:profile} = useMyProfileQuery();
-  useEffect(()=>{
-    if(profile?.user){
-      disptach(setProfile(profile?.user))
+  const { data: profile } = useMyProfileQuery();
+  useEffect(() => {
+    if (profile?.user) {
+      disptach(setProfile(profile?.user));
     }
-  },[profile,disptach])
+  }, [profile, disptach]);
   return <RouterProvider router={router} />;
 }
 

@@ -24,11 +24,18 @@ const feedbackSchema = new mongoose.Schema({
     type: String,
     required: true,
     enum: [
+      // Complaint types
+      'Baggage', 
+      'Flight Delay', 
+      'Booking Issue', 
+      'Accessibility',
+      'Customer Service', 
+      'Refund',
+      // Feedback types
       'Service Quality', 
       'Staff Feedback', 
       'Facilities', 
       'Booking Process', 
-      'Booking Issue',
       'Overall Experience', 
       'Other'
     ]
@@ -61,6 +68,30 @@ const feedbackSchema = new mongoose.Schema({
     type: Date,
     required: true
   },
+  // Complaint-specific fields
+  status: {
+    type: String,
+    enum: ['Pending', 'In Review', 'Resolved', 'Closed'],
+    default: 'Pending'
+  },
+  priority: {
+    type: String,
+    enum: ['Low', 'Medium', 'High'],
+    default: 'Medium'
+  },
+  assignedTo: {
+    type: String,
+    trim: true
+  },
+  resolution: {
+    type: String,
+    maxLength: [1000, 'Resolution notes cannot exceed 1000 characters']
+  },
+  followUp: {
+    type: Boolean,
+    default: false
+  },
+  // General fields
   isAnonymous: {
     type: Boolean,
     default: false
@@ -71,17 +102,28 @@ const feedbackSchema = new mongoose.Schema({
   },
   source: {
     type: String,
-    enum: ['Email', 'WhatsApp'],
+    enum: ['Web', 'Email', 'WhatsApp'],
     default: 'Web'
   }
 }, {
   timestamps: true
 });
 
+// Virtual to check if it's a complaint
+feedbackSchema.virtual('isComplaint').get(function() {
+  const complaintTypes = [
+    'Baggage', 'Flight Delay', 'Booking Issue', 'Accessibility',
+    'Customer Service', 'Refund', 'Other'
+  ];
+  return complaintTypes.includes(this.feedbackType);
+});
+
 // Indexes
 feedbackSchema.index({ email: 1, createdAt: -1 });
 feedbackSchema.index({ rating: 1, createdAt: -1 });
 feedbackSchema.index({ station: 1, createdAt: -1 });
+feedbackSchema.index({ status: 1 });
+feedbackSchema.index({ feedbackType: 1 });
 
 const Feedback = mongoose.model('Feedback', feedbackSchema);
 export default Feedback;

@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useCreateFeedbackMutation } from "../redux/slices/FeedbackSlice";
 import { toast } from "react-toastify";
-import { FaStar } from "react-icons/fa";
+import { FaStar, FaRegStar } from "react-icons/fa";
 
 const TravelFeedbackPortal = () => {
   const [createFeedback, { isLoading, error }] = useCreateFeedbackMutation();
@@ -40,25 +40,23 @@ const TravelFeedbackPortal = () => {
         details: formData.details,
         flightNumber: formData.flightNumber,
         bookingReference: formData.bookingReference,
-        source: "Email",
+        source: "Web",
+        dateOfExperience: formData.dateOfIncident || new Date().toISOString().split("T")[0],
       };
 
       if (activeTab === "complaint") {
         submissionData.feedbackType = formData.complaintType;
-        submissionData.dateOfExperience = formData.dateOfIncident;
-        submissionData.rating = 1;
+        submissionData.rating = 1; // Low rating for complaints
+        submissionData.priority = "Medium"; // Default priority
       } else {
         submissionData.feedbackType = formData.feedbackType;
         submissionData.rating = formData.rating;
-        submissionData.dateOfExperience = new Date()
-          .toISOString()
-          .split("T")[0];
       }
 
       // Call the API
       const result = await createFeedback(submissionData).unwrap();
 
-      toast(
+      toast.success(
         `Thank you for your ${
           activeTab === "complaint" ? "complaint" : "feedback"
         }! We will address it shortly.`
@@ -80,9 +78,30 @@ const TravelFeedbackPortal = () => {
       });
     } catch (err) {
       console.error("Failed to submit feedback:", err);
-      toast("There was an error submitting your feedback. Please try again.");
+      toast.error("There was an error submitting your feedback. Please try again.");
     }
   };
+
+  // Complaint types
+  const complaintTypes = [
+    "Baggage",
+    "Flight Delay",
+    "Booking Issue",
+    "Accessibility",
+    "Customer Service",
+    "Refund",
+    "Other"
+  ];
+
+  // Feedback types
+  const feedbackTypes = [
+    "Service Quality",
+    "Staff Feedback",
+    "Facilities",
+    "Booking Process",
+    "Overall Experience",
+    "Other"
+  ];
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-blue-50 to-blue-100 py-8 px-4">
@@ -93,8 +112,7 @@ const TravelFeedbackPortal = () => {
             Travel Agency Feedback Portal
           </h1>
           <p className="text-gray-600">
-            We value your experience. Share your feedback or report an issue
-            with us.
+            We value your experience. Share your feedback or report an issue with us.
           </p>
         </div>
 
@@ -108,7 +126,7 @@ const TravelFeedbackPortal = () => {
             }`}
             onClick={() => setActiveTab("complaint")}
           >
-            <i className="fas fa-exclamation-circle mr-2"></i>File a Complaint
+            📝 File a Complaint
           </button>
           <button
             className={`py-3 px-6 font-medium text-lg ${
@@ -118,7 +136,7 @@ const TravelFeedbackPortal = () => {
             }`}
             onClick={() => setActiveTab("feedback")}
           >
-            <i className="fas fa-star mr-2"></i>Share Feedback
+            ⭐ Share Feedback
           </button>
         </div>
 
@@ -130,7 +148,7 @@ const TravelFeedbackPortal = () => {
         )}
 
         {/* Form Container */}
-        <div className="bg-white rounded-xl shadow-md overflow-hidden p-6 md:p-8 fade-in">
+        <div className="bg-white rounded-xl shadow-md overflow-hidden p-6 md:p-8">
           <form onSubmit={handleSubmit} className="space-y-6">
             {/* Personal Information */}
             <div>
@@ -139,15 +157,11 @@ const TravelFeedbackPortal = () => {
               </h2>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
-                  <label
-                    htmlFor="name"
-                    className="block text-sm font-medium text-gray-700 mb-1"
-                  >
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
                     Full Name *
                   </label>
                   <input
                     type="text"
-                    id="name"
                     name="name"
                     value={formData.name}
                     onChange={handleChange}
@@ -158,15 +172,11 @@ const TravelFeedbackPortal = () => {
                 </div>
 
                 <div>
-                  <label
-                    htmlFor="email"
-                    className="block text-sm font-medium text-gray-700 mb-1"
-                  >
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
                     Email Address *
                   </label>
                   <input
                     type="email"
-                    id="email"
                     name="email"
                     value={formData.email}
                     onChange={handleChange}
@@ -179,15 +189,11 @@ const TravelFeedbackPortal = () => {
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-4">
                 <div>
-                  <label
-                    htmlFor="phone"
-                    className="block text-sm font-medium text-gray-700 mb-1"
-                  >
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
                     Phone Number
                   </label>
                   <input
                     type="tel"
-                    id="phone"
                     name="phone"
                     value={formData.phone}
                     onChange={handleChange}
@@ -197,15 +203,11 @@ const TravelFeedbackPortal = () => {
                 </div>
 
                 <div>
-                  <label
-                    htmlFor="station"
-                    className="block text-sm font-medium text-gray-700 mb-1"
-                  >
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
                     Station/Location *
                   </label>
                   <input
                     type="text"
-                    id="station"
                     name="station"
                     value={formData.station}
                     onChange={handleChange}
@@ -225,14 +227,10 @@ const TravelFeedbackPortal = () => {
                 </h2>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div>
-                    <label
-                      htmlFor="complaintType"
-                      className="block text-sm font-medium text-gray-700 mb-1"
-                    >
+                    <label className="block text-sm font-medium text-gray-700 mb-1">
                       Issue Type *
                     </label>
                     <select
-                      id="complaintType"
                       name="complaintType"
                       value={formData.complaintType}
                       onChange={handleChange}
@@ -240,26 +238,18 @@ const TravelFeedbackPortal = () => {
                       className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                     >
                       <option value="">Select an issue type</option>
-                      <option value="Baggage">Baggage Issue</option>
-                      <option value="Flight Delay">Flight Delay</option>
-                      <option value="Booking Issue">Booking Issue</option>
-                      <option value="Accessibility">Accessibility</option>
-                      <option value="Customer Service">Customer Service</option>
-                      <option value="Refund">Refund Problem</option>
-                      <option value="Other">Other</option>
+                      {complaintTypes.map(type => (
+                        <option key={type} value={type}>{type}</option>
+                      ))}
                     </select>
                   </div>
 
                   <div>
-                    <label
-                      htmlFor="dateOfIncident"
-                      className="block text-sm font-medium text-gray-700 mb-1"
-                    >
+                    <label className="block text-sm font-medium text-gray-700 mb-1">
                       Date of Incident *
                     </label>
                     <input
                       type="date"
-                      id="dateOfIncident"
                       name="dateOfIncident"
                       value={formData.dateOfIncident}
                       onChange={handleChange}
@@ -279,14 +269,10 @@ const TravelFeedbackPortal = () => {
                 </h2>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div>
-                    <label
-                      htmlFor="feedbackType"
-                      className="block text-sm font-medium text-gray-700 mb-1"
-                    >
+                    <label className="block text-sm font-medium text-gray-700 mb-1">
                       Feedback Category *
                     </label>
                     <select
-                      id="feedbackType"
                       name="feedbackType"
                       value={formData.feedbackType}
                       onChange={handleChange}
@@ -294,22 +280,14 @@ const TravelFeedbackPortal = () => {
                       className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                     >
                       <option value="">Select a category</option>
-                      <option value="Service Quality">Service Quality</option>
-                      <option value="Staff Feedback">Staff Feedback</option>
-                      <option value="Facilities">Facilities</option>
-                      <option value="Booking Process">Booking Process</option>
-                      <option value="Overall Experience">
-                        Overall Experience
-                      </option>
-                      <option value="Other">Other</option>
+                      {feedbackTypes.map(type => (
+                        <option key={type} value={type}>{type}</option>
+                      ))}
                     </select>
                   </div>
 
                   <div>
-                    <label
-                      htmlFor="rating"
-                      className="block text-sm font-medium text-gray-700 mb-1"
-                    >
+                    <label className="block text-sm font-medium text-gray-700 mb-1">
                       Rating *
                     </label>
                     <div className="flex items-center">
@@ -317,18 +295,14 @@ const TravelFeedbackPortal = () => {
                         <button
                           key={star}
                           type="button"
-                          onClick={() =>
-                            setFormData({ ...formData, rating: star })
-                          }
+                          onClick={() => setFormData({ ...formData, rating: star })}
                           className="text-2xl mr-1 focus:outline-none"
                         >
-                          <FaStar
-                            className={
-                              star <= formData.rating
-                                ? "text-yellow-400"
-                                : "text-gray-300"
-                            }
-                          />
+                          {star <= formData.rating ? (
+                            <FaStar className="text-yellow-400" />
+                          ) : (
+                            <FaRegStar className="text-yellow-400" />
+                          )}
                         </button>
                       ))}
                       <span className="ml-2 text-gray-600">
@@ -347,15 +321,11 @@ const TravelFeedbackPortal = () => {
               </h2>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
-                  <label
-                    htmlFor="flightNumber"
-                    className="block text-sm font-medium text-gray-700 mb-1"
-                  >
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
                     Flight Number (if applicable)
                   </label>
                   <input
                     type="text"
-                    id="flightNumber"
                     name="flightNumber"
                     value={formData.flightNumber}
                     onChange={handleChange}
@@ -365,15 +335,11 @@ const TravelFeedbackPortal = () => {
                 </div>
 
                 <div>
-                  <label
-                    htmlFor="bookingReference"
-                    className="block text-sm font-medium text-gray-700 mb-1"
-                  >
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
                     Booking Reference
                   </label>
                   <input
                     type="text"
-                    id="bookingReference"
                     name="bookingReference"
                     value={formData.bookingReference}
                     onChange={handleChange}
@@ -386,16 +352,10 @@ const TravelFeedbackPortal = () => {
 
             {/* Details */}
             <div>
-              <label
-                htmlFor="details"
-                className="block text-sm font-medium text-gray-700 mb-1"
-              >
-                {activeTab === "complaint"
-                  ? "Complaint Details *"
-                  : "Feedback Details *"}
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                {activeTab === "complaint" ? "Complaint Details *" : "Feedback Details *"}
               </label>
               <textarea
-                id="details"
                 name="details"
                 value={formData.details}
                 onChange={handleChange}
@@ -419,18 +379,13 @@ const TravelFeedbackPortal = () => {
               >
                 {isLoading ? (
                   <>
-                    <i className="fas fa-spinner fa-spin mr-2"></i>
+                    <span className="animate-spin mr-2">⏳</span>
                     Submitting...
                   </>
                 ) : (
                   <>
-                    <i
-                      className={`fas ${
-                        activeTab === "complaint" ? "fa-paper-plane" : "fa-star"
-                      } mr-2`}
-                    ></i>
-                    Submit{" "}
-                    {activeTab === "complaint" ? "Complaint" : "Feedback"}
+                    {activeTab === "complaint" ? "📤" : "⭐"}{" "}
+                    Submit {activeTab === "complaint" ? "Complaint" : "Feedback"}
                   </>
                 )}
               </button>
@@ -452,16 +407,12 @@ const TravelFeedbackPortal = () => {
             </span>
           </p>
           <div className="flex flex-wrap gap-4">
-            <a
-              href="#"
-              className="flex items-center text-green-600 font-medium"
-            >
-              <i className="fab fa-whatsapp text-xl mr-2"></i> Message us on
-              WhatsApp
-            </a>
-            <a href="#" className="flex items-center text-blue-600 font-medium">
-              <i className="fas fa-envelope text-xl mr-2"></i> Email us directly
-            </a>
+            <span className="flex items-center text-green-600 font-medium">
+              <span className="text-xl mr-2">💬</span> Message us on WhatsApp
+            </span>
+            <span className="flex items-center text-blue-600 font-medium">
+              <span className="text-xl mr-2">📧</span> Email us directly
+            </span>
           </div>
         </div>
       </div>

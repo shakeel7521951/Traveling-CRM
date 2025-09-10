@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   FiAlertTriangle,
   FiFilter,
@@ -13,80 +13,49 @@ import {
   FiX,
   FiEdit3,
   FiPlus,
+  FiRefreshCw,
 } from "react-icons/fi";
+import {
+  useGetComplaintsQuery,
+  useUpdateComplaintStatusMutation,
+  useDeleteFeedbackMutation,
+  useGetFeedbackStatsQuery,
+} from "../redux/slices/FeedbackSlice";
 
 const Complaints = () => {
-  // State for complaints data
-  const [complaints, setComplaints] = useState([
-    {
-      id: 1,
-      passenger: "Ahmed Mohamed",
-      station: "JED",
-      priority: "high",
-      category: "Baggage",
-      date: "2023-06-15",
-      description:
-        "Lost luggage during connecting flight. No updates provided for 3 days.",
-      status: "pending",
-      assignedTo: null,
-      resolution: null,
-      lastUpdated: "2023-06-15",
-    },
-    {
-      id: 2,
-      passenger: "Sarah Johnson",
-      station: "DXB",
-      priority: "medium",
-      category: "Flight Delay",
-      date: "2023-06-14",
-      description: "Flight delayed by 4 hours without proper notification.",
-      status: "in-progress",
-      assignedTo: "John Smith",
-      resolution: "Investigating with operations team",
-      lastUpdated: "2023-06-16",
-    },
-    {
-      id: 3,
-      passenger: "Fatima Hassan",
-      station: "KRT",
-      priority: "low",
-      category: "Service",
-      date: "2023-06-14",
-      description: "Rude behavior from cabin crew member during meal service.",
-      status: "completed",
-      assignedTo: "Maria Garcia",
-      resolution: "Addressed with crew. Passenger contacted and apologized.",
-      lastUpdated: "2023-06-18",
-    },
-    {
-      id: 4,
-      passenger: "Mohammed Omar",
-      station: "RUH",
-      priority: "high",
-      category: "Booking Issue",
-      date: "2023-06-13",
-      description:
-        "Double charged for seat selection. Credit card charged twice.",
-      status: "pending",
-      assignedTo: null,
-      resolution: null,
-      lastUpdated: "2023-06-13",
-    },
-    {
-      id: 5,
-      passenger: "Lisa Chen",
-      station: "JED",
-      priority: "medium",
-      category: "Accessibility",
-      date: "2023-06-12",
-      description:
-        "Wheelchair assistance not provided as requested during check-in.",
-      status: "in-progress",
-      assignedTo: "David Wilson",
-      resolution: "Training session scheduled for ground staff",
-      lastUpdated: "2023-06-17",
-    },
-  ]);
+  // State for UI controls
+  const [searchTerm, setSearchTerm] = useState("");
+  const [filter, setFilter] = useState("all");
+  const [priorityFilter, setPriorityFilter] = useState("all");
+  const [currentPage, setCurrentPage] = useState(1);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedComplaint, setSelectedComplaint] = useState(null);
+  const complaintsPerPage = 5;
+
+  // Fetch complaints data from API
+  const {
+    data: complaintsData,
+    isLoading,
+    error,
+    refetch,
+  } = useGetComplaintsQuery({
+    page: currentPage,
+    limit: complaintsPerPage,
+    ...(searchTerm && { search: searchTerm }),
+    ...(filter !== "all" && { status: filter }),
+    ...(priorityFilter !== "all" && { priority: priorityFilter }),
+  });
+
+  const { data: statsData } = useGetFeedbackStatsQuery();
+
+  const [updateComplaintStatus] = useUpdateComplaintStatusMutation();
+  const [deleteFeedback] = useDeleteFeedbackMutation();
+
+  // Extract complaints and pagination info from API response
+  const complaints = complaintsData?.data || [];
+  const pagination = complaintsData?.pagination || {};
+  const totalComplaints = pagination.totalItems || 0;
+  const totalPages = pagination.totalPages || 1;
 
   // State for team members
   const [teamMembers] = useState([
@@ -98,84 +67,85 @@ const Complaints = () => {
     "Lisa Wang",
   ]);
 
-  // State for UI controls
-  const [searchTerm, setSearchTerm] = useState("");
-  const [filter, setFilter] = useState("all");
-  const [priorityFilter, setPriorityFilter] = useState("all");
-  const [currentPage, setCurrentPage] = useState(1);
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [selectedComplaint, setSelectedComplaint] = useState(null);
-  const complaintsPerPage = 5;
-
-  // Filter complaints based on search and filters
+  // Filter complaints based on search and filters (client-side fallback)
   const filteredComplaints = complaints.filter((complaint) => {
     const matchesSearch =
-      complaint.passenger.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      complaint.description.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      complaint.category.toLowerCase().includes(searchTerm.toLowerCase());
+      complaint.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      complaint.details?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      complaint.feedbackType?.toLowerCase().includes(searchTerm.toLowerCase());
     const matchesFilter = filter === "all" || complaint.status === filter;
     const matchesPriority =
       priorityFilter === "all" || complaint.priority === priorityFilter;
     return matchesSearch && matchesFilter && matchesPriority;
   });
 
-  // Pagination logic
+  // Pagination logic (client-side fallback)
   const indexOfLastComplaint = currentPage * complaintsPerPage;
   const indexOfFirstComplaint = indexOfLastComplaint - complaintsPerPage;
   const currentComplaints = filteredComplaints.slice(
     indexOfFirstComplaint,
     indexOfLastComplaint
   );
-  const totalPages = Math.ceil(filteredComplaints.length / complaintsPerPage);
 
-  // Change page
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
   // Handle assignment
-  const handleAssignment = (complaintId, assignee) => {
-    setComplaints(
-      complaints.map((complaint) =>
-        complaint.id === complaintId
-          ? {
-              ...complaint,
-              assignedTo: assignee,
-              status: assignee ? "in-progress" : "pending",
-              lastUpdated: new Date().toISOString().split("T")[0],
-            }
-          : complaint
-      )
-    );
+  const handleAssignment = async (complaintId, assignee) => {
+    try {
+      await updateComplaintStatus({
+        id: complaintId,
+        assignedTo: assignee,
+        status: assignee ? "In Review" : "Pending",
+      }).unwrap();
+      refetch();
+    } catch (error) {
+      console.error("Failed to update complaint:", error);
+    }
   };
 
   // Handle status change
-  const handleStatusChange = (complaintId, newStatus, resolution = null) => {
-    setComplaints(
-      complaints.map((complaint) =>
-        complaint.id === complaintId
-          ? {
-              ...complaint,
-              status: newStatus,
-              resolution,
-              lastUpdated: new Date().toISOString().split("T")[0],
-            }
-          : complaint
-      )
-    );
+  const handleStatusChange = async (
+    complaintId,
+    newStatus,
+    resolution = null
+  ) => {
+    try {
+      await updateComplaintStatus({
+        id: complaintId,
+        status: newStatus,
+        resolution: resolution || undefined,
+      }).unwrap();
+      refetch();
+    } catch (error) {
+      console.error("Failed to update complaint:", error);
+    }
+  };
+
+  // Handle delete complaint
+  const handleDeleteComplaint = async (complaintId) => {
+    if (window.confirm("Are you sure you want to delete this complaint?")) {
+      try {
+        await deleteFeedback(complaintId).unwrap();
+        refetch();
+      } catch (error) {
+        console.error("Failed to delete complaint:", error);
+      }
+    }
   };
 
   // Priority badge component
   const PriorityBadge = ({ priority }) => {
     const priorityClasses = {
-      high: "bg-red-100 text-red-800 border-red-200",
-      medium: "bg-yellow-100 text-yellow-800 border-yellow-200",
-      low: "bg-green-100 text-green-800 border-green-200",
+      High: "bg-red-100 text-red-800 border-red-200",
+      Medium: "bg-yellow-100 text-yellow-800 border-yellow-200",
+      Low: "bg-green-100 text-green-800 border-green-200",
     };
 
     return (
       <span
         className={`text-xs px-3 py-1 rounded-full border ${priorityClasses[priority]} font-medium`}
       >
-        {priority.charAt(0).toUpperCase() + priority.slice(1)}
+        {priority}
       </span>
     );
   };
@@ -183,24 +153,28 @@ const Complaints = () => {
   // Status badge component
   const StatusBadge = ({ status }) => {
     const statusClasses = {
-      pending: "bg-gray-100 text-gray-800 border-gray-200",
-      "in-progress": "bg-blue-100 text-blue-800 border-blue-200",
-      completed: "bg-green-100 text-green-800 border-green-200",
-    };
-
-    const statusLabels = {
-      pending: "Pending",
-      "in-progress": "In Progress",
-      completed: "Completed",
+      Pending: "bg-gray-100 text-gray-800 border-gray-200",
+      "In Review": "bg-blue-100 text-blue-800 border-blue-200",
+      Resolved: "bg-green-100 text-green-800 border-green-200",
+      Closed: "bg-purple-100 text-purple-800 border-purple-200",
     };
 
     return (
       <span
         className={`text-xs px-3 py-1 rounded-full border ${statusClasses[status]} font-medium`}
       >
-        {statusLabels[status]}
+        {status}
       </span>
     );
+  };
+
+  // Format date
+  const formatDate = (dateString) => {
+    return new Date(dateString).toLocaleDateString("en-US", {
+      year: "numeric",
+      month: "short",
+      day: "numeric",
+    });
   };
 
   // Complaint details modal
@@ -210,19 +184,23 @@ const Complaints = () => {
 
     if (!complaint) return null;
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
       e.preventDefault();
-      if (assignee && assignee !== complaint.assignedTo) {
-        onAssign(complaint.id, assignee);
+      try {
+        if (assignee && assignee !== complaint.assignedTo) {
+          await onAssign(complaint._id, assignee);
+        }
+        if (resolution !== complaint.resolution) {
+          await onStatusChange(
+            complaint._id,
+            resolution ? "Resolved" : "In Review",
+            resolution
+          );
+        }
+        onClose();
+      } catch (error) {
+        console.error("Failed to update complaint:", error);
       }
-      if (resolution !== complaint.resolution) {
-        onStatusChange(
-          complaint.id,
-          resolution ? "completed" : "in-progress",
-          resolution
-        );
-      }
-      onClose();
     };
 
     return (
@@ -233,7 +211,9 @@ const Complaints = () => {
               <h3 className="text-xl font-bold text-[#242C54]">
                 Complaint Details
               </h3>
-              <p className="text-sm text-gray-600">ID: #{complaint.id}</p>
+              <p className="text-sm text-gray-600">
+                ID: #{complaint._id?.slice(-8)}
+              </p>
             </div>
             <button
               onClick={onClose}
@@ -250,9 +230,7 @@ const Complaints = () => {
                 <label className="block text-sm font-medium text-gray-700 mb-1">
                   Passenger
                 </label>
-                <p className="text-[#242C54] font-semibold">
-                  {complaint.passenger}
-                </p>
+                <p className="text-[#242C54] font-semibold">{complaint.name}</p>
               </div>
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">
@@ -267,14 +245,18 @@ const Complaints = () => {
                   Category
                 </label>
                 <p className="text-[#242C54] font-semibold">
-                  {complaint.category}
+                  {complaint.feedbackType}
                 </p>
               </div>
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">
                   Date
                 </label>
-                <p className="text-[#242C54] font-semibold">{complaint.date}</p>
+                <p className="text-[#242C54] font-semibold">
+                  {formatDate(
+                    complaint.dateOfExperience || complaint.createdAt
+                  )}
+                </p>
               </div>
             </div>
 
@@ -300,9 +282,20 @@ const Complaints = () => {
                 Description
               </label>
               <p className="text-gray-800 bg-gray-50 p-4 rounded-lg border">
-                {complaint.description}
+                {complaint.details}
               </p>
             </div>
+
+            {complaint.flightNumber && (
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Flight Number
+                </label>
+                <p className="text-[#242C54] font-semibold">
+                  {complaint.flightNumber}
+                </p>
+              </div>
+            )}
 
             <form onSubmit={handleSubmit} className="space-y-4">
               {/* Assignment */}
@@ -361,6 +354,39 @@ const Complaints = () => {
     );
   };
 
+  if (isLoading) {
+    return (
+      <div className="p-4 md:p-6 bg-gray-50 min-h-screen flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#E4141C] mx-auto mb-4"></div>
+          <p className="text-gray-600">Loading complaints...</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="p-4 md:p-6 bg-gray-50 min-h-screen flex items-center justify-center">
+        <div className="text-center">
+          <div className="bg-red-100 text-red-600 p-4 rounded-lg mb-4">
+            <FiAlertTriangle className="text-2xl mx-auto mb-2" />
+            <p>
+              Error loading complaints:{" "}
+              {error?.data?.message || "Please try again later"}
+            </p>
+          </div>
+          <button
+            onClick={refetch}
+            className="bg-[#E4141C] text-white px-4 py-2 rounded-lg hover:bg-[#C1121F] transition-colors"
+          >
+            Retry
+          </button>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="p-4 md:p-6 bg-gray-50 min-h-screen">
       {/* Header and search/filter */}
@@ -401,9 +427,10 @@ const Complaints = () => {
               }}
             >
               <option value="all">All Status</option>
-              <option value="pending">Pending</option>
-              <option value="in-progress">In Progress</option>
-              <option value="completed">Completed</option>
+              <option value="Pending">Pending</option>
+              <option value="In Review">In Review</option>
+              <option value="Resolved">Resolved</option>
+              <option value="Closed">Closed</option>
             </select>
           </div>
 
@@ -417,11 +444,19 @@ const Complaints = () => {
               }}
             >
               <option value="all">All Priority</option>
-              <option value="high">High</option>
-              <option value="medium">Medium</option>
-              <option value="low">Low</option>
+              <option value="High">High</option>
+              <option value="Medium">Medium</option>
+              <option value="Low">Low</option>
             </select>
           </div>
+
+          <button
+            onClick={refetch}
+            className="bg-[#242C54] text-white p-3 rounded-xl hover:bg-[#1a223f] transition-colors flex items-center gap-2"
+          >
+            <FiRefreshCw className="text-sm" />
+            Refresh
+          </button>
         </div>
       </div>
 
@@ -437,7 +472,7 @@ const Complaints = () => {
                 Total Complaints
               </p>
               <p className="text-2xl font-bold text-[#242C54]">
-                {complaints.length}
+                {statsData?.data?.complaints?.total || totalComplaints}
               </p>
             </div>
           </div>
@@ -451,7 +486,10 @@ const Complaints = () => {
             <div>
               <p className="text-gray-600 text-sm font-medium">Pending</p>
               <p className="text-2xl font-bold text-[#242C54]">
-                {complaints.filter((c) => c.status === "pending").length}
+                {statsData?.data?.complaints?.byStatus?.find(
+                  (s) => s._id === "Pending"
+                )?.count ||
+                  complaints.filter((c) => c.status === "Pending").length}
               </p>
             </div>
           </div>
@@ -463,9 +501,12 @@ const Complaints = () => {
               <FiUsers className="text-xl" />
             </div>
             <div>
-              <p className="text-gray-600 text-sm font-medium">In Progress</p>
+              <p className="text-gray-600 text-sm font-medium">In Review</p>
               <p className="text-2xl font-bold text-[#242C54]">
-                {complaints.filter((c) => c.status === "in-progress").length}
+                {statsData?.data?.complaints?.byStatus?.find(
+                  (s) => s._id === "In Review"
+                )?.count ||
+                  complaints.filter((c) => c.status === "In Review").length}
               </p>
             </div>
           </div>
@@ -479,7 +520,10 @@ const Complaints = () => {
             <div>
               <p className="text-gray-600 text-sm font-medium">Resolved</p>
               <p className="text-2xl font-bold text-[#242C54]">
-                {complaints.filter((c) => c.status === "completed").length}
+                {statsData?.data?.complaints?.byStatus?.find(
+                  (s) => s._id === "Resolved"
+                )?.count ||
+                  complaints.filter((c) => c.status === "Resolved").length}
               </p>
             </div>
           </div>
@@ -516,7 +560,7 @@ const Complaints = () => {
               <tbody className="divide-y divide-gray-200">
                 {currentComplaints.map((complaint) => (
                   <tr
-                    key={complaint.id}
+                    key={complaint._id}
                     className="hover:bg-gray-50 transition-colors"
                   >
                     <td className="p-4">
@@ -526,17 +570,20 @@ const Complaints = () => {
                         </div>
                         <div>
                           <p className="font-semibold text-[#242C54]">
-                            {complaint.passenger}
+                            {complaint.name}
                           </p>
                           <p className="text-xs text-gray-500">
-                            {complaint.station} • {complaint.date}
+                            {complaint.station} •{" "}
+                            {formatDate(
+                              complaint.dateOfExperience || complaint.createdAt
+                            )}
                           </p>
                         </div>
                       </div>
                     </td>
                     <td className="p-4">
                       <span className="text-sm font-medium text-gray-800">
-                        {complaint.category}
+                        {complaint.feedbackType}
                       </span>
                     </td>
                     <td className="p-4">
@@ -578,6 +625,13 @@ const Complaints = () => {
                         >
                           <FiEdit3 className="text-sm" />
                         </button>
+                        <button
+                          onClick={() => handleDeleteComplaint(complaint._id)}
+                          className="bg-red-100 text-red-700 p-2 rounded-lg hover:bg-red-200 transition-colors"
+                          title="Delete Complaint"
+                        >
+                          <FiX className="text-sm" />
+                        </button>
                       </div>
                     </td>
                   </tr>
@@ -601,12 +655,12 @@ const Complaints = () => {
       </div>
 
       {/* Pagination */}
-      {filteredComplaints.length > complaintsPerPage && (
+      {totalPages > 1 && (
         <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
           <div className="text-sm text-gray-600">
             Showing {indexOfFirstComplaint + 1} to{" "}
-            {Math.min(indexOfLastComplaint, filteredComplaints.length)} of{" "}
-            {filteredComplaints.length} complaints
+            {Math.min(indexOfLastComplaint, totalComplaints)} of{" "}
+            {totalComplaints} complaints
           </div>
 
           <div className="flex items-center gap-2">

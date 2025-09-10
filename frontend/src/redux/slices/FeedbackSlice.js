@@ -13,7 +13,7 @@ export const feedbackApi = createApi({
     },
     credentials: "include",
   }),
-  tagTypes: ["feedback"],
+  tagTypes: ["feedback", "complaint"],
   endpoints: (builder) => ({
     // ✅ Create Feedback
     createFeedback: builder.mutation({
@@ -30,7 +30,15 @@ export const feedbackApi = createApi({
       query: (params = {}) => ({
         url: "/getAllFeedback",
         method: "GET",
-        params,
+        params: {
+          page: params.page || 1,
+          limit: params.limit || 10,
+          ...(params.search && { search: params.search }),
+          ...(params.station && { station: params.station }),
+          ...(params.feedbackType && { feedbackType: params.feedbackType }),
+          ...(params.rating && { rating: params.rating }),
+          ...(params.status && { status: params.status }),
+        },
       }),
       providesTags: ["feedback"],
     }),
@@ -38,7 +46,7 @@ export const feedbackApi = createApi({
     // ✅ Get Feedback Stats
     getFeedbackStats: builder.query({
       query: () => ({
-        url: "/stats",
+        url: "/feedbackStats",
         method: "GET",
       }),
       providesTags: ["feedback"],
@@ -47,7 +55,7 @@ export const feedbackApi = createApi({
     // ✅ Get Single Feedback
     getSingleFeedback: builder.query({
       query: (id) => ({
-        url: `/getSingleFeedback?id=${id}`,
+        url: `/getSingleFeedback/${id}`,
         method: "GET",
       }),
       providesTags: (result, error, id) => [{ type: "feedback", id }],
@@ -74,6 +82,59 @@ export const feedbackApi = createApi({
       }),
       invalidatesTags: ["feedback"],
     }),
+
+    // ✅ Get Complaints (dedicated endpoint)
+    getComplaints: builder.query({
+      query: (params = {}) => ({
+        url: "/getAllFeedback",
+        method: "GET",
+        params: {
+          page: params.page || 1,
+          limit: params.limit || 10,
+          ...(params.search && { search: params.search }),
+          ...(params.station && { station: params.station }),
+          ...(params.status && { status: params.status }),
+          ...(params.priority && { priority: params.priority }),
+        },
+      }),
+      providesTags: ["complaint"],
+    }),
+
+    // ✅ Get Complaint Stats
+    getComplaintStats: builder.query({
+      query: () => ({
+        url: "/complaintStats",
+        method: "GET",
+      }),
+      providesTags: ["complaint"],
+    }),
+
+    // ✅ Update Complaint Status
+    updateComplaintStatus: builder.mutation({
+      query: ({ id, status, resolution, assignedTo, priority }) => ({
+        url: `/complaints/${id}`,
+        method: "PUT",
+        body: {
+          ...(status && { status }),
+          ...(resolution && { resolution }),
+          ...(assignedTo && { assignedTo }),
+          ...(priority && { priority }),
+        },
+      }),
+      invalidatesTags: (result, error, { id }) => [
+        { type: "complaint", id },
+        "complaint",
+      ],
+    }),
+
+    // ✅ Delete Complaint
+    deleteComplaint: builder.mutation({
+      query: (id) => ({
+        url: `/complaints/${id}`,
+        method: "DELETE",
+      }),
+      invalidatesTags: ["complaint"],
+    }),
   }),
 });
 
@@ -84,4 +145,8 @@ export const {
   useGetSingleFeedbackQuery,
   useUpdateFeedbackMutation,
   useDeleteFeedbackMutation,
+  useGetComplaintsQuery,
+  useGetComplaintStatsQuery,
+  useUpdateComplaintStatusMutation,
+  useDeleteComplaintMutation,
 } = feedbackApi;
