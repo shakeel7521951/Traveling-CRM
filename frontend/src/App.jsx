@@ -20,6 +20,7 @@ import { useEffect } from "react";
 import { setProfile } from "./redux/slices/UserProfile";
 import Signup from "./pages/Signup";
 import VerifyOtp from "./pages/VerifyOtp";
+import TravelFeedbackPortal from "./pages/TravelFeedbackPortal";
 
 const MainLayout = () => {
   return (
@@ -52,6 +53,7 @@ const router = createBrowserRouter([
       { path: "/station-passengers", element: <StationPassengers /> },
     ],
   },
+    {path:'/travel-feedback-portal',element:<TravelFeedbackPortal />},
   {path:"/login",element:<Login />},
   {path:"/signup",element:<Signup />},
   {path:"/verify-otp",element:<VerifyOtp />},

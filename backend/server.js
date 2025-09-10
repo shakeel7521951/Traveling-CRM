@@ -4,6 +4,8 @@ import cookieParser from "cookie-parser";
 
 import userRoutes from "./routes/userRoutes.js";
 import passengerRoutes from "./routes/passengerRoutes.js";
+import comapignRoutes from "./routes/compaignRoutes.js";
+import feedBackRoutes from "./routes/feedbackRoutes.js";
 
 import cors from "cors";
 
@@ -27,5 +29,7 @@ app.get("/", (req, res) => {
 
 app.use(userRoutes);
 app.use(passengerRoutes);
+app.use(comapignRoutes)
+app.use(feedBackRoutes)
 
 app.listen(PORT, () => console.log(`Backend is running on port ${PORT}`));
