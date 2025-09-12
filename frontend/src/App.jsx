@@ -36,6 +36,7 @@ const MainLayout = () => {
   );
 };
 
+
 const router = createBrowserRouter([
   {
     element: <MainLayout />,
@@ -57,6 +58,8 @@ const router = createBrowserRouter([
   { path: "/login", element: <Login /> },
   { path: "/signup", element: <Signup /> },
   { path: "/verify-otp", element: <VerifyOtp /> },
+
+
 ]);
 
 function App() {
