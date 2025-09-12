@@ -1,9 +1,12 @@
 import React from 'react'
+import StationsHero from '../../components/superAdminDashboard/Stations/StationsHero'
+import StationCampaigns from '../../components/superAdminDashboard/Stations/StationCampaigns'
 
 const Stations = () => {
   return (
     <div>
-      <h1>super admin stations page </h1>
+      <StationsHero/>
+      <StationCampaigns/>
     </div>
   )
 }
