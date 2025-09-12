@@ -21,6 +21,11 @@ import { setProfile } from "./redux/slices/UserProfile";
 import Signup from "./pages/Signup";
 import VerifyOtp from "./pages/VerifyOtp";
 import TravelFeedbackPortal from "./pages/TravelFeedbackPortal";
+import SuperAdminSidebaar from "./components/superAdminDashboard/common/Sidebaar";
+import SuperAdminNavbar from "./components/superAdminDashboard/common/Navbar";
+import Overview from "./pages/superAdminDashboard/Overview";
+import Stations from "./pages/superAdminDashboard/Stations";
+import SuperAdminCompaigns from "./pages/superAdminDashboard/Compaigns";
 
 const MainLayout = () => {
   return (
@@ -36,6 +41,15 @@ const MainLayout = () => {
   );
 };
 
+const SuperAdminLayout = () => {
+  return (
+    <div>
+      <SuperAdminNavbar />
+      <SuperAdminSidebaar />
+      <Outlet />
+    </div>
+  )
+}
 
 const router = createBrowserRouter([
   {
@@ -58,8 +72,15 @@ const router = createBrowserRouter([
   { path: "/login", element: <Login /> },
   { path: "/signup", element: <Signup /> },
   { path: "/verify-otp", element: <VerifyOtp /> },
-
-
+  {
+    path: '/superadmin',
+    element: <SuperAdminLayout />,
+    children: [
+      { path: 'overview', element: <Overview /> },
+      { path: 'stations', element: <Stations /> },
+      { path: 'compaigns', element: <SuperAdminCompaigns /> }
+    ]
+  }
 ]);
 
 function App() {
