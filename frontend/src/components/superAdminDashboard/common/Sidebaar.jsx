@@ -90,8 +90,8 @@ const Sidebar = () => {
   const getActiveTab = () => {
     const path = location.pathname;
     if (path === "/overview") return "overview";
-    if (path === "/passengers") return "passengers";
-    if (path === "/campaigns") return "campaigns";
+    if (path === "/stations") return "stations";
+    if (path === "/compaigns") return "compaigns";
     if (path === "/feedback") return "feedback";
     if (path === "/complaints") return "complaints";
     if (path === "/reports") return "reports";
@@ -155,7 +155,7 @@ const Sidebar = () => {
             icon={<FiUsers size={20} />}
             text="All Stations"
             active={getActiveTab() === "passengers"}
-            path="passengers"
+            path="stations"
             sidebarOpen={sidebarOpen}
             isMobile={isMobile}
           />
@@ -164,7 +164,7 @@ const Sidebar = () => {
             icon={<FiMessageSquare size={20} />}
             text="Campaigns"
             active={getActiveTab() === "campaigns"}
-            path="campaigns"
+            path="compaigns"
             sidebarOpen={sidebarOpen}
             isMobile={isMobile}
           />
