@@ -1,8 +1,13 @@
+import DefaultSuperCamp from "../../components/superAdminDashboard/SuperCompainComp/DefaultSuperCamp"
+import St1superCampn from "../../components/superAdminDashboard/SuperCompainComp/St1superCampn"
+import St2superCampn from "../../components/superAdminDashboard/SuperCompainComp/St2superCampn"
 
 const Compaigns = () => {
   return (
-    <div>
-      <h1>Super admin compaigns</h1>
+    <div className="my-10 mx-5">
+      <DefaultSuperCamp/>
+      <St1superCampn/>
+      <St2superCampn/>
     </div>
   )
 }
