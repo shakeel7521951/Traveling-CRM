@@ -1,76 +1,7 @@
 import React, { useState } from "react";
-import {
-  FiUsers,
-  FiPlayCircle,
-  FiPauseCircle,
-  FiEye,
-  FiTrendingUp,
-  FiBarChart2,
-  FiPlus,
-} from "react-icons/fi";
+import { FiUsers, FiPlayCircle, FiPauseCircle, FiTrendingUp, FiBarChart2, FiPlus, FiEye, FiSearch, FiFilter, FiX, FiChevronDown } from "react-icons/fi";
+import { useNavigate } from "react-router-dom";
 
-// Station Details Modal
-const StationDetail = ({ station, onClose }) => (
-  <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-50">
-    <div className="bg-white rounded-xl shadow-xl max-w-md w-full p-6">
-      <h2 className="text-2xl font-bold text-[#242C54] mb-4">
-        {station.name} – Details
-      </h2>
-
-      <div className="grid grid-cols-2 gap-4">
-        <div className="bg-gray-50 p-4 rounded-xl flex flex-col items-center">
-          <FiPlayCircle className="text-green-600" size={28} />
-          <p className="text-xl font-bold text-[#242C54]">
-            {station.activeCampaigns}
-          </p>
-          <span className="text-sm text-gray-600">Active Campaigns</span>
-        </div>
-        <div className="bg-gray-50 p-4 rounded-xl flex flex-col items-center">
-          <FiPauseCircle className="text-red-600" size={28} />
-          <p className="text-xl font-bold text-[#242C54]">
-            {station.pendingCampaigns}
-          </p>
-          <span className="text-sm text-gray-600">Pending Campaigns</span>
-        </div>
-        <div className="bg-gray-50 p-4 rounded-xl flex flex-col items-center">
-          <FiUsers className="text-[#E4141C]" size={28} />
-          <p className="text-xl font-bold text-[#242C54]">
-            {station.totalPassengers.toLocaleString()}
-          </p>
-          <span className="text-sm text-gray-600">Total Passengers</span>
-        </div>
-        <div className="bg-gray-50 p-4 rounded-xl flex flex-col items-center">
-          <FiTrendingUp className="text-[#242C54]" size={28} />
-          <p className="text-xl font-bold text-[#242C54]">
-            {station.occupancyRate}%
-          </p>
-          <span className="text-sm text-gray-600">Occupancy Rate</span>
-        </div>
-      </div>
-
-      <div className="mt-6">
-        <h3 className="font-semibold text-[#242C54] mb-2">Passenger Trend</h3>
-        <div className="h-8 bg-gray-100 rounded-full overflow-hidden">
-          <div
-            className="h-full bg-gradient-to-r from-[#242C54] to-[#3A4375]"
-            style={{ width: `${station.occupancyRate}%` }}
-          ></div>
-        </div>
-      </div>
-
-      <div className="mt-6 text-right">
-        <button
-          onClick={onClose}
-          className="px-4 py-2 rounded-lg bg-gradient-to-r from-[#242C54] to-[#3A4375] text-white hover:from-[#3A4375] hover:to-[#242C54] transition"
-        >
-          Close
-        </button>
-      </div>
-    </div>
-  </div>
-);
-
-// Add Station Modal
 const AddStationForm = ({ onClose, onAdd }) => {
   const [formData, setFormData] = useState({
     name: "",
@@ -80,10 +11,7 @@ const AddStationForm = ({ onClose, onAdd }) => {
     occupancyRate: "",
   });
 
-  const handleChange = (e) => {
-    setFormData((prev) => ({ ...prev, [e.target.name]: e.target.value }));
-  };
-
+  const handleChange = (e) => setFormData(prev => ({ ...prev, [e.target.name]: e.target.value }));
   const handleSubmit = (e) => {
     e.preventDefault();
     onAdd({
@@ -100,38 +28,38 @@ const AddStationForm = ({ onClose, onAdd }) => {
   };
 
   return (
-    <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-50">
-      <div className="bg-white rounded-xl shadow-xl max-w-md w-full p-6">
-        <h2 className="text-2xl font-bold text-[#242C54] mb-4">
-          Add New Station
-        </h2>
+    <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-50 p-4 backdrop-blur-sm">
+      <div className="bg-white rounded-xl shadow-2xl max-w-md w-full p-6 border border-gray-100">
+        <div className="flex justify-between items-center mb-6">
+          <h2 className="text-2xl font-bold text-[#242C54]">Add New Station</h2>
+          <button onClick={onClose} className="text-gray-400 hover:text-gray-600">
+            <FiX size={24} />
+          </button>
+        </div>
         <form onSubmit={handleSubmit} className="space-y-4">
-          {["name", "totalPassengers", "activeCampaigns", "pendingCampaigns", "occupancyRate"].map((field) => (
-            <input
-              key={field}
-              name={field}
-              placeholder={field.replace(/([A-Z])/g, " $1")}
-              value={formData[field]}
-              onChange={handleChange}
-              required
-              className="w-full border p-2 rounded-lg focus:ring focus:ring-[#242C54]"
-            />
+          {[
+            { field: "name", label: "Station Name", type: "text" },
+            { field: "totalPassengers", label: "Total Passengers", type: "number" },
+            { field: "activeCampaigns", label: "Active Campaigns", type: "number" },
+            { field: "pendingCampaigns", label: "Pending Campaigns", type: "number" },
+            { field: "occupancyRate", label: "Occupancy Rate (%)", type: "number" }
+          ].map(({ field, label, type }) => (
+            <div key={field}>
+              <label className="block text-sm font-medium text-gray-700 mb-1">{label}</label>
+              <input
+                type={type}
+                name={field}
+                placeholder={label}
+                value={formData[field]}
+                onChange={handleChange}
+                required
+                className="w-full border border-gray-300 p-3 rounded-lg focus:ring-2 focus:ring-[#242C54] focus:border-transparent transition-all"
+              />
+            </div>
           ))}
-
-          <div className="flex justify-end space-x-2 mt-4">
-            <button
-              type="button"
-              onClick={onClose}
-              className="px-4 py-2 rounded-lg bg-gray-200 text-gray-700 hover:bg-gray-300"
-            >
-              Cancel
-            </button>
-            <button
-              type="submit"
-              className="px-4 py-2 rounded-lg bg-gradient-to-r from-[#242C54] to-[#3A4375] text-white hover:from-[#3A4375] hover:to-[#242C54]"
-            >
-              Add
-            </button>
+          <div className="flex justify-end space-x-3 mt-6 pt-4 border-t border-gray-100">
+            <button type="button" onClick={onClose} className="px-5 py-2.5 rounded-lg bg-gray-100 text-gray-700 hover:bg-gray-200 transition-colors font-medium">Cancel</button>
+            <button type="submit" className="px-5 py-2.5 rounded-lg bg-gradient-to-r from-[#242C54] to-[#3A4375] text-white hover:from-[#3A4375] hover:to-[#242C54] transition-all shadow-md hover:shadow-lg font-medium">Add Station</button>
           </div>
         </form>
       </div>
@@ -139,266 +67,219 @@ const AddStationForm = ({ onClose, onAdd }) => {
   );
 };
 
-// Main Component
-const Stations = () => {
+const StationCampaigns = () => {
+  const navigate = useNavigate();
   const [stations, setStations] = useState([
-    {
-      id: 1,
-      name: "Jeddah (JED)",
-      totalPassengers: 4670,
-      activeCampaigns: 12,
-      pendingCampaigns: 4,
-      occupancyRate: 78,
-      trend: "up",
-      growth: 12,
-    },
-    {
-      id: 2,
-      name: "Medina (MED)",
-      totalPassengers: 2980,
-      activeCampaigns: 9,
-      pendingCampaigns: 2,
-      occupancyRate: 65,
-      trend: "up",
-      growth: 8,
-    },
-    {
-      id: 3,
-      name: "Riyadh (RUH)",
-      totalPassengers: 5340,
-      activeCampaigns: 15,
-      pendingCampaigns: 5,
-      occupancyRate: 82,
-      trend: "down",
-      growth: 5,
-    },
-    {
-      id: 4,
-      name: "Dammam (DMM)",
-      totalPassengers: 3250,
-      activeCampaigns: 7,
-      pendingCampaigns: 3,
-      occupancyRate: 71,
-      trend: "up",
-      growth: 15,
-    },
-    {
-      id: 5,
-      name: "Abha (AHB)",
-      totalPassengers: 1870,
-      activeCampaigns: 5,
-      pendingCampaigns: 1,
-      occupancyRate: 58,
-      trend: "up",
-      growth: 22,
-    },
+    { id: 1, name: "Jeddah (JED)", totalPassengers: 4670, activeCampaigns: 12, pendingCampaigns: 4, occupancyRate: 78, trend: "up", growth: 12 },
+    { id: 2, name: "Medina (MED)", totalPassengers: 2980, activeCampaigns: 9, pendingCampaigns: 2, occupancyRate: 65, trend: "up", growth: 8 },
+    { id: 3, name: "Riyadh (RUH)", totalPassengers: 5340, activeCampaigns: 15, pendingCampaigns: 5, occupancyRate: 82, trend: "down", growth: 5 },
+    { id: 4, name: "Dammam (DMM)", totalPassengers: 3250, activeCampaigns: 7, pendingCampaigns: 3, occupancyRate: 71, trend: "up", growth: 15 },
+    { id: 5, name: "Abha (AHB)", totalPassengers: 1870, activeCampaigns: 5, pendingCampaigns: 1, occupancyRate: 58, trend: "up", growth: 22 },
   ]);
-
-  const [selectedStation, setSelectedStation] = useState(null);
   const [showAddForm, setShowAddForm] = useState(false);
   const [search, setSearch] = useState("");
   const [statusFilter, setStatusFilter] = useState("All");
 
-  const handleAddStation = (newStation) => {
-    setStations((prev) => [...prev, newStation]);
-  };
+  const handleAddStation = (newStation) => setStations(prev => [...prev, newStation]);
 
-  // Filtering
-  const filteredStations = stations.filter((station) => {
-    const matchesSearch = station.name
-      .toLowerCase()
-      .includes(search.toLowerCase());
-
+  const filteredStations = stations.filter(station => {
+    const matchesSearch = station.name.toLowerCase().includes(search.toLowerCase());
     let matchesStatus = true;
-    if (statusFilter === "Active") {
-      matchesStatus = station.activeCampaigns > 0;
-    } else if (statusFilter === "Pending") {
-      matchesStatus = station.pendingCampaigns > 0;
-    } else if (statusFilter === "High Occupancy") {
-      matchesStatus = station.occupancyRate > 75;
-    }
-
+    if (statusFilter === "Active") matchesStatus = station.activeCampaigns > 0;
+    else if (statusFilter === "Pending") matchesStatus = station.pendingCampaigns > 0;
+    else if (statusFilter === "High Occupancy") matchesStatus = station.occupancyRate > 75;
     return matchesSearch && matchesStatus;
   });
 
   return (
-    <div className="p-6 bg-gray-50 min-h-screen">
-      {/* Header Controls */}
-      <div className="flex flex-col md:flex-row justify-between items-center mb-4 gap-3">
-        <div className="flex items-center gap-2">
-          <input
-            type="text"
-            placeholder="Search stations..."
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-            className="border p-2 rounded-lg focus:ring focus:ring-[#242C54]"
-          />
-          <select
-            value={statusFilter}
-            onChange={(e) => setStatusFilter(e.target.value)}
-            className="border p-2 rounded-lg focus:ring focus:ring-[#242C54]"
-          >
-            <option>All</option>
-            <option>Active</option>
-            <option>Pending</option>
-            <option>High Occupancy</option>
-          </select>
-        </div>
-        <button
-          onClick={() => setShowAddForm(true)}
-          className="flex items-center gap-1 px-4 py-2 rounded-lg bg-gradient-to-r from-[#242C54] to-[#3A4375] text-white hover:from-[#3A4375] hover:to-[#242C54]"
-        >
-          <FiPlus /> Add Station
-        </button>
-      </div>
-
-      {/* Stations Table */}
-      <div className="bg-white rounded-xl shadow-sm p-6">
-        <div className="flex items-center mb-4">
-          <FiBarChart2 className="text-[#242C54] mr-2" />
-          <h3 className="text-lg font-semibold text-[#242C54]">
-            Station Performance
-          </h3>
+    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 p-6">
+      <div className="max-w-7xl mx-auto">
+        {/* Header */}
+        <div className="mb-8">
+          <h1 className="text-3xl font-bold text-[#242C54] mb-2">Station Management</h1>
+          <p className="text-gray-600">Monitor and manage all station campaigns and performance metrics</p>
         </div>
 
-        <div className="overflow-x-auto">
-          <table className="min-w-full border border-gray-200 bg-white rounded-lg shadow">
-            <thead className="bg-gradient-to-r from-[#242C54] to-[#3A4375] text-white">
-              <tr>
-                <th className="px-6 py-3 text-left text-sm font-semibold">
-                  Station Name
-                </th>
-                <th className="px-6 py-3 text-left text-sm font-semibold">
-                  Total Passengers
-                </th>
-                <th className="px-6 py-3 text-left text-sm font-semibold">
-                  Occupancy Rate
-                </th>
-                <th className="px-6 py-3 text-left text-sm font-semibold">
-                  Growth
-                </th>
-                <th className="px-6 py-3 text-left text-sm font-semibold">
-                  Actions
-                </th>
-              </tr>
-            </thead>
-            <tbody>
-              {filteredStations.map((station) => (
-                <tr
-                  key={station.id}
-                  className="border-t hover:bg-gray-50 transition"
+        {/* Stats Cards */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5 mb-8">
+          <div className="bg-white rounded-xl p-5 shadow-sm border border-gray-100">
+            <div className="flex justify-between items-start">
+              <div>
+                <p className="text-sm text-gray-500 font-medium">Total Stations</p>
+                <h3 className="text-2xl font-bold text-[#242C54] mt-1">{stations.length}</h3>
+              </div>
+              <div className="p-3 bg-blue-50 rounded-lg">
+                <FiUsers className="text-[#242C54]" size={20} />
+              </div>
+            </div>
+            <p className="text-xs text-gray-500 mt-3"><span className="text-green-600 font-medium">+3</span> since last month</p>
+          </div>
+
+          <div className="bg-white rounded-xl p-5 shadow-sm border border-gray-100">
+            <div className="flex justify-between items-start">
+              <div>
+                <p className="text-sm text-gray-500 font-medium">Active Campaigns</p>
+                <h3 className="text-2xl font-bold text-[#242C54] mt-1">{stations.reduce((acc, station) => acc + station.activeCampaigns, 0)}</h3>
+              </div>
+              <div className="p-3 bg-green-50 rounded-lg">
+                <FiPlayCircle className="text-green-600" size={20} />
+              </div>
+            </div>
+            <p className="text-xs text-gray-500 mt-3"><span className="text-green-600 font-medium">+12%</span> from last week</p>
+          </div>
+
+          <div className="bg-white rounded-xl p-5 shadow-sm border border-gray-100">
+            <div className="flex justify-between items-start">
+              <div>
+                <p className="text-sm text-gray-500 font-medium">Pending Campaigns</p>
+                <h3 className="text-2xl font-bold text-[#242C54] mt-1">{stations.reduce((acc, station) => acc + station.pendingCampaigns, 0)}</h3>
+              </div>
+              <div className="p-3 bg-yellow-50 rounded-lg">
+                <FiPauseCircle className="text-yellow-600" size={20} />
+              </div>
+            </div>
+            <p className="text-xs text-gray-500 mt-3"><span className="text-red-600 font-medium">-2</span> since yesterday</p>
+          </div>
+
+          <div className="bg-white rounded-xl p-5 shadow-sm border border-gray-100">
+            <div className="flex justify-between items-start">
+              <div>
+                <p className="text-sm text-gray-500 font-medium">Avg. Occupancy</p>
+                <h3 className="text-2xl font-bold text-[#242C54] mt-1">
+                  {Math.round(stations.reduce((acc, station) => acc + station.occupancyRate, 0) / stations.length)}%
+                </h3>
+              </div>
+              <div className="p-3 bg-purple-50 rounded-lg">
+                <FiTrendingUp className="text-purple-600" size={20} />
+              </div>
+            </div>
+            <p className="text-xs text-gray-500 mt-3"><span className="text-green-600 font-medium">+5%</span> from last month</p>
+          </div>
+        </div>
+
+        {/* Controls and Table */}
+        <div className="bg-white rounded-2xl shadow-sm overflow-hidden border border-gray-100">
+          <div className="px-6 py-5 border-b border-gray-100">
+            <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+              <div className="relative w-full md:w-80">
+                <FiSearch className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={18} />
+                <input 
+                  type="text" 
+                  placeholder="Search stations..." 
+                  value={search} 
+                  onChange={(e) => setSearch(e.target.value)} 
+                  className="w-full pl-10 pr-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#242C54] focus:border-transparent"
+                />
+              </div>
+              
+              <div className="flex flex-col sm:flex-row gap-3 w-full md:w-auto">
+                <div className="relative">
+                  <FiFilter className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={18} />
+                  <select 
+                    value={statusFilter} 
+                    onChange={(e) => setStatusFilter(e.target.value)} 
+                    className="pl-10 pr-8 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#242C54] focus:border-transparent appearance-none"
+                  >
+                    <option>All</option>
+                    <option>Active</option>
+                    <option>Pending</option>
+                    <option>High Occupancy</option>
+                  </select>
+                  <FiChevronDown className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 pointer-events-none" />
+                </div>
+                
+                <button 
+                  onClick={() => setShowAddForm(true)} 
+                  className="flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg bg-gradient-to-r from-[#242C54] to-[#3A4375] text-white hover:from-[#3A4375] hover:to-[#242C54] transition-all shadow-md hover:shadow-lg font-medium"
                 >
-                  <td className="px-6 py-4 text-sm font-medium text-gray-700">
-                    {station.name}
-                  </td>
-                  <td className="px-6 py-4 text-sm text-gray-700">
-                    <div className="flex items-center">
-                      <span className="font-semibold">
-                        {station.totalPassengers.toLocaleString()}
-                      </span>
-                      <div className="ml-2 w-16 bg-gray-200 rounded-full h-2">
-                        <div
-                          className="bg-gradient-to-r from-[#242C54] to-[#3A4375] h-2 rounded-full"
-                          style={{
-                            width: `${(station.totalPassengers / 6000) * 100}%`,
-                          }}
-                        ></div>
+                  <FiPlus size={18} /> Add Station
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <div className="overflow-x-auto">
+            <table className="w-full">
+              <thead>
+                <tr className="bg-gradient-to-r from-[#242C54] to-[#3A4375] text-white">
+                  <th className="px-6 py-4 text-left text-sm font-semibold uppercase tracking-wider">Station Name</th>
+                  <th className="px-6 py-4 text-left text-sm font-semibold uppercase tracking-wider">Total Passengers</th>
+                  <th className="px-6 py-4 text-left text-sm font-semibold uppercase tracking-wider">Active Campaigns</th>
+                  <th className="px-6 py-4 text-left text-sm font-semibold uppercase tracking-wider">Occupancy Rate</th>
+                  <th className="px-6 py-4 text-left text-sm font-semibold uppercase tracking-wider">Growth</th>
+                  <th className="px-6 py-4 text-left text-sm font-semibold uppercase tracking-wider">Actions</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-gray-100">
+                {filteredStations.map(station => (
+                  <tr key={station.id} className="hover:bg-gray-50 transition-colors">
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      <div className="text-sm font-medium text-gray-900">{station.name}</div>
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      <div className="flex items-center">
+                        <span className="text-sm font-semibold text-gray-900 mr-3">{station.totalPassengers.toLocaleString()}</span>
+                        <div className="w-20 bg-gray-200 rounded-full h-2">
+                          <div 
+                            className="bg-gradient-to-r from-[#242C54] to-[#3A4375] h-2 rounded-full" 
+                            style={{ width: `${Math.min(100, (station.totalPassengers / 6000) * 100)}%` }}
+                          ></div>
+                        </div>
                       </div>
-                    </div>
-                  </td>
-                  <td className="px-6 py-4 text-sm">
-                    <span
-                      className={`font-semibold ${
-                        station.occupancyRate > 75
-                          ? "text-green-600"
-                          : station.occupancyRate > 60
-                          ? "text-yellow-600"
-                          : "text-red-600"
-                      }`}
-                    >
-                      {station.occupancyRate}%
-                    </span>
-                  </td>
-                  <td className="px-6 py-4 text-sm">
-                    <div className="flex items-center">
-                      {station.trend === "up" ? (
-                        <svg
-                          className="w-4 h-4 text-green-600 mr-1"
-                          fill="none"
-                          stroke="currentColor"
-                          viewBox="0 0 24 24"
-                          xmlns="http://www.w3.org/2000/svg"
-                        >
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            strokeWidth="2"
-                            d="M5 10l7-7m0 0l7 7m-7-7v18"
-                          ></path>
-                        </svg>
-                      ) : (
-                        <svg
-                          className="w-4 h-4 text-red-600 mr-1"
-                          fill="none"
-                          stroke="currentColor"
-                          viewBox="0 0 24 24"
-                          xmlns="http://www.w3.org/2000/svg"
-                        >
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            strokeWidth="2"
-                            d="M19 14l-7 7m0 0l-7-7m7 7V3"
-                          ></path>
-                        </svg>
-                      )}
-                      <span
-                        className={
-                          station.trend === "up" ? "text-green-600" : "text-red-600"
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      <div className="text-sm text-gray-900 font-medium">{station.activeCampaigns}</div>
+                      <div className="text-xs text-gray-500">{station.pendingCampaigns} pending</div>
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      <div className="flex items-center">
+                        <div className={`w-3 h-3 rounded-full mr-2 ${station.occupancyRate > 75 ? "bg-green-500" : station.occupancyRate > 60 ? "bg-yellow-500" : "bg-red-500"}`}></div>
+                        <span className={`text-sm font-semibold ${station.occupancyRate > 75 ? "text-green-600" : station.occupancyRate > 60 ? "text-yellow-600" : "text-red-600"}`}>
+                          {station.occupancyRate}%
+                        </span>
+                      </div>
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      <div className="flex items-center">
+                        {station.trend === "up" ? 
+                          <span className="text-green-600 mr-1">&#9650;</span> : 
+                          <span className="text-red-600 mr-1">&#9660;</span>
                         }
+                        <span className={`text-sm font-medium ${station.trend === "up" ? "text-green-600" : "text-red-600"}`}>
+                          {station.growth}%
+                        </span>
+                      </div>
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      <button 
+                        onClick={() => navigate(`/superadmin/viewdetail/${station.id}`)} 
+                        className="flex items-center text-sm font-medium text-[#242C54] hover:text-[#3A4375] transition-colors"
                       >
-                        {station.growth}%
-                      </span>
-                    </div>
-                  </td>
-                  <td className="px-6 py-4 text-sm">
-                    <button
-                      onClick={() => setSelectedStation(station)}
-                      className="text-gray-500 hover:text-[#E4141C] transition flex items-center"
-                    >
-                      <FiEye size={16} className="mr-1" />
-                      View Details
-                    </button>
-                  </td>
-                </tr>
-              ))}
-              {filteredStations.length === 0 && (
-                <tr>
-                  <td colSpan="5" className="text-center py-4 text-gray-500">
-                    No stations found.
-                  </td>
-                </tr>
-              )}
-            </tbody>
-          </table>
+                        <FiEye size={16} className="mr-1" /> View Details
+                      </button>
+                    </td>
+                  </tr>
+                ))}
+                {filteredStations.length === 0 && (
+                  <tr>
+                    <td colSpan="6" className="px-6 py-8 text-center">
+                      <div className="flex flex-col items-center justify-center text-gray-500">
+                        <FiBarChart2 size={48} className="mb-2 opacity-50" />
+                        <p className="font-medium">No stations found</p>
+                        <p className="text-sm">Try adjusting your search or filter criteria</p>
+                      </div>
+                    </td>
+                  </tr>
+                )}
+              </tbody>
+            </table>
+          </div>
         </div>
       </div>
 
-      {selectedStation && (
-        <StationDetail
-          station={selectedStation}
-          onClose={() => setSelectedStation(null)}
-        />
-      )}
-
-      {showAddForm && (
-        <AddStationForm
-          onClose={() => setShowAddForm(false)}
-          onAdd={handleAddStation}
-        />
-      )}
+      {showAddForm && <AddStationForm onClose={() => setShowAddForm(false)} onAdd={handleAddStation} />}
     </div>
   );
 };
 
-export default Stations;
+export default StationCampaigns;
