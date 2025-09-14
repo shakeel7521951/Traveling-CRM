@@ -92,11 +92,9 @@ const Sidebar = () => {
     if (path === "/overview") return "overview";
     if (path === "/stations") return "stations";
     if (path === "/compaigns") return "compaigns";
-    if (path === "/feedback") return "feedback";
-    if (path === "/complaints") return "complaints";
-    if (path === "/reports") return "reports";
-    if (path === "/admin") return "admin";
-    if (path === "/all-stations") return "stations";
+    if (path === "/feedbacks") return "feedbacks";
+    if (path === "/complaint") return "complaint";
+   
     if (path === "/setting") return "settings";
     return "";
   };
@@ -172,8 +170,8 @@ const Sidebar = () => {
           <NavItem
             icon={<FiStar size={20} />}
             text="Feedback"
-            active={getActiveTab() === "feedback"}
-            path="/feedback"
+            active={getActiveTab() === "feedbacks"}
+            path="/feedbacks"
             sidebarOpen={sidebarOpen}
             isMobile={isMobile}
           />
@@ -181,8 +179,8 @@ const Sidebar = () => {
           <NavItem
             icon={<FiAlertTriangle size={20} />}
             text="Complaints"
-            active={getActiveTab() === "complaints"}
-            path="/complaints"
+            active={getActiveTab() === "complaint"}
+            path="/complaint"
             sidebarOpen={sidebarOpen}
             isMobile={isMobile}
           />
