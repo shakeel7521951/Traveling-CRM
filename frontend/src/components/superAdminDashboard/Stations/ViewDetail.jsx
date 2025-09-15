@@ -1,6 +1,9 @@
 import React from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { FiUsers, FiPlayCircle, FiPauseCircle, FiTrendingUp, FiArrowLeft, FiBarChart2, FiCalendar, FiClock, FiActivity } from "react-icons/fi";
+import { 
+  FiUsers, FiPlayCircle, FiTrendingUp, FiArrowLeft, 
+  FiBarChart2, FiClock, FiActivity 
+} from "react-icons/fi";
 
 const stationsData = [
   { 
@@ -85,6 +88,32 @@ const stationsData = [
       { id: 2, name: "Cultural Experience", status: "pending", progress: 0 }
     ]
   },
+  { 
+    id: 6, 
+    name: "New Station 1", 
+    totalPassengers: 0, 
+    activeCampaigns: 0, 
+    pendingCampaigns: 0, 
+    occupancyRate: 0, 
+    trend: "up", 
+    growth: 0,
+    lastUpdated: "2023-10-17",
+    performance: 0,
+    campaigns: []
+  },
+  { 
+    id: 7, 
+    name: "New Station 2", 
+    totalPassengers: 0, 
+    activeCampaigns: 0, 
+    pendingCampaigns: 0, 
+    occupancyRate: 0, 
+    trend: "up", 
+    growth: 0,
+    lastUpdated: "2023-10-17",
+    performance: 0,
+    campaigns: []
+  },
 ];
 
 const ViewDetail = () => {
@@ -96,14 +125,14 @@ const ViewDetail = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 p-6">
-      <div className="max-w-6xl mx-auto">
+      <div className="max-w-7xl mx-auto">
         {/* Header */}
         <div className="mb-6 flex items-center">
           <button 
             onClick={() => navigate(-1)} 
-            className="flex items-center gap-2 px-4 py-2.5 rounded-lg bg-white text-[#242C54] hover:bg-gray-50 shadow-sm transition-all border border-gray-200 mr-4"
+            className="flex items-center gap-2 px-3 py-2 rounded-lg bg-white text-[#242C54] hover:bg-gray-50 shadow-sm transition-all border border-gray-200 mr-4"
           >
-            <FiArrowLeft size={18} /> Back
+            <FiArrowLeft size={18} /> 
           </button>
           <h1 className="text-3xl font-bold text-[#242C54]">{station.name} Dashboard</h1>
         </div>
@@ -182,34 +211,41 @@ const ViewDetail = () => {
               <h2 className="text-lg font-semibold text-white">Campaigns</h2>
             </div>
             <div className="p-6">
-              {station.campaigns.map(campaign => (
-                <div key={campaign.id} className="mb-4 last:mb-0 p-4 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors">
-                  <div className="flex justify-between items-start mb-2">
-                    <h3 className="font-medium text-[#242C54]">{campaign.name}</h3>
-                    <span className={`px-2 py-1 rounded-full text-xs font-medium ${campaign.status === 'active' ? 'bg-green-100 text-green-800' : 'bg-yellow-100 text-yellow-800'}`}>
-                      {campaign.status}
-                    </span>
-                  </div>
-                  <div className="flex items-center gap-2 text-sm text-gray-500 mb-3">
-                    <FiClock size={14} />
-                    <span>{campaign.status === 'active' ? 'In progress' : 'Awaiting approval'}</span>
-                  </div>
-                  {campaign.status === 'active' && (
-                    <div>
-                      <div className="w-full bg-gray-200 rounded-full h-2 mb-2">
-                        <div 
-                          className="bg-gradient-to-r from-[#242C54] to-[#3A4375] h-2 rounded-full" 
-                          style={{ width: `${campaign.progress}%` }}
-                        ></div>
-                      </div>
-                      <div className="flex justify-between text-xs text-gray-500">
-                        <span>Progress</span>
-                        <span>{campaign.progress}%</span>
-                      </div>
+              {station.campaigns.length > 0 ? (
+                station.campaigns.map(campaign => (
+                  <div key={campaign.id} className="mb-4 last:mb-0 p-4 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors">
+                    <div className="flex justify-between items-start mb-2">
+                      <h3 className="font-medium text-[#242C54]">{campaign.name}</h3>
+                      <span className={`px-2 py-1 rounded-full text-xs font-medium ${campaign.status === 'active' ? 'bg-green-100 text-green-800' : 'bg-yellow-100 text-yellow-800'}`}>
+                        {campaign.status}
+                      </span>
                     </div>
-                  )}
+                    <div className="flex items-center gap-2 text-sm text-gray-500 mb-3">
+                      <FiClock size={14} />
+                      <span>{campaign.status === 'active' ? 'In progress' : 'Awaiting approval'}</span>
+                    </div>
+                    {campaign.status === 'active' && (
+                      <div>
+                        <div className="w-full bg-gray-200 rounded-full h-2 mb-2">
+                          <div 
+                            className="bg-gradient-to-r from-[#242C54] to-[#3A4375] h-2 rounded-full" 
+                            style={{ width: `${campaign.progress}%` }}
+                          ></div>
+                        </div>
+                        <div className="flex justify-between text-xs text-gray-500">
+                          <span>Progress</span>
+                          <span>{campaign.progress}%</span>
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                ))
+              ) : (
+                <div className="text-center py-8 text-gray-500">
+                  <FiBarChart2 size={32} className="mx-auto mb-2 opacity-50" />
+                  <p>No campaigns available</p>
                 </div>
-              ))}
+              )}
             </div>
           </div>
 
@@ -296,7 +332,9 @@ const ViewDetail = () => {
                 </div>
                 <div className="flex justify-between border-b border-gray-100 pb-2">
                   <span className="text-gray-600">Campaign Efficiency</span>
-                  <span className="font-medium">{(station.activeCampaigns / (station.activeCampaigns + station.pendingCampaigns) * 100).toFixed(0)}%</span>
+                  <span className="font-medium">
+                    {(station.activeCampaigns / (station.activeCampaigns + station.pendingCampaigns || 1) * 100).toFixed(0)}%
+                  </span>
                 </div>
                 <div className="flex justify-between border-b border-gray-100 pb-2">
                   <span className="text-gray-600">Capacity Utilization</span>
@@ -306,6 +344,33 @@ const ViewDetail = () => {
             </div>
           </div>
         </div>
+
+        {/* Feedback Section (static only) */}
+        <div className="mt-6 bg-white rounded-2xl shadow-sm overflow-hidden border border-gray-100">
+          <div className="px-6 py-4 border-b border-gray-100 bg-gradient-to-r from-[#242C54] to-[#3A4375]">
+            <h2 className="text-lg font-semibold text-white">Feedback</h2>
+          </div>
+          <div className="p-6">
+            <div className="mt-8 pt-6 border-t border-gray-200">
+              <h3 className="text-md font-medium text-[#242C54] mb-4">Recent Feedback</h3>
+              <div className="space-y-4">
+                <div className="p-4 bg-gray-50 rounded-lg border border-gray-200">
+                  <p className="text-gray-700">Great station, very clean and organized!</p>
+                  <p className="text-xs text-gray-500 mt-2">
+                    Submitted on 2023-10-15 at 14:32
+                  </p>
+                </div>
+                <div className="p-4 bg-gray-50 rounded-lg border border-gray-200">
+                  <p className="text-gray-700">Need more staff during rush hours.</p>
+                  <p className="text-xs text-gray-500 mt-2">
+                    Submitted on 2023-10-14 at 09:12
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
       </div>
     </div>
   );

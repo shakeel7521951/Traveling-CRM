@@ -1,26 +1,30 @@
 import React, { useState } from "react";
-import { FiUsers, FiPlayCircle, FiPauseCircle, FiTrendingUp, FiBarChart2, FiPlus, FiEye, FiSearch, FiFilter, FiX, FiChevronDown } from "react-icons/fi";
+import { FiUsers, FiPlayCircle, FiPauseCircle, FiTrendingUp, FiBarChart2, FiPlus, FiEye, FiSearch, FiFilter, FiX, FiChevronDown, FiArrowUp, FiArrowDown } from "react-icons/fi";
 import { useNavigate } from "react-router-dom";
 
 const AddStationForm = ({ onClose, onAdd }) => {
   const [formData, setFormData] = useState({
     name: "",
-    totalPassengers: "",
-    activeCampaigns: "",
-    pendingCampaigns: "",
-    occupancyRate: "",
+    code: "",
+    city: "",
+    district: "",
+    state: "",
+    country: "",
+    latitude: "",
+    longitude: ""
   });
 
   const handleChange = (e) => setFormData(prev => ({ ...prev, [e.target.name]: e.target.value }));
+  
   const handleSubmit = (e) => {
     e.preventDefault();
     onAdd({
       ...formData,
       id: Date.now(),
-      totalPassengers: Number(formData.totalPassengers),
-      activeCampaigns: Number(formData.activeCampaigns),
-      pendingCampaigns: Number(formData.pendingCampaigns),
-      occupancyRate: Number(formData.occupancyRate),
+      totalPassengers: 0,
+      activeCampaigns: 0,
+      pendingCampaigns: 0,
+      occupancyRate: 0,
       trend: "up",
       growth: 0,
     });
@@ -29,42 +33,56 @@ const AddStationForm = ({ onClose, onAdd }) => {
 
   return (
     <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-50 p-4 backdrop-blur-sm">
-      <div className="bg-white rounded-xl shadow-2xl max-w-md w-full p-6 border border-gray-100">
-        <div className="flex justify-between items-center mb-6">
-          <h2 className="text-2xl font-bold text-[#242C54]">Add New Station</h2>
-          <button onClick={onClose} className="text-gray-400 hover:text-gray-600">
-            <FiX size={24} />
-          </button>
-        </div>
-        <form onSubmit={handleSubmit} className="space-y-4">
-          {[
-            { field: "name", label: "Station Name", type: "text" },
-            { field: "totalPassengers", label: "Total Passengers", type: "number" },
-            { field: "activeCampaigns", label: "Active Campaigns", type: "number" },
-            { field: "pendingCampaigns", label: "Pending Campaigns", type: "number" },
-            { field: "occupancyRate", label: "Occupancy Rate (%)", type: "number" }
-          ].map(({ field, label, type }) => (
-            <div key={field}>
-              <label className="block text-sm font-medium text-gray-700 mb-1">{label}</label>
-              <input
-                type={type}
-                name={field}
-                placeholder={label}
-                value={formData[field]}
-                onChange={handleChange}
-                required
-                className="w-full border border-gray-300 p-3 rounded-lg focus:ring-2 focus:ring-[#242C54] focus:border-transparent transition-all"
-              />
-            </div>
-          ))}
-          <div className="flex justify-end space-x-3 mt-6 pt-4 border-t border-gray-100">
-            <button type="button" onClick={onClose} className="px-5 py-2.5 rounded-lg bg-gray-100 text-gray-700 hover:bg-gray-200 transition-colors font-medium">Cancel</button>
-            <button type="submit" className="px-5 py-2.5 rounded-lg bg-gradient-to-r from-[#242C54] to-[#3A4375] text-white hover:from-[#3A4375] hover:to-[#242C54] transition-all shadow-md hover:shadow-lg font-medium">Add Station</button>
-          </div>
-        </form>
+     <div className="bg-white rounded-2xl shadow-2xl max-w-md w-full p-6 border border-gray-100 animate-fade-in 
+                max-h-[90vh] flex flex-col overflow-hidden">
+  {/* Header */}
+  <div className="flex justify-between items-center mb-6 flex-shrink-0">
+    <h2 className="text-2xl font-bold text-[#242C54]">Add New Station</h2>
+    <button onClick={onClose} className="text-red-700 hover:text-gray-600 transition-colors">
+      <FiX size={24} />
+    </button>
+  </div>
+
+  {/* Form */}
+  <form onSubmit={handleSubmit} className="space-y-5 overflow-y-auto pr-2 flex-1">
+    {[
+      { field: "name", label: "Station Name", type: "text" },
+      { field: "code", label: "Station Code", type: "text" },
+      { field: "location", label: "Location", type: "text" }
+    ].map(({ field, label, type }) => (
+      <div key={field}>
+        <label className="block text-sm font-medium text-gray-700 mb-2">{label}</label>
+        <input
+          type={type}
+          name={field}
+          placeholder={label}
+          value={formData[field]}
+          onChange={handleChange}
+          required
+          className="w-full border border-gray-300 p-3 rounded-xl focus:ring-2 focus:ring-[#242C54] focus:border-transparent transition-all"
+        />
       </div>
+    ))}
+
+    <div className="flex justify-end space-x-3 mt-6 pt-5 border-t border-gray-100 flex-shrink-0">
+      <button
+        type="button"
+        onClick={onClose}
+        className="px-5 py-2.5 rounded-xl bg-gray-100 text-gray-700 hover:bg-gray-200 transition-colors font-medium"
+      >
+        Cancel
+      </button>
+      <button
+        type="submit"
+        className="px-5 py-2.5 rounded-xl bg-gradient-to-r from-[#242C54] to-[#3A4375] text-white hover:from-[#3A4375] hover:to-[#242C54] transition-all shadow-md hover:shadow-lg font-medium"
+      >
+        Add Station
+      </button>
     </div>
-  );
+  </form>
+</div>
+</div>
+);
 };
 
 const StationCampaigns = () => {
@@ -75,6 +93,8 @@ const StationCampaigns = () => {
     { id: 3, name: "Riyadh (RUH)", totalPassengers: 5340, activeCampaigns: 15, pendingCampaigns: 5, occupancyRate: 82, trend: "down", growth: 5 },
     { id: 4, name: "Dammam (DMM)", totalPassengers: 3250, activeCampaigns: 7, pendingCampaigns: 3, occupancyRate: 71, trend: "up", growth: 15 },
     { id: 5, name: "Abha (AHB)", totalPassengers: 1870, activeCampaigns: 5, pendingCampaigns: 1, occupancyRate: 58, trend: "up", growth: 22 },
+    { id: 6, name: "New Station 1", totalPassengers: 0, activeCampaigns: 0, pendingCampaigns: 0, occupancyRate: 0, trend: "up", growth: 0 },
+    { id: 7, name: "New Station 2", totalPassengers: 0, activeCampaigns: 0, pendingCampaigns: 0, occupancyRate: 0, trend: "up", growth: 0 },
   ]);
   const [showAddForm, setShowAddForm] = useState(false);
   const [search, setSearch] = useState("");
@@ -101,47 +121,47 @@ const StationCampaigns = () => {
         </div>
 
         {/* Stats Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5 mb-8">
-          <div className="bg-white rounded-xl p-5 shadow-sm border border-gray-100">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+          <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100 transition-all hover:shadow-md">
             <div className="flex justify-between items-start">
               <div>
                 <p className="text-sm text-gray-500 font-medium">Total Stations</p>
                 <h3 className="text-2xl font-bold text-[#242C54] mt-1">{stations.length}</h3>
               </div>
-              <div className="p-3 bg-blue-50 rounded-lg">
+              <div className="p-3 bg-blue-50 rounded-xl">
                 <FiUsers className="text-[#242C54]" size={20} />
               </div>
             </div>
             <p className="text-xs text-gray-500 mt-3"><span className="text-green-600 font-medium">+3</span> since last month</p>
           </div>
 
-          <div className="bg-white rounded-xl p-5 shadow-sm border border-gray-100">
+          <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100 transition-all hover:shadow-md">
             <div className="flex justify-between items-start">
               <div>
                 <p className="text-sm text-gray-500 font-medium">Active Campaigns</p>
                 <h3 className="text-2xl font-bold text-[#242C54] mt-1">{stations.reduce((acc, station) => acc + station.activeCampaigns, 0)}</h3>
               </div>
-              <div className="p-3 bg-green-50 rounded-lg">
+              <div className="p-3 bg-green-50 rounded-xl">
                 <FiPlayCircle className="text-green-600" size={20} />
               </div>
             </div>
             <p className="text-xs text-gray-500 mt-3"><span className="text-green-600 font-medium">+12%</span> from last week</p>
           </div>
 
-          <div className="bg-white rounded-xl p-5 shadow-sm border border-gray-100">
+          <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100 transition-all hover:shadow-md">
             <div className="flex justify-between items-start">
               <div>
                 <p className="text-sm text-gray-500 font-medium">Pending Campaigns</p>
                 <h3 className="text-2xl font-bold text-[#242C54] mt-1">{stations.reduce((acc, station) => acc + station.pendingCampaigns, 0)}</h3>
               </div>
-              <div className="p-3 bg-yellow-50 rounded-lg">
+              <div className="p-3 bg-yellow-50 rounded-xl">
                 <FiPauseCircle className="text-yellow-600" size={20} />
               </div>
             </div>
             <p className="text-xs text-gray-500 mt-3"><span className="text-red-600 font-medium">-2</span> since yesterday</p>
           </div>
 
-          <div className="bg-white rounded-xl p-5 shadow-sm border border-gray-100">
+          <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100 transition-all hover:shadow-md">
             <div className="flex justify-between items-start">
               <div>
                 <p className="text-sm text-gray-500 font-medium">Avg. Occupancy</p>
@@ -149,7 +169,7 @@ const StationCampaigns = () => {
                   {Math.round(stations.reduce((acc, station) => acc + station.occupancyRate, 0) / stations.length)}%
                 </h3>
               </div>
-              <div className="p-3 bg-purple-50 rounded-lg">
+              <div className="p-3 bg-purple-50 rounded-xl">
                 <FiTrendingUp className="text-purple-600" size={20} />
               </div>
             </div>
@@ -168,7 +188,7 @@ const StationCampaigns = () => {
                   placeholder="Search stations..." 
                   value={search} 
                   onChange={(e) => setSearch(e.target.value)} 
-                  className="w-full pl-10 pr-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#242C54] focus:border-transparent"
+                  className="w-full pl-10 pr-4 py-2.5 border border-gray-300 rounded-xl focus:ring-2 focus:ring-[#242C54] outline-none focus:border-transparent transition-all"
                 />
               </div>
               
@@ -178,7 +198,7 @@ const StationCampaigns = () => {
                   <select 
                     value={statusFilter} 
                     onChange={(e) => setStatusFilter(e.target.value)} 
-                    className="pl-10 pr-8 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#242C54] focus:border-transparent appearance-none"
+                    className="pl-10 pr-8 py-2.5 border border-gray-300 rounded-xl focus:ring-2 focus:ring-[#242C54] outline-none focus:border-transparent appearance-none transition-all"
                   >
                     <option>All</option>
                     <option>Active</option>
@@ -190,7 +210,7 @@ const StationCampaigns = () => {
                 
                 <button 
                   onClick={() => setShowAddForm(true)} 
-                  className="flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg bg-gradient-to-r from-[#242C54] to-[#3A4375] text-white hover:from-[#3A4375] hover:to-[#242C54] transition-all shadow-md hover:shadow-lg font-medium"
+                  className="flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-gradient-to-r from-[#242C54] to-[#3A4375] text-white hover:from-[#3A4375] hover:to-[#242C54] transition-all shadow-md hover:shadow-lg font-medium"
                 >
                   <FiPlus size={18} /> Add Station
                 </button>
@@ -242,8 +262,8 @@ const StationCampaigns = () => {
                     <td className="px-6 py-4 whitespace-nowrap">
                       <div className="flex items-center">
                         {station.trend === "up" ? 
-                          <span className="text-green-600 mr-1">&#9650;</span> : 
-                          <span className="text-red-600 mr-1">&#9660;</span>
+                          <FiArrowUp className="text-green-600 mr-1" /> : 
+                          <FiArrowDown className="text-red-600 mr-1" />
                         }
                         <span className={`text-sm font-medium ${station.trend === "up" ? "text-green-600" : "text-red-600"}`}>
                           {station.growth}%
@@ -278,6 +298,16 @@ const StationCampaigns = () => {
       </div>
 
       {showAddForm && <AddStationForm onClose={() => setShowAddForm(false)} onAdd={handleAddStation} />}
+      
+      <style jsx>{`
+        @keyframes fade-in {
+          from { opacity: 0; transform: translateY(10px); }
+          to { opacity: 1; transform: translateY(0); }
+        }
+        .animate-fade-in {
+          animation: fade-in 0.3s ease-out;
+        }
+      `}</style>
     </div>
   );
 };
