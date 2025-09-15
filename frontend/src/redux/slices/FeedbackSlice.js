@@ -28,7 +28,7 @@ export const feedbackApi = createApi({
     // ✅ Get All Feedback
     getAllFeedback: builder.query({
       query: (params = {}) => ({
-        url: "/getAllFeedback",
+        url: "/getFeedbacks",
         method: "GET",
         params: {
           page: params.page || 1,
@@ -39,15 +39,6 @@ export const feedbackApi = createApi({
           ...(params.rating && { rating: params.rating }),
           ...(params.status && { status: params.status }),
         },
-      }),
-      providesTags: ["feedback"],
-    }),
-
-    // ✅ Get Feedback Stats
-    getFeedbackStats: builder.query({
-      query: () => ({
-        url: "/feedbackStats",
-        method: "GET",
       }),
       providesTags: ["feedback"],
     }),
@@ -83,10 +74,10 @@ export const feedbackApi = createApi({
       invalidatesTags: ["feedback"],
     }),
 
-    // ✅ Get Complaints (dedicated endpoint)
+    // ✅ Get Complaints
     getComplaints: builder.query({
       query: (params = {}) => ({
-        url: "/getAllFeedback",
+        url: "/getComplaints",
         method: "GET",
         params: {
           page: params.page || 1,
@@ -103,23 +94,18 @@ export const feedbackApi = createApi({
     // ✅ Get Complaint Stats
     getComplaintStats: builder.query({
       query: () => ({
-        url: "/complaintStats",
+        url: "/getComplaintStats",
         method: "GET",
       }),
       providesTags: ["complaint"],
     }),
 
-    // ✅ Update Complaint Status
+    // ✅ Update Complaint (uses same endpoint as feedback update)
     updateComplaintStatus: builder.mutation({
-      query: ({ id, status, resolution, assignedTo, priority }) => ({
-        url: `/complaints/${id}`,
+      query: ({ id, ...data }) => ({
+        url: `/updateFeedback/${id}`,
         method: "PUT",
-        body: {
-          ...(status && { status }),
-          ...(resolution && { resolution }),
-          ...(assignedTo && { assignedTo }),
-          ...(priority && { priority }),
-        },
+        body: data,
       }),
       invalidatesTags: (result, error, { id }) => [
         { type: "complaint", id },
@@ -127,10 +113,10 @@ export const feedbackApi = createApi({
       ],
     }),
 
-    // ✅ Delete Complaint
+    // ✅ Delete Complaint (same as feedback delete)
     deleteComplaint: builder.mutation({
       query: (id) => ({
-        url: `/complaints/${id}`,
+        url: `/deleteFeedback/${id}`,
         method: "DELETE",
       }),
       invalidatesTags: ["complaint"],
@@ -141,7 +127,6 @@ export const feedbackApi = createApi({
 export const {
   useCreateFeedbackMutation,
   useGetAllFeedbackQuery,
-  useGetFeedbackStatsQuery,
   useGetSingleFeedbackQuery,
   useUpdateFeedbackMutation,
   useDeleteFeedbackMutation,

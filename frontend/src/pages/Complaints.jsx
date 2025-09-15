@@ -19,7 +19,6 @@ import {
   useGetComplaintsQuery,
   useUpdateComplaintStatusMutation,
   useDeleteFeedbackMutation,
-  useGetFeedbackStatsQuery,
 } from "../redux/slices/FeedbackSlice";
 
 const Complaints = () => {
@@ -46,7 +45,7 @@ const Complaints = () => {
     ...(priorityFilter !== "all" && { priority: priorityFilter }),
   });
 
-  const { data: statsData } = useGetFeedbackStatsQuery();
+  const { data: statsData } = useGetComplaintsQuery();
 
   const [updateComplaintStatus] = useUpdateComplaintStatusMutation();
   const [deleteFeedback] = useDeleteFeedbackMutation();
