@@ -144,7 +144,7 @@ const DefaultSuperCamp = () => {
   const draftCampaignsCount = allCampaignsList.filter(c => c.status === "draft").length;
 
   return (
-    <div className="mb-5">
+    <div className="mb-5 ">
       {/* Performance Dashboard */}
       <div className="p-4 bg-gray-50 rounded-xl">
         <h2 className="text-2xl font-serif mt-4 font-bold text-[#242C54] mb-6">
