@@ -161,6 +161,9 @@ const St1superCampn = ({ campaigns, searchQuery, filterStatus, setCampaigns }) =
                 key={item.id}
                 className="relative p-6 rounded-2xl border border-gray-100 shadow-md bg-white transition-all duration-300 hover:shadow-lg"
               >
+                <div  className="absolute top-5 right-10 p-2 text-xs uppercase  bg-gray-100 text-black font-semibold rounded-xl shadow-sm">
+                  {item.status}
+                </div>
                 <div className="absolute top-0 left-0 w-full h-2 bg-[#242C54] rounded-t-2xl"></div>
 
                 <h1 className="font-bold text-lg mb-4 text-[#242C54] truncate">
