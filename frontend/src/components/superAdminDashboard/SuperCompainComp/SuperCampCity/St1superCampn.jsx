@@ -127,19 +127,17 @@ const St1superCampn = () => {
   const paginatedCampaigns = filteredCampaigns.slice(startIndex, startIndex + itemsPerPage);
 
   return (
-  <div className=" bg-gray-50 mt-5">
-  
-    
-
-      {/* Campaign List */}
-      <div className="bg-gradient-to-br from-[#2A3163] to-[#ec8086] rounded-xl p-6 shadow-sm">
-        <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-4 mb-6">
-          <h1 className="text-xl bg-[#FB2C36] text-center text-white font-bold px-6 py-3 rounded-lg">
-            Bahawalpur
+    <div className="bg-gray-50 mt-5">
+      <div className="bg-white shadow-lg rounded-2xl p-6">
+        {/* Header */}
+        <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-4 mb-8">
+          <h1 className="text-xl font-bold text-white bg-[#E4141C] px-6 py-3 rounded-xl shadow-sm">
+            Bahawalpur Campaigns
           </h1>
 
           <div className="flex flex-col sm:flex-row gap-3 items-center w-full lg:w-auto">
-            <div className="flex items-center px-4 py-2 rounded-lg border border-gray-200 shadow-sm bg-white w-full sm:w-auto">
+            {/* Search */}
+            <div className="flex items-center px-4 py-2 rounded-xl border border-gray-200 shadow-sm bg-gray-50 w-full sm:w-auto">
               <CiSearch className="text-xl text-gray-400" />
               <input
                 className="p-1 ml-2 text-gray-700 bg-transparent focus:outline-none w-full"
@@ -150,7 +148,8 @@ const St1superCampn = () => {
               />
             </div>
 
-            <div className="flex items-center gap-2 border border-gray-200 bg-white px-3 py-2 rounded-lg shadow-sm w-full sm:w-auto">
+            {/* Filter */}
+            <div className="flex items-center gap-2 border border-gray-200 bg-gray-50 px-3 py-2 rounded-xl shadow-sm w-full sm:w-auto">
               <CiFilter className="text-lg text-gray-500" />
               <select
                 className="bg-transparent outline-none text-gray-700 w-full"
@@ -165,8 +164,9 @@ const St1superCampn = () => {
               </select>
             </div>
 
+            {/* Create Campaign */}
             <button
-              className="flex items-center gap-2 bg-[#D1131E] text-white px-4 py-3 cursor-pointer rounded-lg hover:bg-[#FB2C36] transition-all duration-300 shadow-md w-full sm:w-auto justify-center"
+              className="flex items-center gap-2 bg-[#E4141C] text-white px-4 py-3 cursor-pointer rounded-xl hover:bg-[#c70e16] transition-all duration-300 shadow-md w-full sm:w-auto justify-center"
               onClick={() => {
                 setEditMode(false);
                 setIsModal(true);
@@ -178,58 +178,55 @@ const St1superCampn = () => {
           </div>
         </div>
 
-        {/* Cards */}
+        {/* Campaign Cards */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {paginatedCampaigns.length > 0 ? (
             paginatedCampaigns.map((item) => (
               <div
                 key={item.id}
-                className="relative p-6 rounded-xl border border-gray-100 shadow-md bg-white transition-all duration-300 hover:shadow-lg"
+                className="relative p-6 rounded-2xl border border-gray-100 shadow-md bg-white transition-all duration-300 hover:shadow-lg"
               >
-                <div className="absolute top-0 left-0 w-full h-2 bg-[#FB2C36] rounded-t-xl"></div>
-                
-                <h1 className="font-bold text-xl mb-4 text-gray-800 truncate">{item.name}</h1>
-                
+                <div className="absolute top-0 left-0 w-full h-2 bg-[#242C54] rounded-t-2xl"></div>
+
+                <h1 className="font-bold text-lg mb-4 text-[#242C54] truncate">
+                  {item.name}
+                </h1>
+
                 <div className="flex items-center gap-4 mb-4">
-                  <div className="p-3 bg-[#FB2C36] text-white rounded-lg shadow-sm">
+                  <div className="p-3 bg-[#E4141C] text-white rounded-xl shadow-sm">
                     {item.email}
                   </div>
                   <div>
-                    <h2 className="font-semibold text-gray-700">{item.selectedCampaign}</h2>
+                    <h2 className="font-semibold text-[#242C54]">{item.selectedCampaign}</h2>
                     <p className="text-sm text-gray-500">Target: {item.target}</p>
                   </div>
                 </div>
 
                 <div className="flex items-center gap-4 mb-5">
-                  <div className="p-3 bg-gray-100 rounded-lg">{item.calender}</div>
+                  <div className="p-3 bg-gray-100 rounded-xl">{item.calender}</div>
                   <div>
-                    <h2 className="font-semibold text-gray-700">Duration</h2>
-                    <div className="flex gap-2 text-sm text-gray-500">
-                      <p>{item.date1}</p>
-                      <span className="text-gray-300">-</span>
-                      <p>{item.date2}</p>
-                    </div>
+                    <h2 className="font-semibold text-[#242C54]">Duration</h2>
+                    <p className="text-sm text-gray-500">{item.date1} - {item.date2}</p>
                   </div>
                 </div>
 
+                {/* Progress */}
                 <div className="mb-5">
                   <div className="flex justify-between text-sm text-gray-600 mb-2">
                     <span>Sent: {item.sentVAlue}</span>
                     <span>0% Response Rate ({item.resValue})</span>
                   </div>
                   <div className="w-full h-2 bg-gray-200 rounded-full overflow-hidden">
-                    <div 
-                      className="h-full bg-[#FB2C36] rounded-full" 
-                      style={{ width: '90%' }}
+                    <div
+                      className="h-full bg-[#242C54] rounded-full"
+                      style={{ width: "90%" }}
                     ></div>
                   </div>
                 </div>
 
-                <div className="w-full border-t border-gray-200 mb-4"></div>
-                
-                <div className="flex flex-col sm:flex-row justify-between gap-3">
+                <div className="flex flex-col sm:flex-row justify-between gap-3 mt-4">
                   <Link to="/" className="w-full sm:w-auto">
-                    <button className="text-sm flex items-center justify-center py-2 gap-1 font-medium text-gray-700 hover:text-[#FB2C36] transition-colors w-full sm:w-auto">
+                    <button className="text-sm flex items-center justify-center py-2 gap-1 font-medium text-[#242C54] hover:text-[#E4141C] transition-colors w-full sm:w-auto">
                       <FiEye className="text-base" /> View Analytics
                     </button>
                   </Link>
@@ -237,13 +234,13 @@ const St1superCampn = () => {
                   <div className="flex gap-2 items-center w-full sm:w-auto justify-center sm:justify-end">
                     <button
                       onClick={() => handleEdit(item)}
-                      className="flex items-center px-3 py-2 gap-1 bg-[#1E2449] hover:bg-[#2a3163] text-white font-medium rounded-lg cursor-pointer transition-colors shadow-sm w-full sm:w-auto justify-center"
+                      className="flex items-center px-3 py-2 gap-1 bg-[#242C54] hover:bg-[#1a1f3f] text-white font-medium rounded-xl cursor-pointer transition-colors shadow-sm w-full sm:w-auto justify-center"
                     >
                       <FaRegEdit className="text-sm" /> Edit
                     </button>
                     <button
                       onClick={() => handleDelete(item.id)}
-                      className="flex items-center px-3 py-2 gap-1 bg-[#FB2C36] hover:bg-[#e04149] text-white font-medium rounded-lg cursor-pointer transition-colors shadow-sm w-full sm:w-auto justify-center"
+                      className="flex items-center px-3 py-2 gap-1 bg-[#E4141C] hover:bg-[#c70e16] text-white font-medium rounded-xl cursor-pointer transition-colors shadow-sm w-full sm:w-auto justify-center"
                     >
                       <MdOutlineDelete className="text-sm" /> Delete
                     </button>
@@ -267,38 +264,38 @@ const St1superCampn = () => {
               <ul className="flex items-center space-x-2">
                 <li
                   onClick={() => setCurrentPage((p) => (p > 1 ? p - 1 : p))}
-                  className={`px-4 py-2 rounded-lg border border-gray-200 cursor-pointer transition-colors ${
-                    currentPage === 1 
-                      ? "bg-gray-100 text-gray-400 cursor-not-allowed" 
-                      : "bg-white text-gray-700 hover:bg-gray-50"
+                  className={`px-4 py-2 rounded-xl border cursor-pointer transition-colors ${
+                    currentPage === 1
+                      ? "bg-gray-100 text-gray-400 cursor-not-allowed"
+                      : "bg-white text-[#242C54] border-gray-200 hover:bg-gray-50"
                   }`}
                 >
-                  <span>Previous</span>
+                  Previous
                 </li>
-                
+
                 {Array.from({ length: totalPages }).map((_, index) => (
                   <li
                     key={index}
                     onClick={() => setCurrentPage(index + 1)}
-                    className={`px-4 py-2 rounded-lg border cursor-pointer transition-colors ${
+                    className={`px-4 py-2 rounded-xl border cursor-pointer transition-colors ${
                       currentPage === index + 1
-                        ? "bg-[#FB2C36] text-white border-[#FB2C36]"
-                        : "bg-white text-gray-700 border-gray-200 hover:bg-gray-50"
+                        ? "bg-[#E4141C] text-white border-[#E4141C]"
+                        : "bg-white text-[#242C54] border-gray-200 hover:bg-gray-50"
                     }`}
                   >
-                    <span>{index + 1}</span>
+                    {index + 1}
                   </li>
                 ))}
-                
+
                 <li
                   onClick={() => setCurrentPage((p) => (p < totalPages ? p + 1 : p))}
-                  className={`px-4 py-2 rounded-lg border border-gray-200 cursor-pointer transition-colors ${
-                    currentPage === totalPages 
-                      ? "bg-gray-100 text-gray-400 cursor-not-allowed" 
-                      : "bg-white text-gray-700 hover:bg-gray-50"
+                  className={`px-4 py-2 rounded-xl border cursor-pointer transition-colors ${
+                    currentPage === totalPages
+                      ? "bg-gray-100 text-gray-400 cursor-not-allowed"
+                      : "bg-white text-[#242C54] border-gray-200 hover:bg-gray-50"
                   }`}
                 >
-                  <span>Next</span>
+                  Next
                 </li>
               </ul>
             </nav>
