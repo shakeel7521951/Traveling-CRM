@@ -5,6 +5,7 @@ import { useSelector } from "react-redux";
 
 const Navbar = () => {
   const userProfile = useSelector(selectUserProfile);
+  console.log("profile data in navbar....",userProfile)
   return (
     <header className="bg-gradient-to-r  from-[#242C54] to-[#1a1f42] text-white border-b border-gray-700 shadow-lg">
       <div className="container mx-auto px-4">

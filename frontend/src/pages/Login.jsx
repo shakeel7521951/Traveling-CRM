@@ -40,6 +40,7 @@ const Login = () => {
 
     try {
       const result = await login({ email, password, rememberMe }).unwrap();
+      console.log("result message",result);
       toast.success(result.message);
      navigate("/")
     } catch (err) {
@@ -197,7 +198,7 @@ const Login = () => {
           <div className="text-center">
             <p className="text-sm text-gray-600">
               Don't have an account?{' '}
-              <a href="#" className="font-medium text-indigo-600 hover:text-indigo-500">
+              <a href="/signup" className="font-medium text-indigo-600 hover:text-indigo-500">
                 Sign up
               </a>
             </p>

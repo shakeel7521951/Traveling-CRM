@@ -28,6 +28,8 @@ import Overview from "./pages/superAdminDashboard/Overview";
 import Stations from "./pages/superAdminDashboard/Stations";
 import ViewDetail from "./components/superAdminDashboard/Stations/ViewDetail";
 import SupFeedback from "./pages/superAdminDashboard/SepFeedback";
+import ProtectedRoute from "./components/common/ProtectedRoute";
+
 const MainLayout = () => {
   return (
     <div className="flex flex-col h-screen">
@@ -60,7 +62,7 @@ const SuperAdminLayout = () => {
 
 const router = createBrowserRouter([
   {
-    element: <MainLayout />,
+    element: (<ProtectedRoute><MainLayout /></ProtectedRoute>),
     children: [
       { path: "/", element: <Home /> },
       { path: "/passengers", element: <Passengers /> },
@@ -82,13 +84,13 @@ const router = createBrowserRouter([
   {
     path: "/superadmin",
     element: <SuperAdminLayout />,
-   children: [
-  { path: "overview", element: <Overview /> },
-  { path: "stations", element: <Stations /> },
-  { path: "viewdetail/:id", element: <ViewDetail /> },
-  { path: "compaigns", element: <SuperAdminCompaigns /> },
-  { path: "supfeedback", element: <SupFeedback /> },
-]
+    children: [
+      { path: "overview", element: <Overview /> },
+      { path: "stations", element: <Stations /> },
+      { path: "viewdetail/:id", element: <ViewDetail /> },
+      { path: "compaigns", element: <SuperAdminCompaigns /> },
+      { path: "supfeedback", element: <SupFeedback /> },
+    ]
   }
 ]);
 

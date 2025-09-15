@@ -29,7 +29,7 @@ const VerifyOtp = () => {
     } else {
       setCanResend(true);
     }
-  }, [countdown]);
+  }, []);
 
   const handleOtpChange = (index, value) => {
     if (value && !/^\d+$/.test(value)) return;

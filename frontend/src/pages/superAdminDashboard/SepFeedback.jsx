@@ -1,5 +1,5 @@
 // components/Feedback/SupFeedback.jsx
-import React, { useState } from "react";
+import { useState } from "react";
 import {
   FiStar, FiSearch, FiChevronLeft, FiChevronRight,
   FiAlertCircle, FiCheckCircle, FiMessageSquare, FiUser
