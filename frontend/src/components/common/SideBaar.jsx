@@ -17,23 +17,24 @@ const NavItem = ({ icon, text, active, path, sidebarOpen, isMobile }) => {
   return (
     <Link to={path} className="block">
       <div
-        className={`flex gap-3 mx-2 my-1 p-3 cursor-pointer group relative rounded-lg transition-all duration-200 ${
-          active
-            ? "bg-gradient-to-r from-[#E4141C] to-[#c1121f] text-white shadow-lg transform scale-105"
-            : "hover:bg-white/10 text-gray-300 hover:text-white"
-        }`}
+        className={`relative flex items-center ${
+          sidebarOpen ? "gap-3 px-4" : "justify-center"
+        } my-2 py-3 cursor-pointer group rounded-lg transition-all duration-200
+          ${
+            active
+              ? "bg-gradient-to-r from-[#E4141C] to-[#c1121f] text-white shadow-lg scale-105"
+              : "hover:bg-white/10 text-gray-300 hover:text-white"
+          }`}
       >
-        {/* Show icon only when sidebar is open on mobile */}
-        {sidebarOpen && (
-          <span
-            className={`mr-0 transition-colors ${active ? "text-white" : ""}`}
-          >
-            {icon}
-          </span>
-        )}
+        {/* Always show icon */}
+        <span className={`transition-colors ${active ? "text-white" : ""}`}>
+          {icon}
+        </span>
+
+        {/* Show text only when sidebar is expanded on desktop */}
         {sidebarOpen && !isMobile && (
           <span
-            className={`font-medium transition-colors ${
+            className={`whitespace-nowrap font-medium transition-colors ${
               active ? "text-white" : ""
             }`}
           >
@@ -42,15 +43,15 @@ const NavItem = ({ icon, text, active, path, sidebarOpen, isMobile }) => {
         )}
 
         {/* Active indicator */}
-        {active && (
-          <div className="absolute right-2 top-1/2 transform -translate-y-1/2 w-2 h-2 bg-white rounded-full shadow-sm"></div>
+        {active && sidebarOpen && (
+          <div className="absolute right-2 top-1/2 -translate-y-1/2 w-2 h-2 bg-white rounded-full shadow-sm"></div>
         )}
 
-        {/* Tooltip for desktop when sidebar is closed */}
+        {/* Tooltip for desktop when collapsed */}
         {!sidebarOpen && !isMobile && (
-          <div className="absolute left-full ml-2 px-3 py-2 bg-[#242C54] text-white text-sm rounded-lg opacity-0 group-hover:opacity-100 transition-all duration-200 whitespace-nowrap shadow-lg border border-white/10">
+          <div className="absolute left-full ml-3 px-3 py-2 bg-[#242C54] text-white text-sm rounded-lg opacity-0 group-hover:opacity-100 transition-all duration-300 whitespace-nowrap shadow-lg border border-white/10 z-50">
             {text}
-            <div className="absolute left-0 top-1/2 transform -translate-y-1/2 -translate-x-1 w-2 h-2 bg-[#242C54] rotate-45"></div>
+            <div className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-1 w-2 h-2 bg-[#242C54] rotate-45"></div>
           </div>
         )}
       </div>
@@ -59,7 +60,7 @@ const NavItem = ({ icon, text, active, path, sidebarOpen, isMobile }) => {
 };
 
 const Sidebar = () => {
-  const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [sidebarOpen, setSidebarOpen] = useState(true);
   const [isMobile, setIsMobile] = useState(false);
   const location = useLocation();
 
@@ -70,7 +71,6 @@ const Sidebar = () => {
 
     checkScreenSize();
     window.addEventListener("resize", checkScreenSize);
-
     return () => window.removeEventListener("resize", checkScreenSize);
   }, []);
 
@@ -80,13 +80,12 @@ const Sidebar = () => {
 
   const getSidebarWidth = () => {
     if (isMobile) {
-      return sidebarOpen ? "w-15" : "w-0";
+      return sidebarOpen ? "w-64" : "w-0"; // Mobile: hide fully
     } else {
-      return sidebarOpen ? "w-64" : "w-15";
+      return sidebarOpen ? "w-64" : "w-16"; // Desktop: collapse to icons
     }
   };
 
-  // Determine active tab based on current path
   const getActiveTab = () => {
     const path = location.pathname;
     if (path === "/") return "dashboard";
@@ -103,10 +102,11 @@ const Sidebar = () => {
 
   return (
     <div
-      className={`bg-gradient-to-b from-[#242C54] to-[#1a1f42] text-white transition-all duration-300 h-full z-50 shadow-xl border-r border-white/10 ${getSidebarWidth()}`}
+      className={`h-screen bg-gradient-to-b from-[#242C54] to-[#1a1f42] text-white transition-all duration-300 shadow-xl border-r border-white/10 ${getSidebarWidth()}`}
     >
+      {/* Header */}
       <div
-        className={`px-5 py-4 flex items-center ${
+        className={`px-4 py-4 flex items-center ${
           isMobile ? "justify-center" : "justify-between"
         } border-b border-white/20 bg-white/5 backdrop-blur-sm`}
       >
@@ -123,21 +123,25 @@ const Sidebar = () => {
         )}
         <button
           onClick={toggleSidebar}
-          className="relative text-white hover:bg-white/10 p-2 rounded-lg transition-colors"
+          className="text-white hover:bg-white/10 p-2 rounded-lg transition-colors"
         >
           {sidebarOpen ? (
             <RxCross2 className="text-xl" />
           ) : (
-            <FiMenu className="text-white" size={20} />
+            <FiMenu className="text-xl" />
           )}
         </button>
       </div>
 
-      {/* Only show nav items when sidebar is open on mobile */}
+      {/* Nav Items */}
       {(sidebarOpen || !isMobile) && (
         <nav className="mt-4 w-full">
-          <div className="px-3 mb-2">
-            <p className="text-xs text-gray-400 uppercase tracking-wider font-semibold">
+          <div className={`${sidebarOpen ? "px-4" : "px-0"} mb-2`}>
+            <p
+              className={`text-xs text-gray-400 uppercase tracking-wider font-semibold ${
+                sidebarOpen ? "block" : "hidden"
+              }`}
+            >
               Main Menu
             </p>
           </div>
@@ -187,8 +191,12 @@ const Sidebar = () => {
             isMobile={isMobile}
           />
 
-          <div className="px-3 mb-2 mt-6">
-            <p className="text-xs text-gray-400 uppercase tracking-wider font-semibold">
+          <div className={`${sidebarOpen ? "px-4" : "px-0"} mb-2 mt-6`}>
+            <p
+              className={`text-xs text-gray-400 uppercase tracking-wider font-semibold ${
+                sidebarOpen ? "block" : "hidden"
+              }`}
+            >
               Management
             </p>
           </div>
@@ -220,8 +228,12 @@ const Sidebar = () => {
             isMobile={isMobile}
           />
 
-          <div className="px-3 mb-2 mt-6">
-            <p className="text-xs text-gray-400 uppercase tracking-wider font-semibold">
+          <div className={`${sidebarOpen ? "px-4" : "px-0"} mb-2 mt-6`}>
+            <p
+              className={`text-xs text-gray-400 uppercase tracking-wider font-semibold ${
+                sidebarOpen ? "block" : "hidden"
+              }`}
+            >
               System
             </p>
           </div>

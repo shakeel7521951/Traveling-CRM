@@ -27,7 +27,7 @@ import SuperAdminCompaigns from "./pages/superAdminDashboard/Compaigns";
 import Overview from "./pages/superAdminDashboard/Overview";
 import Stations from "./pages/superAdminDashboard/Stations";
 import ViewDetail from "./components/superAdminDashboard/Stations/ViewDetail";
-
+import SupFeedback from "./pages/superAdminDashboard/SepFeedback";
 const MainLayout = () => {
   return (
     <div className="flex flex-col h-screen">
@@ -86,7 +86,8 @@ const router = createBrowserRouter([
   { path: "overview", element: <Overview /> },
   { path: "stations", element: <Stations /> },
   { path: "viewdetail/:id", element: <ViewDetail /> },
-  { path: "compaigns", element: <SuperAdminCompaigns /> }
+  { path: "compaigns", element: <SuperAdminCompaigns /> },
+  { path: "supfeedback", element: <SupFeedback /> },
 ]
   }
 ]);
