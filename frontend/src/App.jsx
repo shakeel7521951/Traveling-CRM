@@ -23,9 +23,10 @@ import VerifyOtp from "./pages/VerifyOtp";
 import TravelFeedbackPortal from "./pages/TravelFeedbackPortal";
 import SuperAdminSidebaar from "./components/superAdminDashboard/common/Sidebaar";
 import SuperAdminNavbar from "./components/superAdminDashboard/common/Navbar";
+import SuperAdminCompaigns from "./pages/superAdminDashboard/Compaigns";
 import Overview from "./pages/superAdminDashboard/Overview";
 import Stations from "./pages/superAdminDashboard/Stations";
-import SuperAdminCompaigns from "./pages/superAdminDashboard/Compaigns";
+import ViewDetail from "./components/superAdminDashboard/Stations/ViewDetail";
 
 const MainLayout = () => {
   return (
@@ -44,12 +45,18 @@ const MainLayout = () => {
 const SuperAdminLayout = () => {
   return (
     <div>
-      <SuperAdminNavbar />
-      <SuperAdminSidebaar />
-      <Outlet />
+      <div className="flex flex-col h-screen">
+        <SuperAdminNavbar />
+        <div className="flex flex-1 overflow-hidden">
+          <SuperAdminSidebaar />
+          <main className="flex-1 overflow-auto">
+            <Outlet />
+          </main>
+        </div>
+      </div>
     </div>
-  )
-}
+  );
+};
 
 const router = createBrowserRouter([
   {
@@ -73,13 +80,14 @@ const router = createBrowserRouter([
   { path: "/signup", element: <Signup /> },
   { path: "/verify-otp", element: <VerifyOtp /> },
   {
-    path: '/superadmin',
+    path: "/superadmin",
     element: <SuperAdminLayout />,
-    children: [
-      { path: 'overview', element: <Overview /> },
-      { path: 'stations', element: <Stations /> },
-      { path: 'compaigns', element: <SuperAdminCompaigns /> }
-    ]
+   children: [
+  { path: "overview", element: <Overview /> },
+  { path: "stations", element: <Stations /> },
+  { path: "viewdetail/:id", element: <ViewDetail /> },
+  { path: "compaigns", element: <SuperAdminCompaigns /> }
+]
   }
 ]);
 

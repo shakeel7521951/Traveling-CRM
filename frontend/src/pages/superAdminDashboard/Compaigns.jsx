@@ -1,8 +1,12 @@
+import DefaultSuperCamp from "../../components/superAdminDashboard/SuperCompainComp/DefaultSuperCamp"
+
+
 
 const Compaigns = () => {
   return (
-    <div>
-      <h1>Super admin compaigns</h1>
+    <div className=" ">
+      <DefaultSuperCamp/>
+    
     </div>
   )
 }
