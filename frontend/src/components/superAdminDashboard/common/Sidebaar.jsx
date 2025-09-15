@@ -92,8 +92,8 @@ const Sidebar = () => {
     if (path === "/overview") return "overview";
     if (path === "/stations") return "stations";
     if (path === "/compaigns") return "compaigns";
-    if (path === "/feedbacks") return "feedbacks";
-    if (path === "/complaint") return "complaint";
+    if (path === "/feedback") return "feedbacks";
+    if (path === "/complaints") return "complaints";
    
     if (path === "/setting") return "settings";
     return "";
@@ -171,7 +171,7 @@ const Sidebar = () => {
             icon={<FiStar size={20} />}
             text="Feedback"
             active={getActiveTab() === "feedbacks"}
-            path="/feedbacks"
+            path="/feedback"
             sidebarOpen={sidebarOpen}
             isMobile={isMobile}
           />
@@ -180,7 +180,7 @@ const Sidebar = () => {
             icon={<FiAlertTriangle size={20} />}
             text="Complaints"
             active={getActiveTab() === "complaint"}
-            path="/complaint"
+            path="/complaints"
             sidebarOpen={sidebarOpen}
             isMobile={isMobile}
           />

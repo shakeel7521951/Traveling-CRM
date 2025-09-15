@@ -1,10 +1,25 @@
 // components/superadminoverview/SupStationLeaderboard.jsx
+import { Crown } from "lucide-react";
+
 const stationData = [
-  { station: 'JED', score: 92 },
-  { station: 'RUH', score: 88 },
-  { station: 'DXB', score: 95 },
-  { station: 'DMM', score: 83 },
+  { station: "JED", score: 92 },
+  { station: "RUH", score: 88 },
+  { station: "DXB", score: 95 },
+  { station: "DMM", score: 83 },
 ];
+
+const getBadgeStyle = (rank) => {
+  switch (rank) {
+    case 1:
+      return "bg-green-100 text-green-700";
+    case 2:
+      return "bg-amber-100 text-amber-700";
+    case 3:
+      return "bg-red-100 text-red-700";
+    default:
+      return "bg-slate-100 text-slate-700";
+  }
+};
 
 const StationLeaderboard = () => {
   // Always sort by score (descending)
@@ -16,24 +31,35 @@ const StationLeaderboard = () => {
         Station Leaderboard
       </h2>
       <ul className="space-y-3">
-        {data.map((s, idx) => (
-          <li
-            key={s.station}
-            className="flex justify-between items-center p-3 rounded-lg border border-gray-100 transition-colors duration-200 hover:bg-[#626884] hover:text-white"
-          >
-            <div className="flex items-center gap-3">
-              <span className="text-sm font-bold w-6 text-center">
-                {idx + 1}
+        {data.map((s, idx) => {
+          const rank = idx + 1;
+          return (
+            <li
+              key={s.station}
+              className="flex justify-between items-center p-3 rounded-lg border border-gray-100 transition-colors duration-200 hover:bg-[#626884] hover:text-white"
+              aria-label={`Rank ${rank}: ${s.station} with score ${s.score}%`}
+            >
+              <div className="flex items-center gap-3">
+                <span className="text-sm font-bold w-6 text-center">
+                  {rank}
+                </span>
+                <span className="font-semibold text-base flex items-center gap-1">
+                  {s.station}
+                  {rank === 1 && (
+                    <Crown className="w-4 h-4 text-yellow-500" />
+                  )}
+                </span>
+              </div>
+              <span
+                className={`px-3 py-1 rounded-full font-bold text-sm ${getBadgeStyle(
+                  rank
+                )}`}
+              >
+                {s.score}%
               </span>
-              <span className="font-semibold text-base">
-                {s.station}
-              </span>
-            </div>
-            <span className="px-3 py-1 rounded-full font-bold text-sm bg-[#E4141C]/10 text-[#E4141C] hover:bg-white hover:text-[#E4141C]">
-              {s.score}%
-            </span>
-          </li>
-        ))}
+            </li>
+          );
+        })}
       </ul>
     </div>
   );

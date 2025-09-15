@@ -1,27 +1,55 @@
 // components/superadminoverview/SupRecentActivityTimeline.jsx
+import { Megaphone, ClipboardList, CheckCircle2, MessageSquare } from "lucide-react";
+
 const activities = [
-  { station: "JED", activity: "New campaign launched", time: "2h ago" },
-  { station: "RUH", activity: "Passenger survey completed", time: "5h ago" },
-  { station: "DXB", activity: "Complaint resolved", time: "1d ago" },
-  { station: "JED", activity: "Feedback review meeting", time: "2d ago" },
+  { station: "JED", activity: "New campaign launched", time: "2h ago", type: "campaign" },
+  { station: "RUH", activity: "Passenger survey completed", time: "5h ago", type: "survey" },
+  { station: "DXB", activity: "Complaint resolved", time: "1d ago", type: "complaint" },
+  { station: "JED", activity: "Feedback review meeting", time: "2d ago", type: "feedback" },
 ];
 
-const RecentActivityTimeline = () => {
+const typeConfig = {
+  campaign: { icon: Megaphone, color: "bg-blue-100 text-blue-600" },
+  survey: { icon: ClipboardList, color: "bg-amber-100 text-amber-600" },
+  complaint: { icon: CheckCircle2, color: "bg-green-100 text-green-600" },
+  feedback: { icon: MessageSquare, color: "bg-purple-100 text-purple-600" },
+};
+
+const RecentActivityTimeline = ({ data = activities }) => {
   return (
-    <div className="bg-white shadow-md rounded-lg p-4 w-full">
-      <h2 className="text-lg font-bold text-[#242C54] mb-4">Recent Activities</h2>
-      <ul className="space-y-4">
-        {activities.map((a, idx) => (
-          <li key={idx} className="flex items-start gap-3">
-            <div className="w-2 h-2 mt-2 rounded-full bg-[#E4141C]" />
-            <div>
-              <p className="text-sm text-[#242C54] font-medium">{a.activity}</p>
-              <p className="text-xs text-gray-500">
-                {a.time} · {a.station}
-              </p>
-            </div>
-          </li>
-        ))}
+    <div className="bg-white shadow-lg rounded-2xl p-6 w-full">
+      {/* Header */}
+      <h2 className="text-xl font-bold text-[#242C54] mb-6">
+        Recent Activities
+      </h2>
+
+      {/* Timeline */}
+      <ul className="relative border-l border-gray-200 ml-3 space-y-6">
+        {data.map((a, idx) => {
+          const config = typeConfig[a.type] || {};
+          const Icon = config.icon || MessageSquare;
+
+          return (
+            <li key={idx} className="ml-6 relative">
+              {/* Icon */}
+              <span
+                className={`absolute -left-3 flex items-center justify-center w-6 h-6 rounded-full ring-4 ring-white shadow-sm ${config.color}`}
+              >
+                <Icon size={14} />
+              </span>
+
+              {/* Content */}
+              <div className="bg-gray-50 rounded-xl p-4 transition-all hover:shadow-md">
+                <p className="text-sm font-medium text-[#242C54]">
+                  {a.activity}
+                </p>
+                <p className="text-xs text-gray-500 mt-1">
+                  {a.time} · <span className="font-semibold">{a.station}</span>
+                </p>
+              </div>
+            </li>
+          );
+        })}
       </ul>
     </div>
   );
