@@ -4,10 +4,10 @@ import { CiFilter, CiSearch } from "react-icons/ci";
 import { FiUsers, FiStar } from "react-icons/fi";
 import { FaWhatsapp, FaEnvelope } from "react-icons/fa";
 import { MdOutlineEmail, MdDateRange } from "react-icons/md";
-import St1superCampn from "./SuperCampCity/St1superCampn";
-import St2superCampn from "./SuperCampCity/St2superCampn";
+
 import SuperCpnModel from "./SuperCampCity/SuperCpnModel";
-import { campaignData } from "./SuperCampCity/SuperCampnArray";
+import { SuerCmpnData } from "./SuperCampCity/SuperCampnArray";
+import CampainPage from "./SuperCampCity/CampainPage";
 
 const StatCard = ({ title, value, change, icon }) => (
   <div className="bg-white rounded-xl shadow-md p-6 border border-gray-200 flex flex-col gap-2">
@@ -25,17 +25,17 @@ const DefaultSuperCamp = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [filterStatus, setFilterStatus] = useState("");
   const [isModal, setIsModal] = useState(false);
-  const [campaigns, setCampaigns] = useState(campaignData);
+  const [campaigns, setCampaigns] = useState(SuerCmpnData);
 
   // Campaign Data to pass into modal
   const [newCampaign, setNewCampaign] = useState({
     name: "",
     type: "whatsapp",
-    status: "draft",
-    target: "",
+    status: "active",
+    target: "all",
     startDate: "",
     endDate: "",
-    city: "all",
+    city: "",
   });
 
   // Handle input change inside modal
@@ -53,6 +53,7 @@ const DefaultSuperCamp = () => {
     const campaignItem = {
       id: campaignId,
       name: newCampaign.name,
+      city: newCampaign.city,
       email: <MdOutlineEmail />,
       selectedCampaign: newCampaign.type === "email" ? "Email Campaign" : "Whatsapp Campaign",
       target: newCampaign.target,
@@ -62,86 +63,47 @@ const DefaultSuperCamp = () => {
       sentVAlue: "0",
       resValue: "0",
       status: newCampaign.status,
-      city: newCampaign.city
     };
 
-    // Add to selected city/cities
-    setCampaigns(prev => {
-      const updated = [...prev];
-      
-      if (newCampaign.city === "all") {
-        // Add to both cities
-        const bwpIndex = updated.findIndex(c => c.city === "bahawalpur");
-        const multanIndex = updated.findIndex(c => c.city === "multan");
-        
-        if (bwpIndex !== -1) {
-          updated[bwpIndex].Elements = [...updated[bwpIndex].Elements, {...campaignItem}];
-        }
-        if (multanIndex !== -1) {
-          updated[multanIndex].Elements = [...updated[multanIndex].Elements, {...campaignItem}];
-        }
-      } else {
-        // Add to specific city
-        const cityIndex = updated.findIndex(c => c.city === newCampaign.city);
-        if (cityIndex !== -1) {
-          updated[cityIndex].Elements = [...updated[cityIndex].Elements, campaignItem];
-        }
-      }
-      
-      return updated;
-    });
+    // Add to campaigns
+    setCampaigns(prev => [...prev, campaignItem]);
 
     // Reset modal state
     setIsModal(false);
     setNewCampaign({
       name: "",
       type: "whatsapp",
-      status: "draft",
-      target: "",
+      status: "active",
+      target: "all",
       startDate: "",
       endDate: "",
-      city: "all",
+      city: "",
     });
   };
 
-  // Get filtered campaigns for a specific city
-  const getFilteredCampaigns = (city) => {
-    const cityData = campaigns.find(c => c.city === city);
-    if (!cityData) return [];
+  // Get filtered campaigns based on city selection
+  const getFilteredCampaigns = () => {
+    let filtered = campaigns;
     
-    return cityData.Elements.filter(campaign => {
+    // Filter by city if not "all"
+    if (selectedCity !== "all") {
+      filtered = filtered.filter(campaign => campaign.city === selectedCity);
+    }
+    
+    // Filter by search query and status
+    return filtered.filter(campaign => {
       const matchesSearch = campaign.name.toLowerCase().includes(searchQuery.toLowerCase());
       const matchesFilter = filterStatus ? campaign.status === filterStatus : true;
       return matchesSearch && matchesFilter;
     });
   };
 
-  // Get all campaigns for stats (without duplication)
-  const getAllCampaigns = () => {
-    // Use a Set to track unique campaign IDs to avoid duplication
-    const seenIds = new Set();
-    const uniqueCampaigns = [];
-    
-    campaigns.flatMap(city => city.Elements).forEach(campaign => {
-      if (!seenIds.has(campaign.id)) {
-        seenIds.add(campaign.id);
-        uniqueCampaigns.push(campaign);
-      }
-    });
-    
-    return uniqueCampaigns.filter(campaign => {
-      const matchesSearch = campaign.name.toLowerCase().includes(searchQuery.toLowerCase());
-      const matchesFilter = filterStatus ? campaign.status === filterStatus : true;
-      return matchesSearch && matchesFilter;
-    });
-  };
-
-  // Calculate stats using getAllCampaigns to avoid double counting
-  const allCampaignsList = getAllCampaigns();
-  const allCampaignsCount = allCampaignsList.length;
-  const emailCampaignsCount = allCampaignsList.filter(c => c.selectedCampaign.includes("Email")).length;
-  const whatsappCampaignsCount = allCampaignsList.filter(c => c.selectedCampaign.includes("Whatsapp")).length;
-  const draftCampaignsCount = allCampaignsList.filter(c => c.status === "draft").length;
+  // Calculate stats
+  const filteredCampaigns = getFilteredCampaigns();
+  const allCampaignsCount = filteredCampaigns.length;
+  const emailCampaignsCount = filteredCampaigns.filter(c => c.selectedCampaign.includes("Email")).length;
+  const whatsappCampaignsCount = filteredCampaigns.filter(c => c.selectedCampaign.includes("Whatsapp")).length;
+  const activeCampaignsCount = filteredCampaigns.filter(c => c.status === "active").length;
 
   return (
     <div className="mb-5 ">
@@ -171,8 +133,8 @@ const DefaultSuperCamp = () => {
             icon={<FaWhatsapp className="text-[#E4141C]" size={24} />}
           />
           <StatCard
-            title="Draft Campaign"
-            value={draftCampaignsCount}
+            title="Active Campaign"
+            value={activeCampaignsCount}
             change="+23%"
             icon={<FaEnvelope className="text-[#E4141C]" size={24} />}
           />
@@ -239,8 +201,10 @@ const DefaultSuperCamp = () => {
                 onChange={(e) => setSelectedCity(e.target.value)}
               >
                 <option value="all">All</option>
-                <option value="bahawalpur">Bahawalpur</option>
-                <option value="multan">Multan</option>
+                <option value="JED Passenger">JED Passenger</option>
+                <option value="RUH Passengers">RUH Passengers</option>
+                <option value="DXB Passenger">DXB Passenger</option>
+                <option value="Frequent Flyes">Frequent Flyes</option>
               </select>
             </div>
           </div>
@@ -256,44 +220,14 @@ const DefaultSuperCamp = () => {
           />
         )}
 
-        {/* Render Based on Selected City */}
+        {/* Render Campaigns */}
         <div>
-          {selectedCity === "all" ? (
-            <>
-              <div className="mb-8">
-               
-                <St1superCampn 
-                  campaigns={getFilteredCampaigns("bahawalpur")}
-                  searchQuery={searchQuery}
-                  filterStatus={filterStatus}
-                  setCampaigns={setCampaigns}
-                />
-              </div>
-              <div>
-               
-                <St2superCampn 
-                  campaigns={getFilteredCampaigns("multan")}
-                  searchQuery={searchQuery}
-                  filterStatus={filterStatus}
-                  setCampaigns={setCampaigns}
-                />
-              </div>
-            </>
-          ) : selectedCity === "bahawalpur" ? (
-            <St1superCampn 
-              campaigns={getFilteredCampaigns("bahawalpur")}
-              searchQuery={searchQuery}
-              filterStatus={filterStatus}
-              setCampaigns={setCampaigns}
-            />
-          ) : (
-            <St2superCampn 
-              campaigns={getFilteredCampaigns("multan")}
-              searchQuery={searchQuery}
-              filterStatus={filterStatus}
-              setCampaigns={setCampaigns}
-            />
-          )}
+          <CampainPage 
+            campaigns={getFilteredCampaigns()}
+            searchQuery={searchQuery}
+            filterStatus={filterStatus}
+            setCampaigns={setCampaigns}
+          />
         </div>
       </div>
     </div>
