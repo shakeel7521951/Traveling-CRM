@@ -90,13 +90,11 @@ const Sidebar = () => {
   const getActiveTab = () => {
     const path = location.pathname;
     if (path === "/overview") return "overview";
-    if (path === "/passengers") return "passengers";
-    if (path === "/campaigns") return "campaigns";
-    if (path === "/feedback") return "feedback";
+    if (path === "/stations") return "stations";
+    if (path === "/compaigns") return "compaigns";
+    if (path === "/feedback") return "feedbacks";
     if (path === "/complaints") return "complaints";
-    if (path === "/reports") return "reports";
-    if (path === "/admin") return "admin";
-    if (path === "/all-stations") return "stations";
+   
     if (path === "/setting") return "settings";
     return "";
   };
@@ -155,7 +153,7 @@ const Sidebar = () => {
             icon={<FiUsers size={20} />}
             text="All Stations"
             active={getActiveTab() === "passengers"}
-            path="passengers"
+            path="stations"
             sidebarOpen={sidebarOpen}
             isMobile={isMobile}
           />
@@ -164,7 +162,7 @@ const Sidebar = () => {
             icon={<FiMessageSquare size={20} />}
             text="Campaigns"
             active={getActiveTab() === "campaigns"}
-            path="campaigns"
+            path="compaigns"
             sidebarOpen={sidebarOpen}
             isMobile={isMobile}
           />
@@ -172,7 +170,7 @@ const Sidebar = () => {
           <NavItem
             icon={<FiStar size={20} />}
             text="Feedback"
-            active={getActiveTab() === "feedback"}
+            active={getActiveTab() === "feedbacks"}
             path="/feedback"
             sidebarOpen={sidebarOpen}
             isMobile={isMobile}
@@ -181,7 +179,7 @@ const Sidebar = () => {
           <NavItem
             icon={<FiAlertTriangle size={20} />}
             text="Complaints"
-            active={getActiveTab() === "complaints"}
+            active={getActiveTab() === "complaint"}
             path="/complaints"
             sidebarOpen={sidebarOpen}
             isMobile={isMobile}
