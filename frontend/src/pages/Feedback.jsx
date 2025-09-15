@@ -12,10 +12,9 @@ import {
 } from 'react-icons/fi';
 import { FaStar, FaRegStar } from 'react-icons/fa';
 import { 
-  useGetAllFeedbackQuery,
-  useGetFeedbackStatsQuery,
   useUpdateFeedbackMutation,
-  useDeleteFeedbackMutation 
+  useDeleteFeedbackMutation, 
+  useGetAllFeedbackQuery
 } from '../redux/slices/FeedbackSlice';
 
 const Feedback = () => {
@@ -39,7 +38,7 @@ const Feedback = () => {
   });
 
   // Fetch stats
-  const { data: statsData } = useGetFeedbackStatsQuery();
+  const { data: statsData } = useGetAllFeedbackQuery();
 
   // Mutation hooks
   const [updateFeedback] = useUpdateFeedbackMutation();

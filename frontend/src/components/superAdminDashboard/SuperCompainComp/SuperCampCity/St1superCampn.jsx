@@ -1,19 +1,13 @@
 import React, { useState } from "react";
-import { AiOutlinePlus } from "react-icons/ai";
-import { CiFilter, CiSearch } from "react-icons/ci";
 import { MdOutlineEmail, MdDateRange, MdOutlineDelete } from "react-icons/md";
 import { FiEye } from "react-icons/fi";
 import SuperCpnModel from "./SuperCpnModel";
 import { Link } from "react-router-dom";
-import { bwpstAryData } from "./SuperCampnArray";
 import { FaRegEdit } from "react-icons/fa";
 
-const St1superCampn = () => {
-  const [bwpstAry, setBwpstAry] = useState(bwpstAryData);
+const St1superCampn = ({ campaigns, searchQuery, filterStatus, setCampaigns }) => {
   const [isModal, setIsModal] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [searchQuery, setSearchQuery] = useState("");
-  const [filterStatus, setFilterStatus] = useState("");
   const [editMode, setEditMode] = useState(false);
   const [editId, setEditId] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
@@ -43,35 +37,41 @@ const St1superCampn = () => {
 
     setTimeout(() => {
       if (editMode) {
-        setBwpstAry((prev) =>
-          prev.map((c) =>
-            c.id === editId
-              ? {
-                  ...c,
-                  name: newCampaign.name,
-                  selectedCampaign:
-                    newCampaign.type === "email"
-                      ? "Email Campaign"
+        // Update existing campaign
+        setCampaigns(prev => {
+          const updated = [...prev];
+          const bwpIndex = updated.findIndex(c => c.city === "bahawalpur");
+          
+          if (bwpIndex !== -1) {
+            updated[bwpIndex].Elements = updated[bwpIndex].Elements.map(
+              campaign => campaign.id === editId 
+                ? {
+                    ...campaign,
+                    name: newCampaign.name,
+                    selectedCampaign: newCampaign.type === "email" 
+                      ? "Email Campaign" 
                       : "Whatsapp Campaign",
-                  target: newCampaign.target,
-                  date1: newCampaign.startDate,
-                  date2: newCampaign.endDate,
-                  status: newCampaign.status,
-                }
-              : c
-          )
-        );
+                    target: newCampaign.target,
+                    date1: newCampaign.startDate,
+                    date2: newCampaign.endDate,
+                    status: newCampaign.status,
+                  }
+                : campaign
+            );
+          }
+          return updated;
+        });
         setEditMode(false);
         setEditId(null);
       } else {
+        // Add new campaign
         const newCpn = {
-          id: bwpstAry.length + 1,
+          id: Math.max(...campaigns.map(c => c.id), 0) + 1,
           name: newCampaign.name,
           email: <MdOutlineEmail />,
-          selectedCampaign:
-            newCampaign.type === "email"
-              ? "Email Campaign"
-              : "Whatsapp Campaign",
+          selectedCampaign: newCampaign.type === "email" 
+            ? "Email Campaign" 
+            : "Whatsapp Campaign",
           target: newCampaign.target,
           calender: <MdDateRange />,
           date1: newCampaign.startDate,
@@ -80,7 +80,16 @@ const St1superCampn = () => {
           resValue: "0",
           status: newCampaign.status,
         };
-        setBwpstAry((prev) => [...prev, newCpn]);
+        
+        setCampaigns(prev => {
+          const updated = [...prev];
+          const bwpIndex = updated.findIndex(c => c.city === "bahawalpur");
+          
+          if (bwpIndex !== -1) {
+            updated[bwpIndex].Elements = [...updated[bwpIndex].Elements, newCpn];
+          }
+          return updated;
+        });
       }
 
       setIsModal(false);
@@ -98,7 +107,15 @@ const St1superCampn = () => {
   };
 
   const handleDelete = (id) => {
-    setBwpstAry((prev) => prev.filter((c) => c.id !== id));
+    setCampaigns(prev => {
+      const updated = [...prev];
+      const bwpIndex = updated.findIndex(c => c.city === "bahawalpur");
+      
+      if (bwpIndex !== -1) {
+        updated[bwpIndex].Elements = updated[bwpIndex].Elements.filter(c => c.id !== id);
+      }
+      return updated;
+    });
   };
 
   const handleEdit = (campaign) => {
@@ -116,7 +133,7 @@ const St1superCampn = () => {
     setIsModal(true);
   };
 
-  const filteredCampaigns = bwpstAry.filter((item) => {
+  const filteredCampaigns = campaigns.filter((item) => {
     const matchesSearch = item.name.toLowerCase().includes(searchQuery.toLowerCase());
     const matchesFilter = filterStatus ? item.status === filterStatus : true;
     return matchesSearch && matchesFilter;
@@ -134,48 +151,6 @@ const St1superCampn = () => {
           <h1 className="text-xl font-bold text-white bg-[#E4141C] px-6 py-3 rounded-xl shadow-sm">
             Bahawalpur Campaigns
           </h1>
-
-          <div className="flex flex-col sm:flex-row gap-3 items-center w-full lg:w-auto">
-            {/* Search */}
-            <div className="flex items-center px-4 py-2 rounded-xl border border-gray-200 shadow-sm bg-gray-50 w-full sm:w-auto">
-              <CiSearch className="text-xl text-gray-400" />
-              <input
-                className="p-1 ml-2 text-gray-700 bg-transparent focus:outline-none w-full"
-                type="text"
-                placeholder="Search Campaign"
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-              />
-            </div>
-
-            {/* Filter */}
-            <div className="flex items-center gap-2 border border-gray-200 bg-gray-50 px-3 py-2 rounded-xl shadow-sm w-full sm:w-auto">
-              <CiFilter className="text-lg text-gray-500" />
-              <select
-                className="bg-transparent outline-none text-gray-700 w-full"
-                value={filterStatus}
-                onChange={(e) => setFilterStatus(e.target.value)}
-              >
-                <option value="">All Campaigns</option>
-                <option value="active">Active</option>
-                <option value="completed">Completed</option>
-                <option value="scheduled">Scheduled</option>
-                <option value="draft">Draft</option>
-              </select>
-            </div>
-
-            {/* Create Campaign */}
-            <button
-              className="flex items-center gap-2 bg-[#E4141C] text-white px-4 py-3 cursor-pointer rounded-xl hover:bg-[#c70e16] transition-all duration-300 shadow-md w-full sm:w-auto justify-center"
-              onClick={() => {
-                setEditMode(false);
-                setIsModal(true);
-              }}
-            >
-              <AiOutlinePlus className="text-lg" />
-              <span>Create Campaign</span>
-            </button>
-          </div>
         </div>
 
         {/* Campaign Cards */}
@@ -186,6 +161,9 @@ const St1superCampn = () => {
                 key={item.id}
                 className="relative p-6 rounded-2xl border border-gray-100 shadow-md bg-white transition-all duration-300 hover:shadow-lg"
               >
+                <div  className="absolute top-5 right-10 p-2 text-xs uppercase  bg-gray-100 text-black font-semibold rounded-xl shadow-sm">
+                  {item.status}
+                </div>
                 <div className="absolute top-0 left-0 w-full h-2 bg-[#242C54] rounded-t-2xl"></div>
 
                 <h1 className="font-bold text-lg mb-4 text-[#242C54] truncate">
@@ -250,7 +228,7 @@ const St1superCampn = () => {
             ))
           ) : (
             <div className="col-span-3 py-12 text-center">
-              <div className="text-gray-400 text-5xl mb-3">📋</div>
+              
               <p className="text-gray-500 text-lg">No campaigns found.</p>
               <p className="text-gray-400 text-sm mt-1">Try adjusting your search or filter criteria</p>
             </div>
