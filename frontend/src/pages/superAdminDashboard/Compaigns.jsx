@@ -4,7 +4,7 @@ import DefaultSuperCamp from "../../components/superAdminDashboard/SuperCompainC
 
 const Compaigns = () => {
   return (
-    <div className="my-10 ">
+    <div className=" ">
       <DefaultSuperCamp/>
     
     </div>

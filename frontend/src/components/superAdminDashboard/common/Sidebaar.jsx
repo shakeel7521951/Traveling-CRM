@@ -135,7 +135,9 @@ const Sidebar = () => {
       {(sidebarOpen || !isMobile) && (
         <nav className="mt-4 w-full">
           <div className="px-3 mb-2">
-            <p className="text-xs text-gray-400 uppercase tracking-wider font-semibold">
+            <p className={`text-xs  text-gray-400 uppercase tracking-wider font-semibold ${
+              !sidebarOpen ? "hidden" :"block"
+            }`}>
               Main Menu
             </p>
           </div>
@@ -188,7 +190,9 @@ const Sidebar = () => {
           {/* Removed Management Section */}
 
           <div className="px-3  mb-2 mt-6 ">
-            <p className="text-xs  text-gray-400 uppercase tracking-wider font-semibold">
+            <p className={`text-xs  text-gray-400 uppercase tracking-wider font-semibold ${
+              !sidebarOpen ? "hidden" :"block"
+            }`}>
               System
             </p>
           </div>

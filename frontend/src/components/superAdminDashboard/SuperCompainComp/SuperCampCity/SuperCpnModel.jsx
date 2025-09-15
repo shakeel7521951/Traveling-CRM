@@ -2,27 +2,45 @@ import React from "react";
 import { FiX, FiCalendar, FiMail } from "react-icons/fi";
 import { FaWhatsapp } from "react-icons/fa";
 
-const SuperCpnModel = ({ isLoading,newCampaign, onInputChange, onSubmit, onClose }) => {
+const SuperCpnModel = ({ 
+  isLoading,
+  newCampaign,
+  onInputChange,
+  onSubmit,
+  onClose,
+  editMode = false
+}) => {
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-      <div className="bg-white rounded-lg shadow-lg w-full max-w-2xl max-h-[90vh] overflow-y-auto">
+    <div 
+      className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="campaign-modal-title"
+    >
+      <div className="bg-white rounded-xl shadow-lg w-full max-w-2xl max-h-[90vh] overflow-y-auto animate-fadeIn">
+        
+        {/* Header */}
         <div className="border-b border-gray-200 p-4 flex justify-between items-center">
-          <h3 className="text-lg font-bold text-[#242C54]">
-            Create New Campaign
+          <h3 id="campaign-modal-title" className="text-lg font-bold text-[#242C54]">
+            {editMode ? "Edit Campaign" : "Create New Campaign"}
           </h3>
           <button
             onClick={onClose}
             className="text-gray-500 hover:text-[#E4141C] transition-colors"
+            aria-label="Close modal"
           >
             <FiX size={20} />
           </button>
         </div>
 
-        <form onSubmit={onSubmit} className="p-4 md:p-6">
+        {/* Form */}
+        <form onSubmit={onSubmit} className="p-4 md:p-6 space-y-5">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            
+            {/* Campaign Name */}
             <div className="col-span-2">
               <label className="block text-sm font-medium text-[#242C54] mb-1">
-                Campaign Name
+                Campaign Name <span className="text-red-500">*</span>
               </label>
               <input
                 type="text"
@@ -30,11 +48,12 @@ const SuperCpnModel = ({ isLoading,newCampaign, onInputChange, onSubmit, onClose
                 value={newCampaign.name}
                 onChange={onInputChange}
                 className="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#E4141C] focus:border-transparent"
-                placeholder="e.g. Summer Promotion 2023"
+                placeholder="e.g. Summer Promotion 2025"
                 required
               />
             </div>
 
+            {/* Channel */}
             <div>
               <label className="block text-sm font-medium text-[#242C54] mb-1">
                 Channel
@@ -87,6 +106,7 @@ const SuperCpnModel = ({ isLoading,newCampaign, onInputChange, onSubmit, onClose
               </div>
             </div>
 
+            {/* Status */}
             <div>
               <label className="block text-sm font-medium text-[#242C54] mb-1">
                 Status
@@ -103,9 +123,10 @@ const SuperCpnModel = ({ isLoading,newCampaign, onInputChange, onSubmit, onClose
               </select>
             </div>
 
+            {/* Target Audience */}
             <div>
               <label className="block text-sm font-medium text-[#242C54] mb-1">
-                Target Audience
+                Target Audience <span className="text-red-500">*</span>
               </label>
               <select
                 name="target"
@@ -115,14 +136,15 @@ const SuperCpnModel = ({ isLoading,newCampaign, onInputChange, onSubmit, onClose
                 required
               >
                 <option value="">Select target</option>
-                <option value="all">All passengers</option>
-                <option value="JED">JED passengers</option>
-                <option value="RUH">RUH passengers</option>
-                <option value="DXB">DXB passengers</option>
-                <option value="frequent">Frequent flyers</option>
+                <option value="all">All Passengers</option>
+                <option value="JED">JED Passengers</option>
+                <option value="RUH">RUH Passengers</option>
+                <option value="DXB">DXB Passengers</option>
+                <option value="frequent">Frequent Flyers</option>
               </select>
             </div>
 
+            {/* Start Date */}
             <div>
               <label className="block text-sm font-medium text-[#242C54] mb-1">
                 Start Date
@@ -142,6 +164,7 @@ const SuperCpnModel = ({ isLoading,newCampaign, onInputChange, onSubmit, onClose
               </div>
             </div>
 
+            {/* End Date */}
             <div>
               <label className="block text-sm font-medium text-[#242C54] mb-1">
                 End Date
@@ -161,6 +184,7 @@ const SuperCpnModel = ({ isLoading,newCampaign, onInputChange, onSubmit, onClose
               </div>
             </div>
 
+            {/* Message */}
             <div className="col-span-2">
               <label className="block text-sm font-medium text-[#242C54] mb-1">
                 Message Content
@@ -177,6 +201,7 @@ const SuperCpnModel = ({ isLoading,newCampaign, onInputChange, onSubmit, onClose
             </div>
           </div>
 
+          {/* Footer */}
           <div className="flex justify-end gap-3 mt-6 border-t pt-4">
             <button
               type="button"
@@ -187,9 +212,18 @@ const SuperCpnModel = ({ isLoading,newCampaign, onInputChange, onSubmit, onClose
             </button>
             <button
               type="submit"
-              className={`px-4 py-2 bg-[#E4141C] text-white rounded-lg hover:bg-[#C1121F] transition-colors text-sm ${isLoading?'cursor-not-allowed':''}`}
+              disabled={isLoading}
+              className={`px-4 py-2 rounded-lg text-white text-sm transition-colors ${
+                isLoading
+                  ? "bg-gray-400 cursor-not-allowed"
+                  : "bg-[#E4141C] hover:bg-[#C1121F]"
+              }`}
             >
-              {isLoading ? 'Creating...':'Create Compaign'}
+              {isLoading
+                ? "Saving..."
+                : editMode
+                ? "Update Campaign"
+                : "Create Campaign"}
             </button>
           </div>
         </form>
