@@ -5,7 +5,7 @@ import SuperCpnModel from "./SuperCpnModel";
 import { Link } from "react-router-dom";
 import { FaRegEdit } from "react-icons/fa";
 
-const St2superCampn = ({ campaigns, searchQuery, filterStatus, setCampaigns }) => {
+const CampainPage = ({ campaigns, searchQuery, filterStatus, setCampaigns }) => {
   const [isModal, setIsModal] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [editMode, setEditMode] = useState(false);
@@ -16,11 +16,12 @@ const St2superCampn = ({ campaigns, searchQuery, filterStatus, setCampaigns }) =
   const [newCampaign, setNewCampaign] = useState({
     name: "",
     type: "whatsapp",
-    status: "draft",
-    target: "",
+    status: "active",
+    target: "all",
     startDate: "",
     endDate: "",
     message: "",
+    city: "",
   });
 
   const handleInputChange = (e) => {
@@ -39,27 +40,22 @@ const St2superCampn = ({ campaigns, searchQuery, filterStatus, setCampaigns }) =
       if (editMode) {
         // Update existing campaign
         setCampaigns(prev => {
-          const updated = [...prev];
-          const multanIndex = updated.findIndex(c => c.city === "multan");
-          
-          if (multanIndex !== -1) {
-            updated[multanIndex].Elements = updated[multanIndex].Elements.map(
-              campaign => campaign.id === editId 
-                ? {
-                    ...campaign,
-                    name: newCampaign.name,
-                    selectedCampaign: newCampaign.type === "email" 
-                      ? "Email Campaign" 
-                      : "Whatsapp Campaign",
-                    target: newCampaign.target,
-                    date1: newCampaign.startDate,
-                    date2: newCampaign.endDate,
-                    status: newCampaign.status,
-                  }
-                : campaign
-            );
-          }
-          return updated;
+          return prev.map(campaign => 
+            campaign.id === editId 
+              ? {
+                  ...campaign,
+                  name: newCampaign.name,
+                  selectedCampaign: newCampaign.type === "email" 
+                    ? "Email Campaign" 
+                    : "Whatsapp Campaign",
+                  target: newCampaign.target,
+                  date1: newCampaign.startDate,
+                  date2: newCampaign.endDate,
+                  status: newCampaign.status,
+                  city: newCampaign.city,
+                }
+              : campaign
+          );
         });
         setEditMode(false);
         setEditId(null);
@@ -68,6 +64,7 @@ const St2superCampn = ({ campaigns, searchQuery, filterStatus, setCampaigns }) =
         const newCpn = {
           id: Math.max(...campaigns.map(c => c.id), 0) + 1,
           name: newCampaign.name,
+          city: newCampaign.city,
           email: <MdOutlineEmail />,
           selectedCampaign: newCampaign.type === "email" 
             ? "Email Campaign" 
@@ -81,15 +78,7 @@ const St2superCampn = ({ campaigns, searchQuery, filterStatus, setCampaigns }) =
           status: newCampaign.status,
         };
         
-        setCampaigns(prev => {
-          const updated = [...prev];
-          const multanIndex = updated.findIndex(c => c.city === "multan");
-          
-          if (multanIndex !== -1) {
-            updated[multanIndex].Elements = [...updated[multanIndex].Elements, newCpn];
-          }
-          return updated;
-        });
+        setCampaigns(prev => [...prev, newCpn]);
       }
 
       setIsModal(false);
@@ -97,25 +86,18 @@ const St2superCampn = ({ campaigns, searchQuery, filterStatus, setCampaigns }) =
       setNewCampaign({
         name: "",
         type: "whatsapp",
-        status: "draft",
-        target: "",
+        status: "active",
+        target: "all",
         startDate: "",
         endDate: "",
         message: "",
+        city: "",
       });
     }, 1000);
   };
 
   const handleDelete = (id) => {
-    setCampaigns(prev => {
-      const updated = [...prev];
-      const multanIndex = updated.findIndex(c => c.city === "multan");
-      
-      if (multanIndex !== -1) {
-        updated[multanIndex].Elements = updated[multanIndex].Elements.filter(c => c.id !== id);
-      }
-      return updated;
-    });
+    setCampaigns(prev => prev.filter(c => c.id !== id));
   };
 
   const handleEdit = (campaign) => {
@@ -129,6 +111,7 @@ const St2superCampn = ({ campaigns, searchQuery, filterStatus, setCampaigns }) =
       startDate: campaign.date1,
       endDate: campaign.date2,
       message: "",
+      city: campaign.city,
     });
     setIsModal(true);
   };
@@ -146,13 +129,6 @@ const St2superCampn = ({ campaigns, searchQuery, filterStatus, setCampaigns }) =
   return (
     <div className="bg-gray-50 mt-5">
       <div className="bg-white shadow-lg rounded-2xl p-6">
-        {/* Header */}
-        <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-4 mb-8">
-          <h1 className="text-xl font-bold text-white bg-[#E4141C] px-6 py-3 rounded-xl shadow-sm">
-            Multan Campaigns
-          </h1>
-        </div>
-
         {/* Campaign Cards */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {paginatedCampaigns.length > 0 ? (
@@ -161,12 +137,16 @@ const St2superCampn = ({ campaigns, searchQuery, filterStatus, setCampaigns }) =
                 key={item.id}
                 className="relative p-6 rounded-2xl border border-gray-100 shadow-md bg-white transition-all duration-300 hover:shadow-lg"
               >
-                <div  className="absolute top-5 right-10 p-2 text-xs uppercase  bg-gray-100 text-black font-semibold rounded-xl shadow-sm">
-                  {item.status}
+                <div className="absolute flex flex-col top-0 -right-9  gap-2">
+                 <span className="relative text-center top-5 right-10 p-2 text-xs uppercase bg-gray-100 text-black font-semibold rounded-xl shadow-sm"> {item.status}</span>
+                 
+                  <div className="relative top-5 right-10 p-2 text-xs capitalize bg-[#242C54] text-white font-semibold rounded-xl shadow-sm">
+                    <h1>{item.city}</h1>
+                  </div>
                 </div>
                 <div className="absolute top-0 left-0 w-full h-2 bg-[#242C54] rounded-t-2xl"></div>
 
-                <h1 className="font-bold text-lg mb-4 text-[#242C54] truncate">
+                <h1 className="font-bold font-serif text-lg mb-4 text-[#242C54] truncate">
                   {item.name}
                 </h1>
 
@@ -204,7 +184,7 @@ const St2superCampn = ({ campaigns, searchQuery, filterStatus, setCampaigns }) =
 
                 <div className="flex flex-col sm:flex-row justify-between gap-3 mt-4">
                   <Link to="/" className="w-full sm:w-auto">
-                    <button className="text-sm flex items-center justify-center py-2 gap-1 font-medium text-[#242C54] hover:text-[#E4141C] transition-colors w-full sm:w-auto">
+                    <button className="text-sm flex font-serif cursor-pointer items-center justify-center py-2 gap-1 font-medium text-[#242C54] hover:text-[#E4141C] transition-colors w-full sm:w-auto">
                       <FiEye className="text-base" /> View Analytics
                     </button>
                   </Link>
@@ -228,7 +208,6 @@ const St2superCampn = ({ campaigns, searchQuery, filterStatus, setCampaigns }) =
             ))
           ) : (
             <div className="col-span-3 py-12 text-center">
-              
               <p className="text-gray-500 text-lg">No campaigns found.</p>
               <p className="text-gray-400 text-sm mt-1">Try adjusting your search or filter criteria</p>
             </div>
@@ -295,4 +274,4 @@ const St2superCampn = ({ campaigns, searchQuery, filterStatus, setCampaigns }) =
   );
 };
 
-export default St2superCampn;
+export default CampainPage;

@@ -1,43 +1,62 @@
 // SuperCampnArray.js (updated)
 import { MdOutlineEmail, MdDateRange } from "react-icons/md";
 
-export const campaignData = [
+export const SuerCmpnData = [
   {
-    city: "bahawalpur",
-    Elements: [
-      {
-        id: 1,
-        name: "Get Free Ticket",
-        email: <MdOutlineEmail />,
-        selectedCampaign: "Whatsapp Campaign",
-        target: "all",
-        calender: <MdDateRange />,
-        date1: "2023-12-01",
-        date2: "2023-12-31",
-        sentVAlue: "0",
-        resValue: "0",
-        status: "active",
-      },
-      
-    ]
+    id: 1,
+    name: "Get JED Staion Services",
+    city:"JED Passenger",
+    email: <MdOutlineEmail />,
+    selectedCampaign: "Whatsapp Campaign",
+    target: "all",
+    calender: <MdDateRange />,
+    date1: "2023-12-01",
+    date2: "2023-12-31",
+    sentVAlue: "0",
+    resValue: "0",
+    status: "active",
+  },
+
+  {
+    id: 2,
+    name: "Get RUH Staion Services",
+    city:"RUH Passengers",
+    email: <MdOutlineEmail />,
+    selectedCampaign: "Whatsapp Campaign",
+    target: "all",
+    calender: <MdDateRange />,
+    date1: "2023-12-01",
+    date2: "2023-12-31",
+    sentVAlue: "0",
+    resValue: "10",
+    status: "active",
   },
   {
-    city: "multan",
-    Elements: [
-      {
-        id: 1,
-        name: "Multan Free Ticket",
-        email: <MdOutlineEmail />,
-        selectedCampaign: "Whatsapp Campaign",
-        target: "all",
-        calender: <MdDateRange />,
-        date1: "2023-12-01",
-        date2: "2023-12-31",
-        sentVAlue: "0",
-        resValue: "10",
-        status: "active",
-      },
-   
-    ]
-  }
+    id: 3,
+    name: "Get DXB Staion Services",
+    city:"DXB Passenger",
+    email: <MdOutlineEmail />,
+    selectedCampaign: "Whatsapp Campaign",
+    target: "all",
+    calender: <MdDateRange />,
+    date1: "2023-12-01",
+    date2: "2023-12-31",
+    sentVAlue: "0",
+    resValue: "10",
+    status: "active",
+  },
+  {
+    id: 4,
+    name: " Frequent Flyes Staion Services",
+    city:"FrequentFlyes",
+    email: <MdOutlineEmail />,
+    selectedCampaign: "Whatsapp Campaign",
+    target: "all",
+    calender: <MdDateRange />,
+    date1: "2023-12-01",
+    date2: "2023-12-31",
+    sentVAlue: "0",
+    resValue: "10",
+    status: "active",
+  },
 ];
