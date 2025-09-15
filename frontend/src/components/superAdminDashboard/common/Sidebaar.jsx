@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import { RxCross2 } from "react-icons/rx";
 import {
   FiHome,
@@ -12,84 +12,88 @@ import {
 } from "react-icons/fi";
 import { Link, useLocation } from "react-router-dom";
 
-const NavItem = ({ icon, text, active, path, sidebarOpen, isMobile }) => {
-  return (
-    <Link to={path} className="block">
-      <div
-        className={`flex gap-3 mx-2 my-1 p-3 cursor-pointer group relative rounded-lg transition-all duration-200 ${
+// Reusable NavItem
+const NavItem = ({ icon, text, active, path, sidebarOpen, isMobile }) => (
+  <Link to={path} className="block">
+    <div
+      className={`flex gap-3 mx-2 my-1 p-3 cursor-pointer group relative rounded-lg transition-all duration-200
+        ${
           active
-            ? "bg-gradient-to-r from-[#E4141C] to-[#c1121f] text-white shadow-lg transform scale-105"
-            : "hover:bg-white/10 text-gray-300 hover:text-white"
+            ? "bg-gradient-to-r from-[#E4141C] to-[#c1121f]  text-white shadow-lg transform scale-105"
+            : "hover:bg-[#E4141C] text-gray-300 hover:text-white"
         }`}
-      >
-        {/* Always show icon */}
-        <span className={`transition-colors ${active ? "text-white" : ""}`}>
-          {icon}
+    >
+      <span className={`${active ? "text-white" : ""}`}>{icon}</span>
+
+      {sidebarOpen && !isMobile && (
+        <span className={`font-medium ${active ? "text-white" : ""}`}>
+          {text}
         </span>
+      )}
 
-        {/* Show text only when sidebar is expanded on desktop */}
-        {sidebarOpen && !isMobile && (
-          <span
-            className={`font-medium transition-colors ${
-              active ? "text-white" : ""
-            }`}
-          >
-            {text}
-          </span>
-        )}
+      {active && (
+        <div className="absolute right-2 top-1/2 -translate-y-1/2 w-2 h-2 bg-white rounded-full shadow-sm"></div>
+      )}
+    </div>
+  </Link>
+);
 
-        {/* Active indicator */}
-        {active && (
-          <div className="absolute right-2 top-1/2 transform -translate-y-1/2 w-2 h-2 bg-white rounded-full shadow-sm"></div>
-        )}
-      </div>
-    </Link>
-  );
-};
+// Sidebar sections config
+const sections = [
+  {
+    title: "Main Menu",
+    items: [
+      { text: "Dashboard", path: "overview", icon: <FiHome size={20} /> },
+      { text: "All Stations", path: "stations", icon: <FiUsers size={20} /> },
+      {
+        text: "Campaigns",
+        path: "compaigns",
+        icon: <FiMessageSquare size={20} />,
+      },
+      { text: "Feedback", path: "supfeedback", icon: <FiStar size={20} /> },
+      {
+        text: "Complaints",
+        path: "complaints",
+        icon: <FiAlertTriangle size={20} />,
+      },
+    ],
+  },
+  {
+    title: "System",
+    items: [
+      { text: "Settings", path: "setting", icon: <FiSettings size={20} /> },
+    ],
+  },
+];
 
 const Sidebar = () => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
   const location = useLocation();
 
+  // Detect screen size
   useEffect(() => {
-    const checkScreenSize = () => {
-      setIsMobile(window.innerWidth < 640);
-    };
-
+    const checkScreenSize = () => setIsMobile(window.innerWidth < 640);
     checkScreenSize();
     window.addEventListener("resize", checkScreenSize);
-
     return () => window.removeEventListener("resize", checkScreenSize);
   }, []);
 
-  const toggleSidebar = () => {
-    setSidebarOpen(!sidebarOpen);
-  };
+  const toggleSidebar = () => setSidebarOpen((prev) => !prev);
 
   const getSidebarWidth = () => {
-    if (isMobile) {
-      return sidebarOpen ? "w-64" : "w-0"; // mobile: fully hide
-    } else {
-      return sidebarOpen ? "w-64" : "w-16"; // desktop: collapse to icons only
-    }
+    if (isMobile) return sidebarOpen ? "w-64" : "w-0";
+    return sidebarOpen ? "w-64" : "w-16";
   };
 
-  const getActiveTab = () => {
-    const path = location.pathname;
-    if (path === "/overview") return "overview";
-    if (path === "/stations") return "stations";
-    if (path === "/compaigns") return "compaigns";
-    if (path === "/supfeedback") return "supfeedback";
-    if (path === "/complaints") return "complaints";
-    if (path === "/setting") return "settings";
-    return "";
-  };
+  // Active path memoized
+  const activePath = useMemo(() => location.pathname, [location.pathname]);
 
   return (
     <div
       className={`h-full bg-gradient-to-b from-[#242C54] to-[#1a1f42] text-white transition-all duration-300 shadow-xl border-r border-white/10 ${getSidebarWidth()}`}
     >
+      {/* Header */}
       <div
         className={`px-5 py-4 flex items-center ${
           isMobile ? "justify-center" : "justify-between"
@@ -108,86 +112,36 @@ const Sidebar = () => {
         )}
         <button
           onClick={toggleSidebar}
-          className="relative text-white hover:bg-white/10 p-2 rounded-lg transition-colors"
+          aria-expanded={sidebarOpen}
+          className="text-white hover:bg-white/10 p-2 rounded-lg transition-colors"
         >
-          {sidebarOpen ? (
-            <RxCross2 className="text-xl" />
-          ) : (
-            <FiMenu className="text-white" size={20} />
-          )}
+          {sidebarOpen ? <RxCross2 className="text-xl" /> : <FiMenu size={20} />}
         </button>
       </div>
 
-      {/* Nav Items */}
+      {/* Nav Sections */}
       {(sidebarOpen || !isMobile) && (
         <nav className="mt-4 w-full">
-          <div className="px-3 mb-2">
-            <p className={`text-xs  text-gray-400 uppercase tracking-wider font-semibold ${
-              !sidebarOpen ? "hidden" :"block"
-            }`}>
-              Main Menu
-            </p>
-          </div>
-
-          <NavItem
-            icon={<FiHome size={20} />}
-            text="Dashboard"
-            active={getActiveTab() === "overview"}
-            path="overview"
-            sidebarOpen={sidebarOpen}
-            isMobile={isMobile}
-          />
-
-          <NavItem
-            icon={<FiUsers size={20} />}
-            text="All Stations"
-            active={getActiveTab() === "stations"}
-            path="stations"
-            sidebarOpen={sidebarOpen}
-            isMobile={isMobile}
-          />
-
-          <NavItem
-            icon={<FiMessageSquare size={20} />}
-            text="Campaigns"
-            active={getActiveTab() === "compaigns"}
-            path="compaigns"
-            sidebarOpen={sidebarOpen}
-            isMobile={isMobile}
-          />
-
-          <NavItem
-            icon={<FiStar size={20} />}
-            text="Feedback"
-            active={getActiveTab() === "supfeedback"}
-            path="supfeedback"
-            sidebarOpen={sidebarOpen}
-            isMobile={isMobile}
-          />
-
-          <NavItem
-            icon={<FiAlertTriangle size={20} />}
-            text="Complaints"
-            active={getActiveTab() === "complaints"}
-            path="complaints"
-            sidebarOpen={sidebarOpen}
-            isMobile={isMobile}
-          />
-
-          <div className="px-3 mb-2 mt-6">
-            <p className="text-xs text-gray-400 uppercase tracking-wider font-semibold">
-              System
-            </p>
-          </div>
-
-          <NavItem
-            icon={<FiSettings size={20} />}
-            text="Settings"
-            active={getActiveTab() === "settings"}
-            path="setting"
-            sidebarOpen={sidebarOpen}
-            isMobile={isMobile}
-          />
+          {sections.map((section, idx) => (
+            <div key={idx}>
+              <div className="px-3 mb-2 mt-4">
+                {sidebarOpen && (
+                  <p className="text-xs text-gray-400 uppercase tracking-wider font-semibold">
+                    {section.title}
+                  </p>
+                )}
+              </div>
+              {section.items.map((item) => (
+                <NavItem
+                  key={item.path}
+                  {...item}
+                  active={activePath === item.path}
+                  sidebarOpen={sidebarOpen}
+                  isMobile={isMobile}
+                />
+              ))}
+            </div>
+          ))}
         </nav>
       )}
     </div>
