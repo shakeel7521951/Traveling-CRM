@@ -5,7 +5,6 @@ import {
   FiUsers,
   FiMessageSquare,
   FiStar,
-  FiPieChart,
   FiSettings,
   FiMenu,
   FiAlertTriangle,
@@ -23,14 +22,12 @@ const NavItem = ({ icon, text, active, path, sidebarOpen, isMobile }) => {
             : "hover:bg-white/10 text-gray-300 hover:text-white"
         }`}
       >
-        {/* Show icon only when sidebar is open on mobile */}
-        {sidebarOpen && (
-          <span
-            className={`mr-0 transition-colors ${active ? "text-white" : ""}`}
-          >
-            {icon}
-          </span>
-        )}
+        {/* Always show icon */}
+        <span className={`transition-colors ${active ? "text-white" : ""}`}>
+          {icon}
+        </span>
+
+        {/* Show text only when sidebar is expanded on desktop */}
         {sidebarOpen && !isMobile && (
           <span
             className={`font-medium transition-colors ${
@@ -44,14 +41,6 @@ const NavItem = ({ icon, text, active, path, sidebarOpen, isMobile }) => {
         {/* Active indicator */}
         {active && (
           <div className="absolute right-2 top-1/2 transform -translate-y-1/2 w-2 h-2 bg-white rounded-full shadow-sm"></div>
-        )}
-
-        {/* Tooltip for desktop when sidebar is closed */}
-        {!sidebarOpen && !isMobile && (
-          <div className="absolute left-full ml-2 px-3 py-2 bg-[#242C54] text-white text-sm rounded-lg opacity-0 group-hover:opacity-100 transition-all duration-200 whitespace-nowrap shadow-lg border border-white/10">
-            {text}
-            <div className="absolute left-0 top-1/2 transform -translate-y-1/2 -translate-x-1 w-2 h-2 bg-[#242C54] rotate-45"></div>
-          </div>
         )}
       </div>
     </Link>
@@ -80,28 +69,26 @@ const Sidebar = () => {
 
   const getSidebarWidth = () => {
     if (isMobile) {
-      return sidebarOpen ? "w-15" : "w-0";
+      return sidebarOpen ? "w-64" : "w-0"; // mobile: fully hide
     } else {
-      return sidebarOpen ? "w-64" : "w-15";
+      return sidebarOpen ? "w-64" : "w-16"; // desktop: collapse to icons only
     }
   };
 
-  // Determine active tab based on current path
   const getActiveTab = () => {
     const path = location.pathname;
     if (path === "/overview") return "overview";
     if (path === "/stations") return "stations";
     if (path === "/compaigns") return "compaigns";
-    if (path === "/feedback") return "feedbacks";
+    if (path === "/supfeedback") return "supfeedback";
     if (path === "/complaints") return "complaints";
-   
     if (path === "/setting") return "settings";
     return "";
   };
 
   return (
     <div
-      className={`bg-gradient-to-b from-[#242C54] to-[#1a1f42] text-white transition-all duration-300  z-50 shadow-xl border-r border-white/10 ${getSidebarWidth()}`}
+      className={`h-full bg-gradient-to-b from-[#242C54] to-[#1a1f42] text-white transition-all duration-300 shadow-xl border-r border-white/10 ${getSidebarWidth()}`}
     >
       <div
         className={`px-5 py-4 flex items-center ${
@@ -131,7 +118,7 @@ const Sidebar = () => {
         </button>
       </div>
 
-      {/* Only show nav items when sidebar is open on mobile */}
+      {/* Nav Items */}
       {(sidebarOpen || !isMobile) && (
         <nav className="mt-4 w-full">
           <div className="px-3 mb-2">
@@ -145,7 +132,7 @@ const Sidebar = () => {
           <NavItem
             icon={<FiHome size={20} />}
             text="Dashboard"
-            active={getActiveTab() === "dashboard"}
+            active={getActiveTab() === "overview"}
             path="overview"
             sidebarOpen={sidebarOpen}
             isMobile={isMobile}
@@ -154,7 +141,7 @@ const Sidebar = () => {
           <NavItem
             icon={<FiUsers size={20} />}
             text="All Stations"
-            active={getActiveTab() === "passengers"}
+            active={getActiveTab() === "stations"}
             path="stations"
             sidebarOpen={sidebarOpen}
             isMobile={isMobile}
@@ -163,7 +150,7 @@ const Sidebar = () => {
           <NavItem
             icon={<FiMessageSquare size={20} />}
             text="Campaigns"
-            active={getActiveTab() === "campaigns"}
+            active={getActiveTab() === "compaigns"}
             path="compaigns"
             sidebarOpen={sidebarOpen}
             isMobile={isMobile}
@@ -172,8 +159,8 @@ const Sidebar = () => {
           <NavItem
             icon={<FiStar size={20} />}
             text="Feedback"
-            active={getActiveTab() === "feedbacks"}
-            path="/feedback"
+            active={getActiveTab() === "supfeedback"}
+            path="supfeedback"
             sidebarOpen={sidebarOpen}
             isMobile={isMobile}
           />
@@ -181,18 +168,14 @@ const Sidebar = () => {
           <NavItem
             icon={<FiAlertTriangle size={20} />}
             text="Complaints"
-            active={getActiveTab() === "complaint"}
-            path="/complaints"
+            active={getActiveTab() === "complaints"}
+            path="complaints"
             sidebarOpen={sidebarOpen}
             isMobile={isMobile}
           />
 
-          {/* Removed Management Section */}
-
-          <div className="px-3  mb-2 mt-6 ">
-            <p className={`text-xs  text-gray-400 uppercase tracking-wider font-semibold ${
-              !sidebarOpen ? "hidden" :"block"
-            }`}>
+          <div className="px-3 mb-2 mt-6">
+            <p className="text-xs text-gray-400 uppercase tracking-wider font-semibold">
               System
             </p>
           </div>
