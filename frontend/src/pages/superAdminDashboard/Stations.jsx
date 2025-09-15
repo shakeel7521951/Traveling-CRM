@@ -5,10 +5,10 @@ import StationCampaigns from '../../components/superAdminDashboard/Stations/Stat
 
 const Stations = () => {
   return (
-    <div>
-      <StationsHero />
+    <div className="bg-gradient-to-br from-gray-50 to-gray-100">
+      {/* <StationsHero /> */}
       <StationCampaigns />
-       <StationGraph />
+       {/* <StationGraph /> */}
     </div>
   )
 }

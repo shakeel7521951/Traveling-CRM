@@ -32,7 +32,7 @@ const StationGraph = ({ stations = [] }) => {
   console.log("Chart Data:", chartData);
 
   return (
-    <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
+    <div className="bg-white max-w-7xl mx-auto rounded-2xl shadow-sm border border-gray-100 p-6">
       {/* Header */}
       <div className="flex items-center mb-4">
         <div className="p-3 bg-purple-50 rounded-lg mr-3">
@@ -49,7 +49,7 @@ const StationGraph = ({ stations = [] }) => {
           data={chartData}
           margin={{ top: 10, right: 30, left: 0, bottom: 0 }}
         >
-          <CartesianGrid strokeDasharray="3 3" className="stroke-gray-200" />
+          <CartesianGrid strokeDasharray="3 3" className="stroke-blue-200" />
           <XAxis dataKey="name" tick={{ fill: "#242C54", fontSize: 12 }} />
           <YAxis tick={{ fill: "#242C54", fontSize: 12 }} />
           <Tooltip
