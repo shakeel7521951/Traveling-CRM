@@ -1,13 +1,12 @@
 // components/Feedback/SupFeedback.jsx
 import React, { useState } from "react";
 import {
-  FiStar, FiFilter, FiSearch, FiChevronLeft, FiChevronRight,
+  FiStar, FiSearch, FiChevronLeft, FiChevronRight,
   FiAlertCircle, FiCheckCircle, FiMessageSquare, FiUser
 } from "react-icons/fi";
 import { FaStar, FaRegStar } from "react-icons/fa";
 import {
   useGetAllFeedbackQuery,
-  useGetFeedbackStatsQuery,
   useUpdateFeedbackMutation,
   useDeleteFeedbackMutation
 } from "../../redux/slices/FeedbackSlice";
@@ -31,7 +30,7 @@ const SupFeedback = () => {
     ...(station !== "All" && { station }),
   });
 
-  const { data: statsData } = useGetFeedbackStatsQuery(
+  const { data: statsData } = useGetAllFeedbackQuery(
     station !== "All" ? { station } : {}
   );
 
