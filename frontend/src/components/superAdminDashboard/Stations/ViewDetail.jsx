@@ -90,7 +90,7 @@ const stationsData = [
   },
   { 
     id: 6, 
-    name: "New Station 1", 
+    name: "Pakistan (PAK)", 
     totalPassengers: 0, 
     activeCampaigns: 0, 
     pendingCampaigns: 0, 
@@ -103,7 +103,7 @@ const stationsData = [
   },
   { 
     id: 7, 
-    name: "New Station 2", 
+    name: "India (IND)", 
     totalPassengers: 0, 
     activeCampaigns: 0, 
     pendingCampaigns: 0, 
@@ -134,7 +134,7 @@ const ViewDetail = () => {
           >
             <FiArrowLeft size={18} /> 
           </button>
-          <h1 className="text-3xl font-bold text-[#242C54]">{station.name} Dashboard</h1>
+          <h1 className="text-3xl font-bold text-[#242C54]">{station.name}</h1>
         </div>
 
         {/* Stats Grid */}
@@ -351,7 +351,7 @@ const ViewDetail = () => {
             <h2 className="text-lg font-semibold text-white">Feedback</h2>
           </div>
           <div className="p-6">
-            <div className="mt-8 pt-6 border-t border-gray-200">
+            <div className="mt-4 pt-6 border-t border-gray-200">
               <h3 className="text-md font-medium text-[#242C54] mb-4">Recent Feedback</h3>
               <div className="space-y-4">
                 <div className="p-4 bg-gray-50 rounded-lg border border-gray-200">

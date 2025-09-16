@@ -93,8 +93,8 @@ const StationCampaigns = () => {
     { id: 3, name: "Riyadh (RUH)", totalPassengers: 5340, activeCampaigns: 15, pendingCampaigns: 5, occupancyRate: 82, trend: "down", growth: 5 },
     { id: 4, name: "Dammam (DMM)", totalPassengers: 3250, activeCampaigns: 7, pendingCampaigns: 3, occupancyRate: 71, trend: "up", growth: 15 },
     { id: 5, name: "Abha (AHB)", totalPassengers: 1870, activeCampaigns: 5, pendingCampaigns: 1, occupancyRate: 58, trend: "up", growth: 22 },
-    { id: 6, name: "New Station 1", totalPassengers: 0, activeCampaigns: 0, pendingCampaigns: 0, occupancyRate: 0, trend: "up", growth: 0 },
-    { id: 7, name: "New Station 2", totalPassengers: 0, activeCampaigns: 0, pendingCampaigns: 0, occupancyRate: 0, trend: "up", growth: 0 },
+    { id: 6, name: "Pakistan (PAK)", totalPassengers: 0, activeCampaigns: 0, pendingCampaigns: 0, occupancyRate: 0, trend: "up", growth: 0 },
+    { id: 7, name: "India (IND)", totalPassengers: 0, activeCampaigns: 0, pendingCampaigns: 0, occupancyRate: 0, trend: "up", growth: 0 },
   ]);
   const [showAddForm, setShowAddForm] = useState(false);
   const [search, setSearch] = useState("");
