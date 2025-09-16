@@ -90,7 +90,7 @@ const stationsData = [
   },
   { 
     id: 6, 
-    name: "New Station 1", 
+    name: "Pakistan (PAK)", 
     totalPassengers: 0, 
     activeCampaigns: 0, 
     pendingCampaigns: 0, 
@@ -103,7 +103,7 @@ const stationsData = [
   },
   { 
     id: 7, 
-    name: "New Station 2", 
+    name: "India (IND)", 
     totalPassengers: 0, 
     activeCampaigns: 0, 
     pendingCampaigns: 0, 
@@ -126,7 +126,7 @@ const ViewDetail = () => {
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 p-6">
       <div className="max-w-7xl mx-auto">
-        {/* Header */}
+        {/* Headers */}
         <div className="mb-6 flex items-center">
           <button 
             onClick={() => navigate(-1)} 
@@ -134,10 +134,10 @@ const ViewDetail = () => {
           >
             <FiArrowLeft size={18} /> 
           </button>
-          <h1 className="text-3xl font-bold text-[#242C54]">{station.name} Dashboard</h1>
+          <h1 className="text-3xl font-bold text-[#242C54]">{station.name}</h1>
         </div>
 
-        {/* Stats Grid */}
+        {/* Stats Grids */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5 mb-8">
           <div className="bg-white rounded-xl p-5 shadow-sm border border-gray-100">
             <div className="flex justify-between items-start">
@@ -205,7 +205,7 @@ const ViewDetail = () => {
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-          {/* Campaigns Section */}
+          {/* Campaignes Section */}
           <div className="bg-white rounded-2xl shadow-sm overflow-hidden border border-gray-100">
             <div className="px-6 py-4 border-b border-gray-100 bg-gradient-to-r from-[#242C54] to-[#3A4375]">
               <h2 className="text-lg font-semibold text-white">Campaigns</h2>
@@ -351,7 +351,7 @@ const ViewDetail = () => {
             <h2 className="text-lg font-semibold text-white">Feedback</h2>
           </div>
           <div className="p-6">
-            <div className="mt-8 pt-6 border-t border-gray-200">
+            <div className="mt-4 pt-6 border-t border-gray-200">
               <h3 className="text-md font-medium text-[#242C54] mb-4">Recent Feedback</h3>
               <div className="space-y-4">
                 <div className="p-4 bg-gray-50 rounded-lg border border-gray-200">

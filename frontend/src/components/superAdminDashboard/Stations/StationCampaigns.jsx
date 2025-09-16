@@ -35,7 +35,7 @@ const AddStationForm = ({ onClose, onAdd }) => {
     <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-50 p-4 backdrop-blur-sm">
      <div className="bg-white rounded-2xl shadow-2xl max-w-md w-full p-6 border border-gray-100 animate-fade-in 
                 max-h-[90vh] flex flex-col overflow-hidden">
-  {/* Header */}
+  {/* Headers */}
   <div className="flex justify-between items-center mb-6 flex-shrink-0">
     <h2 className="text-2xl font-bold text-[#242C54]">Add New Station</h2>
     <button onClick={onClose} className="text-red-700 hover:text-gray-600 transition-colors">
@@ -43,7 +43,7 @@ const AddStationForm = ({ onClose, onAdd }) => {
     </button>
   </div>
 
-  {/* Form */}
+  {/* Forms */}
   <form onSubmit={handleSubmit} className="space-y-5 overflow-y-auto pr-2 flex-1">
     {[
       { field: "name", label: "Station Name", type: "text" },
@@ -93,8 +93,8 @@ const StationCampaigns = () => {
     { id: 3, name: "Riyadh (RUH)", totalPassengers: 5340, activeCampaigns: 15, pendingCampaigns: 5, occupancyRate: 82, trend: "down", growth: 5 },
     { id: 4, name: "Dammam (DMM)", totalPassengers: 3250, activeCampaigns: 7, pendingCampaigns: 3, occupancyRate: 71, trend: "up", growth: 15 },
     { id: 5, name: "Abha (AHB)", totalPassengers: 1870, activeCampaigns: 5, pendingCampaigns: 1, occupancyRate: 58, trend: "up", growth: 22 },
-    { id: 6, name: "New Station 1", totalPassengers: 0, activeCampaigns: 0, pendingCampaigns: 0, occupancyRate: 0, trend: "up", growth: 0 },
-    { id: 7, name: "New Station 2", totalPassengers: 0, activeCampaigns: 0, pendingCampaigns: 0, occupancyRate: 0, trend: "up", growth: 0 },
+    { id: 6, name: "Pakistan (PAK)", totalPassengers: 0, activeCampaigns: 0, pendingCampaigns: 0, occupancyRate: 0, trend: "up", growth: 0 },
+    { id: 7, name: "India (IND)", totalPassengers: 0, activeCampaigns: 0, pendingCampaigns: 0, occupancyRate: 0, trend: "up", growth: 0 },
   ]);
   const [showAddForm, setShowAddForm] = useState(false);
   const [search, setSearch] = useState("");
@@ -177,7 +177,7 @@ const StationCampaigns = () => {
           </div>
         </div>
 
-        {/* Controls and Table */}
+        {/* Control and Table */}
         <div className="bg-white rounded-2xl shadow-sm overflow-hidden border border-gray-100">
           <div className="px-6 py-5 border-b border-gray-100">
             <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
