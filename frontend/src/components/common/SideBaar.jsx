@@ -60,14 +60,7 @@ const sections = [
       { text: "Complaints", path: "/complaints", icon: <FiAlertTriangle size={20} /> },
     ],
   },
-  {
-    title: "Management",
-    items: [
-      { text: "Admin Panel", path: "/admin", icon: <FiBarChart2 size={20} /> },
-      { text: "All Stations", path: "/all-stations", icon: <FiPieChart size={20} /> },
-      { text: "Reports", path: "/reports", icon: <FiPieChart size={20} /> },
-    ],
-  },
+  
   {
     title: "System",
     items: [
