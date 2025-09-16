@@ -9,7 +9,6 @@ export const isLoggedIn = (req, res, next) => {
       .status(401)
       .json({ message: "Please login to access this page" });
   }
-
   try {
     const user = jwt.verify(token, process.env.JWT_SECRET);
     req.user = user;

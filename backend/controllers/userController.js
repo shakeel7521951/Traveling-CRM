@@ -68,41 +68,52 @@ export const verifyAccount = async (req, res) => {
 export const login = async (req, res) => {
   try {
     const { email, password } = req.body;
+
     if (!email || !password) {
-      return res
-        .status(400)
-        .json({ message: "Email and password is required" });
+      return res.status(400).json({ message: "Email and password are required" });
     }
+
     const user = await User.findOne({ email });
+
     if (!user) {
       return res.status(404).json({
-        message:
-          "User with this email not registered.Please create your account first",
+        message: "User with this email not registered. Please create your account first",
       });
     }
-    if (user.password !== password) {
-      return res
-        .status(400)
-        .json({ message: "Email or password is incorrect" });
+
+    if (user.isVarified === false) {
+      await User.deleteOne({ _id: user._id });
+      return res.status(403).json({
+        message: "Your account is not verified. Please signup again.",
+      });
     }
+
+    const isPasswordMatch = user.password === password; 
+    if (!isPasswordMatch) {
+      return res.status(400).json({ message: "Email or password is incorrect" });
+    }
+
     const token = await user.getJWTToken();
+
     res.cookie("token", token, {
-      httpOnly: "true",
-      secure: "true",
+      httpOnly: true,
+      secure: true,
       sameSite: "None",
     });
-    return res.status(200).json({ message: "Login successfull" });
+
+    return res.status(200).json({ message: "Login successful" });
   } catch (error) {
-    console.log(error);
+    console.error("Login error:", error);
     return res.status(500).json({ message: "Internal server error" });
   }
 };
 
-export const myProfile = async(req,res)=>{
+
+export const myProfile = async (req, res) => {
   try {
     const user = req.user;
-    return res.status(200).json({user})
+    return res.status(200).json({ user })
   } catch (error) {
-    return res.status(500).json({message:"Internal server error"});
+    return res.status(500).json({ message: "Internal server error" });
   }
 }
