@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { 
-  FiStar, 
-  FiFilter, 
-  FiSearch, 
-  FiChevronLeft, 
+import {
+  FiStar,
+  FiFilter,
+  FiSearch,
+  FiChevronLeft,
   FiChevronRight,
   FiAlertCircle,
   FiCheckCircle,
@@ -11,10 +11,11 @@ import {
   FiUser
 } from 'react-icons/fi';
 import { FaStar, FaRegStar } from 'react-icons/fa';
-import { 
+import {
   useUpdateFeedbackMutation,
-  useDeleteFeedbackMutation, 
-  useGetAllFeedbackQuery
+  useDeleteFeedbackMutation,
+  useGetAllFeedbackQuery,
+  useGetStationFeedbacksQuery
 } from '../redux/slices/FeedbackSlice';
 
 const Feedback = () => {
@@ -25,12 +26,12 @@ const Feedback = () => {
   const feedbackPerPage = 5;
 
   // Fetch feedback data from API
-  const { 
-    data: feedbackData, 
-    isLoading, 
-    error, 
-    refetch 
-  } = useGetAllFeedbackQuery({
+  const {
+    data: feedbackData,
+    isLoading,
+    error,
+    refetch
+  } = useGetStationFeedbacksQuery({
     page: currentPage,
     limit: feedbackPerPage,
     ...(searchTerm && { search: searchTerm }),
@@ -52,8 +53,8 @@ const Feedback = () => {
 
   // Filter feedback based on search and filter (client-side as fallback)
   const filteredFeedback = feedback.filter(item => {
-    const matchesSearch = item.name?.toLowerCase().includes(searchTerm.toLowerCase()) || 
-                         item.details?.toLowerCase().includes(searchTerm.toLowerCase());
+    const matchesSearch = item.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      item.details?.toLowerCase().includes(searchTerm.toLowerCase());
     const ratingCategory = item.rating >= 4 ? 'positive' : 'negative';
     const matchesFilter = filter === 'all' || ratingCategory === filter;
     return matchesSearch && matchesFilter;
@@ -97,8 +98,8 @@ const Feedback = () => {
     return (
       <div className="flex">
         {[...Array(5)].map((_, i) => (
-          i < rating ? 
-            <FaStar key={i} className="text-yellow-400" /> : 
+          i < rating ?
+            <FaStar key={i} className="text-yellow-400" /> :
             <FaRegStar key={i} className="text-yellow-400" />
         ))}
       </div>
@@ -147,7 +148,7 @@ const Feedback = () => {
             <FiAlertCircle className="text-2xl mx-auto mb-2" />
             <p>Error loading feedback: {error.data?.message || 'Please try again later'}</p>
           </div>
-          <button 
+          <button
             onClick={refetch}
             className="bg-[#E4141C] text-white px-4 py-2 rounded-lg hover:bg-[#C1121F] transition-colors"
           >
@@ -166,7 +167,7 @@ const Feedback = () => {
           <h1 className="text-xl md:text-2xl font-bold text-[#242C54]">Passenger Feedback</h1>
           <p className="text-gray-500 text-sm">Review and manage passenger feedback</p>
         </div>
-        
+
         <div className="flex flex-col sm:flex-row gap-3 w-full md:w-auto">
           <div className="relative flex-1 min-w-[200px]">
             <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
@@ -183,7 +184,7 @@ const Feedback = () => {
               }}
             />
           </div>
-          
+
           <div className="relative flex-1">
             <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
               <FiFilter className="text-gray-400" />
@@ -288,13 +289,13 @@ const Feedback = () => {
                     </div>
                   </div>
                   <div className="flex justify-end md:justify-start gap-2">
-                    <button 
+                    <button
                       onClick={() => handleFollowUpToggle(item._id, item.followUp)}
                       className={`px-3 py-1 rounded-lg text-sm font-medium ${item.followUp ? 'bg-[#E4141C] text-white hover:bg-[#C1121F]' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'} transition-colors`}
                     >
                       {item.followUp ? 'Follow Up' : 'Resolved'}
                     </button>
-                    <button 
+                    <button
                       onClick={() => handleDeleteFeedback(item._id)}
                       className="px-3 py-1 bg-red-100 text-red-700 rounded-lg text-sm font-medium hover:bg-red-200 transition-colors"
                     >
@@ -322,7 +323,7 @@ const Feedback = () => {
           <div className="text-sm text-gray-500">
             Showing {indexOfFirstFeedback + 1} to {Math.min(indexOfLastFeedback, totalFeedback)} of {totalFeedback} feedback
           </div>
-          
+
           <div className="flex items-center gap-2">
             <button
               onClick={() => paginate(currentPage > 1 ? currentPage - 1 : 1)}
@@ -331,7 +332,7 @@ const Feedback = () => {
             >
               <FiChevronLeft className="text-lg" />
             </button>
-            
+
             <div className="flex gap-1">
               {Array.from({ length: totalPages }, (_, i) => i + 1).map(number => (
                 <button
@@ -343,7 +344,7 @@ const Feedback = () => {
                 </button>
               ))}
             </div>
-            
+
             <button
               onClick={() => paginate(currentPage < totalPages ? currentPage + 1 : totalPages)}
               disabled={currentPage === totalPages}

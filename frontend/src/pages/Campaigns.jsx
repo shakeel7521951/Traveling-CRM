@@ -2,8 +2,8 @@ import { useState, useEffect } from "react";
 import { useLocation } from "react-router-dom";
 import {
   useAddCompaignMutation,
-  useGetAllCompaignsQuery,
   useDeleteCompaignMutation,
+  useStationCompaignsQuery,
 } from "../redux/slices/CompaignSlice";
 import CampaignAnalytics from "../components/campaigns/CampaignAnalytics";
 import CampaignCard from "../components/campaigns/CampaignCard";
@@ -16,15 +16,14 @@ const Campaigns = () => {
   const location = useLocation();
 
   // API hooks
-  const { data: campaignsData, isLoading, refetch } = useGetAllCompaignsQuery();
+  const { data: campaignsData, isLoading, refetch } = useStationCompaignsQuery();
   const [addCampaign] = useAddCompaignMutation();
   const [deleteCampaign] = useDeleteCompaignMutation();
-  // Local UI state
   const [campaigns, setCampaigns] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [filter, setFilter] = useState("all");
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [isSubmitting, setIsSubmitting] = useState(false); // ✅ for modal button
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [newCampaign, setNewCampaign] = useState({
     name: "",
     type: "whatsapp",
@@ -40,9 +39,9 @@ const Campaigns = () => {
   const [selectedCampaign, setSelectedCampaign] = useState(null);
   // Load campaigns from API
   useEffect(() => {
-    if (campaignsData) {
+    if (campaignsData?.compaigns) {
       setCampaigns(
-        campaignsData.map((campaign) => ({
+        campaignsData?.compaigns.map((campaign) => ({
           id: campaign._id || campaign.id,
           name: campaign.name,
           type: campaign.channel,
@@ -57,7 +56,7 @@ const Campaigns = () => {
         }))
       );
     }
-  }, [campaignsData]);
+  }, [campaignsData?.compaigns]);
 
   useEffect(() => {
     if (location.state) {

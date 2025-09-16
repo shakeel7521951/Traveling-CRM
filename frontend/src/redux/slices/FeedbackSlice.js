@@ -42,6 +42,22 @@ export const feedbackApi = createApi({
       }),
       providesTags: ["feedback"],
     }),
+    getStationFeedbacks: builder.query({
+      query: (params = {}) => ({
+        url: "/getStationFeedbacks",
+        method: "GET",
+        params: {
+          page: params.page || 1,
+          limit: params.limit || 10,
+          ...(params.search && { search: params.search }),
+          ...(params.station && { station: params.station }),
+          ...(params.feedbackType && { feedbackType: params.feedbackType }),
+          ...(params.rating && { rating: params.rating }),
+          ...(params.status && { status: params.status }),
+        },
+      }),
+      providesTags: ["feedback"],
+    }),
 
     // ✅ Get Single Feedback
     getSingleFeedback: builder.query({
@@ -91,10 +107,34 @@ export const feedbackApi = createApi({
       providesTags: ["complaint"],
     }),
 
+    getStationComplaints: builder.query({
+      query: (params = {}) => ({
+        url: "/stationComplaints",
+        method: "GET",
+        params: {
+          page: params.page || 1,
+          limit: params.limit || 10,
+          ...(params.search && { search: params.search }),
+          ...(params.station && { station: params.station }),
+          ...(params.status && { status: params.status }),
+          ...(params.priority && { priority: params.priority }),
+        },
+      }),
+      providesTags: ["complaint"],
+    }),
+
     // ✅ Get Complaint Stats
     getComplaintStats: builder.query({
       query: () => ({
         url: "/getComplaintStats",
+        method: "GET",
+      }),
+      providesTags: ["complaint"],
+    }),
+
+    getStationComplaintStats: builder.query({
+      query: () => ({
+        url: "/getStationComplaintStats",
         method: "GET",
       }),
       providesTags: ["complaint"],
@@ -127,6 +167,7 @@ export const feedbackApi = createApi({
 export const {
   useCreateFeedbackMutation,
   useGetAllFeedbackQuery,
+  useGetStationFeedbacksQuery,
   useGetSingleFeedbackQuery,
   useUpdateFeedbackMutation,
   useDeleteFeedbackMutation,
@@ -134,4 +175,6 @@ export const {
   useGetComplaintStatsQuery,
   useUpdateComplaintStatusMutation,
   useDeleteComplaintMutation,
+  useGetStationComplaintsQuery,
+  useGetStationComplaintStatsQuery
 } = feedbackApi;
