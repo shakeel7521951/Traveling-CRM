@@ -69,7 +69,7 @@ const VerifyOtp = () => {
 
   const handleVerifyOtp = async (otpCode) => {
     try {
-      const result = await verifyUser({ email, otpCode }).unwrap();
+      const result = await verifyUser({ email, otp:otpCode }).unwrap();
       toast.success(result.message);
       navigate("/");
     } catch (err) {
