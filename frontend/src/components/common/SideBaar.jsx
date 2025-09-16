@@ -116,7 +116,7 @@ const Sidebar = () => {
         <button
           onClick={toggleSidebar}
           aria-expanded={sidebarOpen}
-          className="text-white hover:bg-white/10 p-2 rounded-lg transition-colors"
+          className="text-[#C8131F] bg-[#20274C] hover:bg-white/10 p-2 rounded-lg transition-colors"
         >
           {sidebarOpen ? <RxCross2 className="text-xl" /> : <FiMenu className="text-xl" />}
         </button>

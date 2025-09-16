@@ -22,7 +22,7 @@ export const allPassenger = async (req, res) => {
       return res.status(404).json({ message: "No Passenger found" });
     }
     return res.status(200).json({ allPassenger });
-  } catch (error) {}
+  } catch (error) { }
 };
 
 export const editPassenger = async (req, res) => {
@@ -62,3 +62,13 @@ export const deletePassenger = async (req, res) => {
   }
 };
 
+export const stationPassengers = async (req, res) => {
+  try {
+    const station = req.user?.station;
+    const allPassenger = await Passenger.find({ station });
+    if (allPassenger === null) {
+      return res.status(404).json({ message: "No Passenger found" });
+    }
+    return res.status(200).json({ allPassenger });
+  } catch (error) { }
+};
