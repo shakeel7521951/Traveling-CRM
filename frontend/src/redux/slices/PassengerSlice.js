@@ -31,6 +31,11 @@ export const passengerApi = createApi({
       providesTags: ["Passenger"],
     }),
 
+    stationPassengers: builder.query({
+      query: () => "/stationPassengers",
+      providesTags: ["Passenger"],
+    }),
+
     //  Get Passenger by ID
     getPassengerById: builder.query({
       query: (id) => `/passenger/${id}`,
@@ -64,4 +69,5 @@ export const {
   useGetPassengerByIdQuery,
   useUpdatePassengerMutation,
   useDeletePassengerMutation,
+  useStationPassengersQuery
 } = passengerApi;
