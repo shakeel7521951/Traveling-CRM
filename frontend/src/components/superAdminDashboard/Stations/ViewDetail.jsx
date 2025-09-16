@@ -126,7 +126,7 @@ const ViewDetail = () => {
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 p-6">
       <div className="max-w-7xl mx-auto">
-        {/* Header */}
+        {/* Headers */}
         <div className="mb-6 flex items-center">
           <button 
             onClick={() => navigate(-1)} 
@@ -137,7 +137,7 @@ const ViewDetail = () => {
           <h1 className="text-3xl font-bold text-[#242C54]">{station.name}</h1>
         </div>
 
-        {/* Stats Grid */}
+        {/* Stats Grids */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5 mb-8">
           <div className="bg-white rounded-xl p-5 shadow-sm border border-gray-100">
             <div className="flex justify-between items-start">
@@ -205,7 +205,7 @@ const ViewDetail = () => {
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-          {/* Campaigns Section */}
+          {/* Campaignes Section */}
           <div className="bg-white rounded-2xl shadow-sm overflow-hidden border border-gray-100">
             <div className="px-6 py-4 border-b border-gray-100 bg-gradient-to-r from-[#242C54] to-[#3A4375]">
               <h2 className="text-lg font-semibold text-white">Campaigns</h2>
