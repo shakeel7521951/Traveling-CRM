@@ -44,7 +44,6 @@ const Passengers = () => {
     phone: "",
     email: "",
     flightDate: "",
-    station: "JED",
   });
 
   // ✅ Handle new passenger from navigation state
@@ -395,26 +394,6 @@ const Passengers = () => {
                       </div>
                     )
                   )}
-                  <div className="mb-4">
-                    <label
-                      htmlFor="station"
-                      className="block text-sm font-medium text-gray-700"
-                    >
-                      Station
-                    </label>
-                    <select
-                      name="station"
-                      id="station"
-                      className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-[#242C54] focus:border-[#242C54] sm:text-sm"
-                      value={formData.station}
-                      onChange={handleInputChange}
-                      required
-                    >
-                      <option value="JED">Jeddah (JED)</option>
-                      <option value="MED">Medina (MED)</option>
-                      <option value="RUH">Riyadh (RUH)</option>
-                    </select>
-                  </div>
                   <div className="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
                     <button
                       type="submit"

@@ -27,12 +27,11 @@ const feedbackSchema = new mongoose.Schema({
   },
   rating: { type: Number, min: 1, max: 5 },
   details: { type: String, required: true, minLength: 10, maxLength: 2000 },
-  flightNumber: { type: String, trim: true, uppercase: true, maxLength: 10 },
+  flightNumber: { type: String, trim: true, uppercase: true,},
   bookingReference: {
     type: String,
     trim: true,
     uppercase: true,
-    maxLength: 20,
   },
   dateOfExperience: { type: Date, required: true },
 

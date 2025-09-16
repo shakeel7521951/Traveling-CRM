@@ -57,8 +57,7 @@ const TravelFeedbackPortal = () => {
       const result = await createFeedback(submissionData).unwrap();
 
       toast.success(
-        `Thank you for your ${
-          activeTab === "complaint" ? "complaint" : "feedback"
+        `Thank you for your ${activeTab === "complaint" ? "complaint" : "feedback"
         }! We will address it shortly.`
       );
 
@@ -119,21 +118,19 @@ const TravelFeedbackPortal = () => {
         {/* Tabs */}
         <div className="flex border-b border-gray-200 mb-8">
           <button
-            className={`py-3 px-6 font-medium text-lg ${
-              activeTab === "complaint"
+            className={`py-3 px-6 font-medium text-lg ${activeTab === "complaint"
                 ? "text-blue-600 border-b-2 border-blue-600"
                 : "text-gray-500"
-            }`}
+              }`}
             onClick={() => setActiveTab("complaint")}
           >
             📝 File a Complaint
           </button>
           <button
-            className={`py-3 px-6 font-medium text-lg ${
-              activeTab === "feedback"
+            className={`py-3 px-6 font-medium text-lg ${activeTab === "feedback"
                 ? "text-blue-600 border-b-2 border-blue-600"
                 : "text-gray-500"
-            }`}
+              }`}
             onClick={() => setActiveTab("feedback")}
           >
             ⭐ Share Feedback
@@ -206,15 +203,23 @@ const TravelFeedbackPortal = () => {
                   <label className="block text-sm font-medium text-gray-700 mb-1">
                     Station/Location *
                   </label>
-                  <input
-                    type="text"
+                  <select
                     name="station"
                     value={formData.station}
                     onChange={handleChange}
                     required
                     className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                    placeholder="New York JFK Airport"
-                  />
+                  >
+                    <option value="">Select a station</option>
+                    <option value="a">New York JFK</option>
+                    <option value="Los Angeles LAX">Los Angeles LAX</option>
+                    <option value="Chicago ORD">Chicago ORD</option>
+                    <option value="Houston IAH">Houston IAH</option>
+                    <option value="Miami MIA">Miami MIA</option>
+                    <option value="London Heathrow">London Heathrow</option>
+                    <option value="Dubai DXB">Dubai DXB</option>
+                    <option value="Other">Other</option>
+                  </select>
                 </div>
               </div>
             </div>

@@ -31,13 +31,18 @@ export const CompaignApi = createApi({
       providesTags: ["compaign"],
     }),
 
-    // ✅ Get Single Compaign
+    //get Station compaigns
+    stationCompaigns: builder.query({
+      query: () => "/stationCompaigns",
+      providesTags: ['compaign']
+    }),
+    //  Get Single Compaign
     getCompaignById: builder.query({
       query: (id) => `/getCompaign/${id}`,
       providesTags: ["compaign"],
     }),
 
-    // ✅ Update Compaign
+    // Update Compaign
     updateCompaign: builder.mutation({
       query: ({ id, ...data }) => ({
         url: `/updateCompaign/${id}`,
@@ -59,6 +64,8 @@ export const CompaignApi = createApi({
 });
 
 export const {
+  useStationCompaignsQuery,
+
   useAddCompaignMutation,
   useGetAllCompaignsQuery,
   useGetCompaignByIdQuery,

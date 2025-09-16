@@ -53,6 +53,22 @@ const SuperCpnModel = ({
               />
             </div>
 
+            {/* City Name */}
+            <div className="col-span-2">
+              <label className="block text-sm font-medium text-[#242C54] mb-1">
+                City Name <span className="text-red-500">*</span>
+              </label>
+              <input
+                type="text"
+                name="city"
+                value={newCampaign.city}
+                onChange={onInputChange}
+                className="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#E4141C] focus:border-transparent"
+                placeholder="Enter Your City Name"
+                required
+              />
+            </div>
+
             {/* Channel */}
             <div>
               <label className="block text-sm font-medium text-[#242C54] mb-1">
