@@ -19,6 +19,7 @@ import {
   useGetComplaintsQuery,
   useUpdateComplaintStatusMutation,
   useDeleteFeedbackMutation,
+  useGetStationComplaintsQuery,
 } from "../redux/slices/FeedbackSlice";
 
 const Complaints = () => {
@@ -37,7 +38,7 @@ const Complaints = () => {
     isLoading,
     error,
     refetch,
-  } = useGetComplaintsQuery({
+  } = useGetStationComplaintsQuery({
     page: currentPage,
     limit: complaintsPerPage,
     ...(searchTerm && { search: searchTerm }),

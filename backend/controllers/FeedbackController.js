@@ -156,13 +156,59 @@ export const getComplaintStats = async (req, res) => {
   }
 };
 
+export const getStationComplaintStats = async (req, res) => {
+  const station = req.user?.station;
+  try {
+    const complaintTypes = [
+      "Baggage",
+      "Flight Delay",
+      "Booking Issue",
+      "Accessibility",
+      "Customer Service",
+      "Refund",
+      "Other",
+    ];
+
+    // Total complaints for this station only
+    const totalComplaints = await Feedback.countDocuments({
+      station,
+      feedbackType: { $in: complaintTypes },
+    });
+
+    // Complaints grouped by status for this station
+    const byStatus = await Feedback.aggregate([
+      { $match: { station, feedbackType: { $in: complaintTypes } } },
+      { $group: { _id: "$status", count: { $sum: 1 } } },
+    ]);
+
+    // Complaints grouped by type for this station
+    const byType = await Feedback.aggregate([
+      { $match: { station, feedbackType: { $in: complaintTypes } } },
+      { $group: { _id: "$feedbackType", count: { $sum: 1 } } },
+      { $sort: { count: -1 } },
+    ]);
+
+    // Complaints grouped by priority for this station
+    const byPriority = await Feedback.aggregate([
+      { $match: { station, feedbackType: { $in: complaintTypes } } },
+      { $group: { _id: "$priority", count: { $sum: 1 } } },
+    ]);
+
+    res.json({
+      success: true,
+      data: { total: totalComplaints, byStatus, byType, byPriority },
+    });
+  } catch (error) {
+    res.status(500).json({ success: false, message: error.message });
+  }
+};
 
 // Update feedback/complaint
 export const updateFeedback = async (req, res) => {
   try {
     const feedback = await Feedback.findByIdAndUpdate(
-      req.params.id, 
-      req.body, 
+      req.params.id,
+      req.body,
       {
         new: true,
         runValidators: true,
@@ -237,5 +283,97 @@ export const getFeedback = async (req, res) => {
       message: "Error fetching feedback",
       error: error.message,
     });
+  }
+};
+
+export const stationComplaints = async (req, res) => {
+  try {
+    const station = req.user?.station;
+    const { page = 1, limit = 10, status, priority } = req.query;
+
+    const complaintTypes = [
+      "Baggage",
+      "Flight Delay",
+      "Booking Issue",
+      "Accessibility",
+      "Customer Service",
+      "Refund",
+      "Other",
+    ];
+
+    const filter = {
+      feedbackType: { $in: complaintTypes },
+    };
+
+    if (station) {
+      filter.station = station;
+    }
+
+    if (status) filter.status = status;
+    if (priority) filter.priority = priority;
+
+    const complaints = await Feedback.find(filter)
+      .limit(Number(limit))
+      .skip((Number(page) - 1) * Number(limit))
+      .sort({ createdAt: -1 });
+
+    const total = await Feedback.countDocuments(filter);
+
+    res.json({
+      success: true,
+      data: complaints,
+      pagination: {
+        currentPage: Number(page),
+        totalPages: Math.ceil(total / Number(limit)),
+        totalItems: total,
+        itemsPerPage: Number(limit),
+      },
+    });
+  } catch (error) {
+    console.error("Error fetching station complaints:", error);
+    return res.status(500).json({ message: "Internal server error" });
+  }
+};
+
+export const getStationFeedbacks = async (req, res) => {
+  try {
+    const station = req.user?.station;
+    const { page = 1, limit = 10, rating } = req.query;
+
+    const feedbackTypes = [
+      "Service Quality",
+      "Staff Feedback",
+      "Facilities",
+      "Booking Process",
+      "Overall Experience",
+    ];
+
+    // Build filter
+    const filter = {
+      station, // <-- restrict feedbacks to current station
+      feedbackType: { $in: feedbackTypes },
+    };
+
+    if (rating) filter.rating = parseInt(rating);
+
+    const feedbacks = await Feedback.find(filter)
+      .limit(Number(limit))
+      .skip((page - 1) * limit)
+      .sort({ createdAt: -1 });
+
+    const total = await Feedback.countDocuments(filter);
+
+    res.json({
+      success: true,
+      data: feedbacks,
+      pagination: {
+        currentPage: parseInt(page),
+        totalPages: Math.ceil(total / limit),
+        totalItems: total,
+        itemsPerPage: parseInt(limit),
+      },
+    });
+  } catch (error) {
+    res.status(500).json({ success: false, message: error.message });
   }
 };
