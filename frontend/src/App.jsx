@@ -28,7 +28,6 @@ import Overview from "./pages/superAdminDashboard/Overview";
 import Stations from "./pages/superAdminDashboard/Stations";
 import ViewDetail from "./components/superAdminDashboard/Stations/ViewDetail";
 import SupFeedback from "./pages/superAdminDashboard/SepFeedback";
-import SettingsPage from "./pages/superAdminDashboard/SettingsPage";
 import ProtectedRoute from "./components/common/ProtectedRoute";
 import SupComplaints from "./pages/superAdminDashboard/SupComplaints";
 
@@ -93,7 +92,6 @@ const router = createBrowserRouter([
       { path: "compaigns", element: <SuperAdminCompaigns /> },
       { path: "supfeedback", element: <SupFeedback /> },
       { path: "supcomplaints", element: <SupComplaints /> },
-      { path: "setting", element: <SettingsPage /> },
     ]
   }
 ]);
