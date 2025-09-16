@@ -13,10 +13,10 @@ import {
 } from "react-icons/fi";
 import { useLocation, useNavigate } from "react-router-dom";
 import {
-  useGetPassengersQuery,
   useAddPassengerMutation,
   useUpdatePassengerMutation,
   useDeletePassengerMutation,
+  useStationPassengersQuery,
 } from "../redux/slices/PassengerSlice"; // adjust path if needed
 
 const Passengers = () => {
@@ -32,7 +32,7 @@ const Passengers = () => {
   const navigate = useNavigate();
 
   // ✅ RTK Query hooks
-  const { data, refetch, isLoading } = useGetPassengersQuery();
+  const { data, refetch, isLoading } = useStationPassengersQuery();
   const passengers = data?.allPassenger || [];
   const [addPassenger] = useAddPassengerMutation();
   const [updatePassenger] = useUpdatePassengerMutation();

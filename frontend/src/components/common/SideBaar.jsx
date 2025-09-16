@@ -60,14 +60,7 @@ const sections = [
       { text: "Complaints", path: "/complaints", icon: <FiAlertTriangle size={20} /> },
     ],
   },
-  {
-    title: "Management",
-    items: [
-      { text: "Admin Panel", path: "/admin", icon: <FiBarChart2 size={20} /> },
-      { text: "All Stations", path: "/all-stations", icon: <FiPieChart size={20} /> },
-      { text: "Reports", path: "/reports", icon: <FiPieChart size={20} /> },
-    ],
-  },
+  
   {
     title: "System",
     items: [
@@ -123,7 +116,7 @@ const Sidebar = () => {
         <button
           onClick={toggleSidebar}
           aria-expanded={sidebarOpen}
-          className="text-white hover:bg-white/10 p-2 rounded-lg transition-colors"
+          className="text-[#C8131F] bg-[#20274C] hover:bg-white/10 p-2 rounded-lg transition-colors"
         >
           {sidebarOpen ? <RxCross2 className="text-xl" /> : <FiMenu className="text-xl" />}
         </button>

@@ -1,6 +1,8 @@
 import React from 'react';
-import { FiUsers,FiSearch,FiBell, FiStar } from 'react-icons/fi';
+import { FiUsers, FiSearch, FiBell, FiStar } from 'react-icons/fi';
 import { FaWhatsapp, FaEnvelope } from 'react-icons/fa';
+import { useStationPassengersQuery } from '../../redux/slices/PassengerSlice';
+import { useGetStationFeedbacksQuery } from '../../redux/slices/FeedbackSlice';
 
 const StatCard = ({ title, value, change, icon }) => (
   <div className="bg-white rounded-xl shadow-md p-6 border border-gray-200 flex flex-col gap-2">
@@ -14,9 +16,12 @@ const StatCard = ({ title, value, change, icon }) => (
 );
 
 const Station = () => {
+  const { data } = useStationPassengersQuery();
+  const { data: feedback } = useGetStationFeedbacksQuery();
+  const averageRating = feedback?.data && feedback?.data.length > 0 ? feedback?.data?.reduce((sum, item) => sum + item.rating, 0) / feedback?.data?.length : '';
   return (
     <div className="p-4 bg-gray-50 ">
-      
+
       <h2 className="text-2xl mt-4 font-bold text-[#242C54] mb-6">
         Station Performance Dashboard
       </h2>
@@ -25,13 +30,13 @@ const Station = () => {
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
         <StatCard
           title="Total Passengers"
-          value="4,670"
+          value={data?.allPassenger?.length}
           change="+12%"
           icon={<FiUsers className="text-[#E4141C]" size={24} />}
         />
         <StatCard
           title="Average Rating"
-          value="4.2"
+          value={averageRating}
           change="+0.3"
           icon={<FiStar className="text-[#E4141C]" size={24} />}
         />
