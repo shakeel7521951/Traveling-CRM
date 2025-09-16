@@ -1,10 +1,9 @@
-// SuperCampnArray.js (updated)
 import { MdOutlineEmail, MdDateRange } from "react-icons/md";
 
 export const SuerCmpnData = [
   {
     id: 1,
-    name: "Get JED Staion Services",
+    name: "Frequent Flyes Staion Services ",
     city:"JED Passenger",
     email: <MdOutlineEmail />,
     selectedCampaign: "Whatsapp Campaign",
@@ -33,7 +32,7 @@ export const SuerCmpnData = [
   },
   {
     id: 3,
-    name: "Get DXB Staion Services",
+    name: "Frequent Flyes Staion Services",
     city:"DXB Passenger",
     email: <MdOutlineEmail />,
     selectedCampaign: "Whatsapp Campaign",

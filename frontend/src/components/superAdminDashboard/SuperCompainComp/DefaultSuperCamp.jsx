@@ -55,7 +55,8 @@ const DefaultSuperCamp = () => {
       name: newCampaign.name,
       city: newCampaign.city,
       email: <MdOutlineEmail />,
-      selectedCampaign: newCampaign.type === "email" ? "Email Campaign" : "Whatsapp Campaign",
+      selectedCampaign:
+        newCampaign.type === "email" ? "Email Campaign" : "Whatsapp Campaign",
       target: newCampaign.target,
       calender: <MdDateRange />,
       date1: newCampaign.startDate,
@@ -66,7 +67,7 @@ const DefaultSuperCamp = () => {
     };
 
     // Add to campaigns
-    setCampaigns(prev => [...prev, campaignItem]);
+    setCampaigns((prev) => [...prev, campaignItem]);
 
     // Reset modal state
     setIsModal(false);
@@ -84,16 +85,20 @@ const DefaultSuperCamp = () => {
   // Get filtered campaigns based on city selection
   const getFilteredCampaigns = () => {
     let filtered = campaigns;
-    
+
     // Filter by city if not "all"
     if (selectedCity !== "all") {
-      filtered = filtered.filter(campaign => campaign.city === selectedCity);
+      filtered = filtered.filter((campaign) => campaign.city === selectedCity);
     }
-    
+
     // Filter by search query and status
-    return filtered.filter(campaign => {
-      const matchesSearch = campaign.name.toLowerCase().includes(searchQuery.toLowerCase());
-      const matchesFilter = filterStatus ? campaign.status === filterStatus : true;
+    return filtered.filter((campaign) => {
+      const matchesSearch = campaign.name
+        .toLowerCase()
+        .includes(searchQuery.toLowerCase());
+      const matchesFilter = filterStatus
+        ? campaign.status === filterStatus
+        : true;
       return matchesSearch && matchesFilter;
     });
   };
@@ -101,9 +106,15 @@ const DefaultSuperCamp = () => {
   // Calculate stats
   const filteredCampaigns = getFilteredCampaigns();
   const allCampaignsCount = filteredCampaigns.length;
-  const emailCampaignsCount = filteredCampaigns.filter(c => c.selectedCampaign.includes("Email")).length;
-  const whatsappCampaignsCount = filteredCampaigns.filter(c => c.selectedCampaign.includes("Whatsapp")).length;
-  const activeCampaignsCount = filteredCampaigns.filter(c => c.status === "active").length;
+  const emailCampaignsCount = filteredCampaigns.filter((c) =>
+    c.selectedCampaign.includes("Email")
+  ).length;
+  const whatsappCampaignsCount = filteredCampaigns.filter((c) =>
+    c.selectedCampaign.includes("Whatsapp")
+  ).length;
+  const activeCampaignsCount = filteredCampaigns.filter(
+    (c) => c.status === "active"
+  ).length;
 
   return (
     <div className="mb-5 ">
@@ -144,7 +155,7 @@ const DefaultSuperCamp = () => {
       {/* Campaign Filter + List */}
       <div className="bg-white rounded-xl p-6 shadow-sm mb-6">
         {/* Header */}
-        <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+        <div className="flex flex-col md:flex-row justify-between  md:items-center gap-4">
           <div>
             <h1 className="text-2xl font-serif font-bold text-gray-800">
               All Campaigns
@@ -154,17 +165,21 @@ const DefaultSuperCamp = () => {
             </p>
           </div>
 
-          <div className="flex flex-wrap gap-3 items-center">
-            {/* Search */}
-            <div className="flex items-center px-3 py-2 rounded-lg border border-gray-300 bg-gray-50 w-full sm:w-auto">
-              <CiSearch className="text-lg text-gray-500" />
-              <input
-                className="ml-2 text-gray-700 bg-transparent focus:outline-none w-full"
-                type="text"
-                placeholder="Search Campaign"
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-              />
+          <div className="flex flex-wrap  gap-3 items-center">
+            {/* City Dropdown */}
+            <div className="flex  items-center gap-2 border border-gray-200 bg-white px-3 py-2 rounded-lg shadow-sm">
+              <CiFilter className="text-lg text-gray-500" />
+              <select
+                className="bg-transparent font-medium outline-none text-gray-700"
+                value={selectedCity}
+                onChange={(e) => setSelectedCity(e.target.value)}
+              >
+                <option value="all">All</option>
+                <option value="JED Passenger">JED Passenger</option>
+                <option value="RUH Passengers">RUH Passengers</option>
+                <option value="DXB Passenger">DXB Passenger</option>
+                <option value="Frequent Flyes">Frequent Flyes</option>
+              </select>
             </div>
 
             {/* Filter */}
@@ -191,21 +206,16 @@ const DefaultSuperCamp = () => {
               <AiOutlinePlus className="text-lg" />
               <span>Create Campaign</span>
             </button>
-
-            {/* City Dropdown */}
-            <div className="flex items-center gap-2 border border-gray-200 bg-white px-3 py-2 rounded-lg shadow-sm">
-              <CiFilter className="text-lg text-gray-500" />
-              <select
-                className="bg-transparent font-medium outline-none text-gray-700"
-                value={selectedCity}
-                onChange={(e) => setSelectedCity(e.target.value)}
-              >
-                <option value="all">All</option>
-                <option value="JED Passenger">JED Passenger</option>
-                <option value="RUH Passengers">RUH Passengers</option>
-                <option value="DXB Passenger">DXB Passenger</option>
-                <option value="Frequent Flyes">Frequent Flyes</option>
-              </select>
+            {/* Search */}
+            <div className="flex items-center px-3 py-2 rounded-lg border border-gray-300 bg-gray-50 w-full sm:w-auto">
+              <CiSearch className="text-lg text-gray-500" />
+              <input
+                className="ml-2 text-gray-700 bg-transparent focus:outline-none w-full"
+                type="text"
+                placeholder="Search Campaign"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+              />
             </div>
           </div>
         </div>
@@ -222,7 +232,7 @@ const DefaultSuperCamp = () => {
 
         {/* Render Campaigns */}
         <div>
-          <CampainPage 
+          <CampainPage
             campaigns={getFilteredCampaigns()}
             searchQuery={searchQuery}
             filterStatus={filterStatus}
