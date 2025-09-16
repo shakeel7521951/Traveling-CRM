@@ -46,7 +46,7 @@ const SuperAdminLayout = () => {
   return (
     <div>
       <div className="flex flex-col h-screen">
-        <SuperAdminNavbar />
+        <SuperAdminNavbar  />
         <div className="flex flex-1 overflow-hidden">
           <SuperAdminSidebaar />
           <main className="flex-1 overflow-auto">

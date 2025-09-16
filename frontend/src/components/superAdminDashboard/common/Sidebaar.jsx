@@ -70,6 +70,7 @@ const Sidebar = () => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
   const location = useLocation();
+  const [hide,sethide]=useState(false);
 
   // Detect screen size
   useEffect(() => {
@@ -80,6 +81,12 @@ const Sidebar = () => {
   }, []);
 
   const toggleSidebar = () => setSidebarOpen((prev) => !prev);
+  const handleX=()=>{
+    sethide(!hide);
+  }
+  const handleT=()=>{
+    sethide(!hide);
+  }
 
   const getSidebarWidth = () => {
     if (isMobile) return sidebarOpen ? "w-64" : "w-0";
@@ -115,7 +122,7 @@ const Sidebar = () => {
           aria-expanded={sidebarOpen}
           className="text-white hover:bg-white/10 p-2 rounded-lg transition-colors"
         >
-          {sidebarOpen ? <RxCross2 className="text-xl" /> : <FiMenu size={20} />}
+          {sidebarOpen ? <RxCross2 onClick={handleX} className="text-xl" /> : <FiMenu onClick={handleT} size={20} />}
         </button>
       </div>
 
