@@ -92,6 +92,8 @@ const router = createBrowserRouter([
       { path: "viewdetail/:id", element: <ViewDetail /> },
       { path: "compaigns", element: <SuperAdminCompaigns /> },
       { path: "supfeedback", element: <SupFeedback /> },
+      { path: "supcomplaints", element: <SupComplaints /> },
+      { path: "setting", element: <SettingsPage /> },
     ]
   }
 ]);
