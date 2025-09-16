@@ -2,8 +2,9 @@ import Passenger from "../models/Passenger.js";
 
 export const addPassenger = async (req, res) => {
   try {
-    const { name, phone, email, flightDate, station } = req.body;
-    if (!name || !phone || !email || !flightDate || !station) {
+    const station = req.user?.station;
+    const { name, phone, email, flightDate } = req.body;
+    if (!name || !phone || !email || !flightDate) {
       return res.status(400).json({ message: "All fields required" });
     }
     await Passenger.create({ name, email, phone, flightDate, station });
