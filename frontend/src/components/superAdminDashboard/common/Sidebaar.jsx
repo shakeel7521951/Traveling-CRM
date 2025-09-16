@@ -53,7 +53,7 @@ const sections = [
       { text: "Feedback", path: "supfeedback", icon: <FiStar size={20} /> },
       {
         text: "Complaints",
-        path: "complaints",
+        path: "supcomplaints",
         icon: <FiAlertTriangle size={20} />,
       },
     ],

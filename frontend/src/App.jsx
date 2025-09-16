@@ -29,6 +29,7 @@ import Stations from "./pages/superAdminDashboard/Stations";
 import ViewDetail from "./components/superAdminDashboard/Stations/ViewDetail";
 import SupFeedback from "./pages/superAdminDashboard/SepFeedback";
 import ProtectedRoute from "./components/common/ProtectedRoute";
+import SupComplaints from "./pages/superAdminDashboard/SupComplaints";
 
 const MainLayout = () => {
   return (
@@ -90,6 +91,7 @@ const router = createBrowserRouter([
       { path: "viewdetail/:id", element: <ViewDetail /> },
       { path: "compaigns", element: <SuperAdminCompaigns /> },
       { path: "supfeedback", element: <SupFeedback /> },
+      { path: "supcomplaints", element: <SupComplaints /> },
     ]
   }
 ]);
