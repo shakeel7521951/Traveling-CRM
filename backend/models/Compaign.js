@@ -17,6 +17,10 @@ const compaignSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  station: {
+    type: String,
+    required: true
+  },
   startDate: {
     type: Date,
     required: true,

@@ -7,6 +7,8 @@ export const createCompaign = async (req, res) => {
     const { name, type, status, target, startDate, endDate, message } =
       req.body;
 
+    const station = req.user?.station;
+
     if (
       !name ||
       !type ||
@@ -27,6 +29,7 @@ export const createCompaign = async (req, res) => {
       startDate,
       endDate,
       message,
+      station
     });
 
     let recipients = [];
@@ -125,5 +128,22 @@ export const deleteCompaign = async (req, res) => {
     return res
       .status(500)
       .json({ message: "Internal server error", error: error.message });
+  }
+};
+
+export const stationCompaigns = async (req, res) => {
+  try {
+    const station = req.user?.station;
+    if (!station) {
+      return res.status(400).json({ message: "Station not provided in user" });
+    }
+    const compaigns = await Compaign.find({ station });
+    if (!compaigns || compaigns.length < 1) {
+      return res.status(404).json({ message: "No compaign found" });
+    }
+    return res.status(200).json({ compaigns });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ message: "Internal server error" });
   }
 };

@@ -25,6 +25,11 @@ const UserSchema = new mongoose.Schema({
     type: Boolean,
     default: false,
   },
+  station:{
+    type:String,
+    enum:['a','b','c'],
+    default:'a'
+  },
   role: {
     type: String,
     default: "User",
@@ -52,7 +57,7 @@ UserSchema.methods.varifyOTP = function (enteredOtp) {
 
 UserSchema.methods.getJWTToken = function () {
   return jwt.sign(
-    { id: this._id, name: this.name, email: this.email, role: this.role },
+    { id: this._id, name: this.name, email: this.email, role: this.role,station:this.station },
     process.env.JWT_SECRET,
     { expiresIn: "7d" }
   );
