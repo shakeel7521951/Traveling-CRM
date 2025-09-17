@@ -17,8 +17,6 @@ const RecentPassenger = () => {
   const navigate = useNavigate();
   const { data, isLoading } = useStationPassengersQuery();
   
-  console.log("passengers.....", data);
-
   if (isLoading) {
     return <div className="flex h-screen bg-gray-100 items-center justify-center">Loading...</div>;
   }
@@ -35,7 +33,7 @@ const RecentPassenger = () => {
               <div className="space-y-4">
                 {data?.allPassenger?.map((passenger) => (
                   <div
-                    key={passenger.id}
+                    key={passenger._id}
                     className="flex sm:items-center flex-col items-start  sm:flex-row  sm:justify-between p-3 border-b border-gray-100"
                   >
                     <div>

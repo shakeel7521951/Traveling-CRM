@@ -17,6 +17,9 @@ const userSlice = createSlice({
       state.profile = null;
       state.loading = false;
     },
+    setLoading: (state) => {
+      state.loading = true;
+    },
   },
 });
 
