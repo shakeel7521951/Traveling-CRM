@@ -177,7 +177,7 @@ const StationCampaigns = () => {
           </div>
         </div>
 
-        {/* Control and Table */}
+        {/* Controls and Tables */}
         <div className="bg-white rounded-2xl shadow-sm overflow-hidden border border-gray-100">
           <div className="px-6 py-5 border-b border-gray-100">
             <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
