@@ -8,27 +8,30 @@ import {
   FiSettings,
   FiMenu,
   FiAlertTriangle,
-  FiBarChart2,
 } from "react-icons/fi";
 import { Link, useLocation } from "react-router-dom";
 
 // Reusable NavItem
-const NavItem = ({ icon, text, active, path, sidebarOpen, isMobile }) => (
-  <Link to={path} className="block">
+const NavItem = ({ icon, text, active, path, sidebarOpen, isMobile, onItemClick }) => (
+  <Link
+    to={path}
+    className="block"
+    onClick={() => {
+      if (isMobile && onItemClick) onItemClick();
+    }}
+  >
     <div
       className={`flex gap-3 mx-2 my-1 p-3 cursor-pointer group relative rounded-lg transition-all duration-200
         ${
           active
-            ? "bg-gradient-to-r from-[#E4141C] to-[#c1121f]  text-white shadow-lg transform scale-105"
+            ? "bg-gradient-to-r from-[#E4141C] to-[#c1121f] text-white shadow-lg transform scale-105"
             : "hover:bg-[#E4141C] text-gray-300 hover:text-white"
         }`}
     >
       <span className={`${active ? "text-white" : ""}`}>{icon}</span>
 
       {sidebarOpen && !isMobile && (
-        <span className={`font-medium ${active ? "text-white" : ""}`}>
-          {text}
-        </span>
+        <span className={`font-medium ${active ? "text-white" : ""}`}>{text}</span>
       )}
 
       {active && (
@@ -45,24 +48,14 @@ const sections = [
     items: [
       { text: "Dashboard", path: "overview", icon: <FiHome size={20} /> },
       { text: "All Stations", path: "stations", icon: <FiUsers size={20} /> },
-      {
-        text: "Campaigns",
-        path: "compaigns",
-        icon: <FiMessageSquare size={20} />,
-      },
+      { text: "Campaigns", path: "compaigns", icon: <FiMessageSquare size={20} /> },
       { text: "Feedback", path: "supfeedback", icon: <FiStar size={20} /> },
-      {
-        text: "Complaints",
-        path: "supcomplaints",
-        icon: <FiAlertTriangle size={20} />,
-      },
+      { text: "Complaints", path: "supcomplaints", icon: <FiAlertTriangle size={20} /> },
     ],
   },
   {
     title: "System",
-    items: [
-      { text: "Settings", path: "setting", icon: <FiSettings size={20} /> },
-    ],
+    items: [{ text: "Settings", path: "setting", icon: <FiSettings size={20} /> }],
   },
 ];
 
@@ -70,7 +63,6 @@ const Sidebar = () => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
   const location = useLocation();
-  const [hide,sethide]=useState(false);
 
   // Detect screen size
   useEffect(() => {
@@ -81,12 +73,8 @@ const Sidebar = () => {
   }, []);
 
   const toggleSidebar = () => setSidebarOpen((prev) => !prev);
-  const handleX=()=>{
-    sethide(!hide);
-  }
-  const handleT=()=>{
-    sethide(!hide);
-  }
+
+  const closeSidebar = () => setSidebarOpen(false);
 
   const getSidebarWidth = () => {
     if (isMobile) return sidebarOpen ? "w-64" : "w-0";
@@ -102,27 +90,16 @@ const Sidebar = () => {
     >
       {/* Header */}
       <div
-        className={`px-5 py-4 flex items-center ${
+        className={`px-4 py-4 flex items-center ${
           isMobile ? "justify-center" : "justify-between"
         } border-b border-white/20 bg-white/5 backdrop-blur-sm`}
       >
-        {sidebarOpen && !isMobile && (
-          <div className="flex items-center">
-            <div className="bg-[#E4141C] text-white p-2 rounded-lg mr-3">
-              <FiBarChart2 className="text-lg" />
-            </div>
-            <div>
-              <h1 className="text-lg font-bold">Travel CRM</h1>
-              <p className="text-xs text-gray-300">Management Panel</p>
-            </div>
-          </div>
-        )}
         <button
           onClick={toggleSidebar}
           aria-expanded={sidebarOpen}
-          className="text-white hover:bg-white/10 p-2 rounded-lg transition-colors"
+          className="text-[#C8131F] bg-[#20274C] p-2 rounded-lg transition-colors"
         >
-          {sidebarOpen ? <RxCross2 onClick={handleX} className="text-xl" /> : <FiMenu onClick={handleT} size={20} />}
+          {sidebarOpen ? <RxCross2 className="text-xl" /> : <FiMenu size={20} />}
         </button>
       </div>
 
@@ -142,9 +119,10 @@ const Sidebar = () => {
                 <NavItem
                   key={item.path}
                   {...item}
-                  active={activePath === item.path}
+                  active={activePath === `/${item.path}`}
                   sidebarOpen={sidebarOpen}
                   isMobile={isMobile}
+                  onItemClick={closeSidebar} // ✅ auto close on mobile
                 />
               ))}
             </div>
