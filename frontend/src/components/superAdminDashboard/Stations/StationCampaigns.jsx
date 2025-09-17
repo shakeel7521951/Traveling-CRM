@@ -114,7 +114,7 @@ const StationCampaigns = () => {
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 p-6">
       <div className="max-w-7xl mx-auto">
-        {/* Header */}
+        {/* Headers */}
         <div className="mb-8">
           <h1 className="text-3xl font-bold text-[#242C54] mb-2">Station Management</h1>
           <p className="text-gray-600">Monitor and manage all station campaigns and performance metrics</p>
@@ -177,7 +177,7 @@ const StationCampaigns = () => {
           </div>
         </div>
 
-        {/* Controls and Tables */}
+        {/* Control and Table */}
         <div className="bg-white rounded-2xl shadow-sm overflow-hidden border border-gray-100">
           <div className="px-6 py-5 border-b border-gray-100">
             <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
