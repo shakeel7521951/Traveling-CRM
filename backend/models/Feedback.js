@@ -32,6 +32,7 @@ const feedbackSchema = new mongoose.Schema({
     type: String,
     trim: true,
     uppercase: true,
+
   },
   dateOfExperience: { type: Date, required: true },
 

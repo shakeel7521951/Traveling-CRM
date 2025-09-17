@@ -1,8 +1,9 @@
 import React from 'react';
-import { FiUsers, FiSearch, FiBell, FiStar } from 'react-icons/fi';
+import { FiUsers, FiStar } from 'react-icons/fi';
 import { FaWhatsapp, FaEnvelope } from 'react-icons/fa';
 import { useStationPassengersQuery } from '../../redux/slices/PassengerSlice';
 import { useGetStationFeedbacksQuery } from '../../redux/slices/FeedbackSlice';
+import { useStationCompaignsQuery } from '../../redux/slices/CompaignSlice';
 
 const StatCard = ({ title, value, change, icon }) => (
   <div className="bg-white rounded-xl shadow-md p-6 border border-gray-200 flex flex-col gap-2">
@@ -18,6 +19,18 @@ const StatCard = ({ title, value, change, icon }) => (
 const Station = () => {
   const { data } = useStationPassengersQuery();
   const { data: feedback } = useGetStationFeedbacksQuery();
+  const { data: compaigns } = useStationCompaignsQuery();
+
+  const whatsappCount = compaigns?.compaigns?.reduce(
+    (sum, item) => item.channel === "whatsapp" ? sum + 1 : sum,
+    0
+  ) ?? 0;
+
+  const emailCount = compaigns?.compaigns?.reduce(
+    (sum, item) => item.channel === "email" ? sum + 1 : sum,
+    0
+  ) ?? 0;
+
   const averageRating = feedback?.data && feedback?.data.length > 0 ? feedback?.data?.reduce((sum, item) => sum + item.rating, 0) / feedback?.data?.length : '';
   return (
     <div className="p-4 bg-gray-50 ">
@@ -41,14 +54,14 @@ const Station = () => {
           icon={<FiStar className="text-[#E4141C]" size={24} />}
         />
         <StatCard
-          title="WhatsApp Messages"
-          value="3,245"
+          title="WhatsApp Compaigns"
+          value={whatsappCount}
           change="+8%"
           icon={<FaWhatsapp className="text-[#E4141C]" size={24} />}
         />
         <StatCard
           title="Email Campaigns"
-          value="1,876"
+          value={emailCount}
           change="+5%"
           icon={<FaEnvelope className="text-[#E4141C]" size={24} />}
         />
