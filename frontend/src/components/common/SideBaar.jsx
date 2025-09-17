@@ -5,17 +5,22 @@ import {
   FiUsers,
   FiMessageSquare,
   FiStar,
-  FiPieChart,
   FiSettings,
   FiMenu,
   FiAlertTriangle,
-  FiBarChart2,
 } from "react-icons/fi";
 import { Link, useLocation } from "react-router-dom";
 
 // Reusable NavItem
-const NavItem = ({ icon, text, active, path, sidebarOpen, isMobile }) => (
-  <Link to={path} className="block" aria-current={active ? "page" : undefined}>
+const NavItem = ({ icon, text, active, path, sidebarOpen, isMobile, onItemClick }) => (
+  <Link
+    to={path}
+    className="block"
+    aria-current={active ? "page" : undefined}
+    onClick={() => {
+      if (isMobile && onItemClick) onItemClick(); // ✅ close sidebar on mobile
+    }}
+  >
     <div
       className={`relative flex items-center ${
         sidebarOpen ? "gap-3 px-4" : "justify-center"
@@ -60,7 +65,6 @@ const sections = [
       { text: "Complaints", path: "/complaints", icon: <FiAlertTriangle size={20} /> },
     ],
   },
-  
   {
     title: "System",
     items: [
@@ -84,6 +88,8 @@ const Sidebar = () => {
 
   const toggleSidebar = () => setSidebarOpen((prev) => !prev);
 
+  const closeSidebar = () => setSidebarOpen(false); // ✅ helper
+
   const getSidebarWidth = () => {
     if (isMobile) return sidebarOpen ? "w-64" : "w-0";
     return sidebarOpen ? "w-64" : "w-16";
@@ -102,17 +108,6 @@ const Sidebar = () => {
           isMobile ? "justify-center" : "justify-between"
         } border-b border-white/20 bg-white/5 backdrop-blur-sm`}
       >
-        {sidebarOpen && !isMobile && (
-          <div className="flex items-center">
-            <div className="bg-[#E4141C] text-white p-2 rounded-lg mr-3">
-              <FiBarChart2 className="text-lg" />
-            </div>
-            <div>
-              <h1 className="text-lg font-bold">Travel CRM</h1>
-              <p className="text-xs text-gray-300">Management Panel</p>
-            </div>
-          </div>
-        )}
         <button
           onClick={toggleSidebar}
           aria-expanded={sidebarOpen}
@@ -141,6 +136,7 @@ const Sidebar = () => {
                   active={activePath === item.path}
                   sidebarOpen={sidebarOpen}
                   isMobile={isMobile}
+                  onItemClick={closeSidebar} // ✅ auto-close on mobile
                 />
               ))}
             </div>

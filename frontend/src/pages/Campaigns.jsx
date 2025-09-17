@@ -9,8 +9,9 @@ import CampaignAnalytics from "../components/campaigns/CampaignAnalytics";
 import CampaignCard from "../components/campaigns/CampaignCard";
 import CampaignModal from "../components/campaigns/CampaignModal";
 import StatCard from "../components/campaigns/StatCard";
-import { FiBarChart2, FiChevronDown, FiFilter, FiMail, FiPhone, FiPlus, FiSearch } from "react-icons/fi";
+import { FiBarChart2, FiChevronDown, FiFilter, FiMail, FiPlus, FiSearch } from "react-icons/fi";
 import { FaWhatsapp } from "react-icons/fa";
+import { MdEmail } from "react-icons/md";
 
 const Campaigns = () => {
   const location = useLocation();
@@ -34,6 +35,8 @@ const Campaigns = () => {
     message: "",
   });
 
+  const whatsappCount = campaignsData?.compaigns?.reduce((sum,item)=>item.channel === 'whatsapp'?sum+1:sum,0)??0;
+  const emailCount = campaignsData?.compaigns?.reduce((sum,item)=>item.channel === 'email'?sum+1:sum,0)??0;
   // Detailed view
   const [isDetailedView, setIsDetailedView] = useState(false);
   const [selectedCampaign, setSelectedCampaign] = useState(null);
@@ -231,15 +234,15 @@ const Campaigns = () => {
           color="bg-[#E4141C]"
         />
         <StatCard
-          title="Messages Sent"
-          value={campaigns.reduce((sum, c) => sum + c.sent, 0).toLocaleString()}
-          icon={<FiPhone />}
+          title="Whatsapp Compaigns"
+          value={whatsappCount}
+          icon={<FaWhatsapp />}
           color="bg-[#242C54]"
         />
         <StatCard
-          title="Response Rate"
-          value={calculateResponseRate()}
-          icon={<FaWhatsapp />}
+          title="Email Compaigns"
+          value={emailCount}
+          icon={<MdEmail />}
           color="bg-[#E4141C]"
         />
       </div>

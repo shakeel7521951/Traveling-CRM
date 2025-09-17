@@ -13,7 +13,7 @@ import Login from "./pages/Login";
 import { useDispatch } from "react-redux";
 import { useMyProfileQuery } from "./redux/slices/UserSlice";
 import { useEffect } from "react";
-import { setProfile } from "./redux/slices/UserProfile";
+import { clearProfile, setProfile } from "./redux/slices/UserProfile";
 import Signup from "./pages/Signup";
 import VerifyOtp from "./pages/VerifyOtp";
 import TravelFeedbackPortal from "./pages/TravelFeedbackPortal";
@@ -26,6 +26,7 @@ import ViewDetail from "./components/superAdminDashboard/Stations/ViewDetail";
 import SupFeedback from "./pages/superAdminDashboard/SepFeedback";
 import ProtectedRoute from "./components/common/ProtectedRoute";
 import SupComplaints from "./pages/superAdminDashboard/SupComplaints";
+import SupSetting from "./pages/superAdminDashboard/SupSetting";
 
 const MainLayout = () => {
   return (
@@ -45,7 +46,7 @@ const SuperAdminLayout = () => {
   return (
     <div>
       <div className="flex flex-col h-screen">
-        <SuperAdminNavbar  />
+        <SuperAdminNavbar />
         <div className="flex flex-1 overflow-hidden">
           <SuperAdminSidebaar />
           <main className="flex-1 overflow-auto">
@@ -66,9 +67,9 @@ const router = createBrowserRouter([
       { path: "/campaigns", element: <Campaigns /> },
       { path: "/feedback", element: <Feedback /> },
       { path: "/complaints", element: <Complaints /> },
-      
+
       { path: "/setting", element: <Setting /> },
-    
+
     ],
   },
   { path: "/travel-feedback-portal", element: <TravelFeedbackPortal /> },
@@ -85,19 +86,28 @@ const router = createBrowserRouter([
       { path: "compaigns", element: <SuperAdminCompaigns /> },
       { path: "supfeedback", element: <SupFeedback /> },
       { path: "supcomplaints", element: <SupComplaints /> },
+      { path: "setting", element: <SupSetting /> },
     ]
   }
 ]);
 
 function App() {
-  const disptach = useDispatch();
-  const { data: profile } = useMyProfileQuery();
+  const dispatch = useDispatch();
+  const { data: profile, isLoading } = useMyProfileQuery();
+
   useEffect(() => {
     if (profile?.user) {
-      disptach(setProfile(profile?.user));
+      dispatch(setProfile(profile.user));
+    } else if (!isLoading) {
+      dispatch(clearProfile());
     }
-  }, [profile, disptach]);
+  }, [profile, isLoading, dispatch]);
+
+  if (isLoading) return <div>Loading...</div>;
+
   return <RouterProvider router={router} />;
 }
+
+
 
 export default App;
