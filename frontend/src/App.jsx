@@ -24,7 +24,6 @@ import Overview from "./pages/superAdminDashboard/Overview";
 import Stations from "./pages/superAdminDashboard/Stations";
 import ViewDetail from "./components/superAdminDashboard/Stations/ViewDetail";
 import SupFeedback from "./pages/superAdminDashboard/SepFeedback";
-import SettingsPage from "./pages/superAdminDashboard/SettingsPage";
 import ProtectedRoute from "./components/common/ProtectedRoute";
 import SupComplaints from "./pages/superAdminDashboard/SupComplaints";
 
@@ -46,7 +45,7 @@ const SuperAdminLayout = () => {
   return (
     <div>
       <div className="flex flex-col h-screen">
-        <SuperAdminNavbar />
+        <SuperAdminNavbar  />
         <div className="flex flex-1 overflow-hidden">
           <SuperAdminSidebaar />
           <main className="flex-1 overflow-auto">
@@ -86,7 +85,6 @@ const router = createBrowserRouter([
       { path: "compaigns", element: <SuperAdminCompaigns /> },
       { path: "supfeedback", element: <SupFeedback /> },
       { path: "supcomplaints", element: <SupComplaints /> },
-      { path: "setting", element: <SettingsPage /> },
     ]
   }
 ]);
