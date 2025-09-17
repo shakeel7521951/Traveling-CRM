@@ -205,7 +205,7 @@ const StationCampaigns = () => {
                     <option>Pending</option>
                     <option>High Occupancy</option>
                   </select>
-                  <FiChevronDown className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 pointer-events-none" />
+                  {/* <FiChevronDown className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 pointer-events-none" /> */}
                 </div>
                 
                 <button 
@@ -222,12 +222,12 @@ const StationCampaigns = () => {
             <table className="w-full">
               <thead>
                 <tr className="bg-gradient-to-r from-[#242C54] to-[#3A4375] text-white">
-                  <th className="px-6 py-4 text-left text-sm font-semibold uppercase tracking-wider">Station Name</th>
-                  <th className="px-6 py-4 text-left text-sm font-semibold uppercase tracking-wider">Total Passengers</th>
-                  <th className="px-6 py-4 text-left text-sm font-semibold uppercase tracking-wider">Active Campaigns</th>
-                  <th className="px-6 py-4 text-left text-sm font-semibold uppercase tracking-wider">Occupancy Rate</th>
-                  <th className="px-6 py-4 text-left text-sm font-semibold uppercase tracking-wider">Growth</th>
-                  <th className="px-6 py-4 text-left text-sm font-semibold uppercase tracking-wider">Actions</th>
+                  <th className="px-6 py-4 text-left text-sm font-semibold uppercase tracking-wider text-nowrap">Station Name</th>
+                  <th className="px-6 py-4 text-left text-sm font-semibold uppercase tracking-wider text-nowrap">Total Passengers</th>
+                  <th className="px-6 py-4 text-left text-sm font-semibold uppercase tracking-wider text-nowrap">Active Campaigns</th>
+                  <th className="px-6 py-4 text-left text-sm font-semibold uppercase tracking-wider text-nowrap">Occupancy Rate</th>
+                  <th className="px-6 py-4 text-left text-sm font-semibold uppercase tracking-wider text-nowrap">Growth</th>
+                  <th className="px-6 py-4 text-left text-sm font-semibold uppercase tracking-wider text-nowrap">Actions</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-100">
