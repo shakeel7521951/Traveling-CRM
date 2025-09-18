@@ -355,9 +355,9 @@ const Setting = () => {
               </div>
             </div>
 
-            {/* Account Actions Card */}
+           
             <div className="bg-white rounded-xl shadow-md overflow-hidden border border-gray-100">
-              <div className="bg-gradient-to-r from-[#242C54] to-[#3a456b] p-5 text-white">
+              <div className="bg-gradient-to-r fr  om-[#242C54] to-[#3a456b] p-5 text-white">
                 <div className="flex items-center space-x-3">
                   <div className="p-3 bg-white bg-opacity-20 rounded-full">
                     <FiUser size={20} />
