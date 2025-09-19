@@ -120,7 +120,7 @@ const StationCampaigns = () => {
           <p className="text-gray-600">Monitor and manage all station campaigns and performance metrics</p>
         </div>
 
-        {/* Stats Cards */}
+        {/* Stat Card */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
           <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100 transition-all hover:shadow-md">
             <div className="flex justify-between items-start">
@@ -177,7 +177,7 @@ const StationCampaigns = () => {
           </div>
         </div>
 
-        {/* Control and Table */}
+        {/* Controls and Tables */}
         <div className="bg-white rounded-2xl shadow-sm overflow-hidden border border-gray-100">
           <div className="px-6 py-5 border-b border-gray-100">
             <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
